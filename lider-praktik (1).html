@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Лидер-практик: Ситуационное управление — курс для тимлида в B2C digital</title>
+<meta name="description" content="Лидер-практик: Ситуационное управление — 21 день, 30 кейсов из практики команд в e-com, финтех, edtech и медиа. Алгоритмы для 1:1, ретро, performance review и работы с распределёнными командами.">
+<meta property="og:title" content="Лидер-практик: Ситуационное управление — курс для тимлида в B2C digital">
+<meta property="og:description" content="Ситуационное управление для тимлидов в B2C digital. 21 день, 30 кейсов из практики команд в e-com, финтех, edtech и медиа.">
+<meta property="og:type" content="website">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #f5efe4;
+  --bg-elev: #ebe3d3;
+  --bg-card: #fbf6ed;
+  --ink: #15110d;
+  --ink-soft: #4a4138;
+  --ink-faint: #6b5f50;
+  --rule: #d4ccbe;
+  --rule-soft: #e1d8c8;
+  --accent: #9a3e26;
+  --accent-soft: #c86044;
+  --moss: #4a5a3a;
+  --moss-dark: #3d4f2f;
+  --max: 1280px;
+  --gutter: clamp(20px, 4vw, 64px);
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-body: "IBM Plex Sans", -apple-system, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 1.55;
+  color: var(--ink);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Page-wide grain overlay for texture */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.08 0 0 0 0 0.07 0 0 0 0 0.05 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.18;
+  mix-blend-mode: multiply;
+}
+
+/* TOP BAR — pilot strip */
+.pilot-strip {
+  position: relative;
+  z-index: 10;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 10px var(--gutter);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+.pilot-strip span { color: var(--accent-soft); }
+
+/* HEADER */
+header {
+  position: relative;
+  z-index: 10;
+  padding: 28px var(--gutter);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--rule);
+}
+.brand {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 22px;
+  letter-spacing: -0.01em;
+}
+.brand span { color: var(--accent); }
+nav ul { list-style: none; display: flex; gap: 28px; }
+nav a {
+  color: var(--ink);
+  text-decoration: none;
+  font-size: 14px;
+  letter-spacing: 0.01em;
+  transition: color 0.2s;
+}
+nav a:hover { color: var(--accent); }
+.nav-cta {
+  background: var(--ink);
+  color: var(--bg) !important;
+  padding: 8px 16px;
+  border-radius: 0;
+  transition: background 0.2s;
+}
+.nav-cta:hover { background: var(--accent); }
+/* SECTIONS — common */
+section {
+  position: relative;
+  z-index: 2;
+  padding: clamp(80px, 10vw, 140px) var(--gutter);
+  max-width: var(--max);
+  margin: 0 auto;
+}
+.section-marker {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--ink-faint);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.section-marker .num { color: var(--accent); margin-right: 12px; }
+
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 400; letter-spacing: -0.02em; line-height: 1.05; }
+h2 { font-size: clamp(40px, 5vw, 64px); margin-bottom: 32px; }
+h3 { font-size: clamp(24px, 2.5vw, 32px); margin-bottom: 16px; }
+em { font-style: italic; color: var(--accent); font-weight: 500; }
+
+/* HERO */
+.hero {
+  padding-top: clamp(80px, 12vw, 160px);
+  padding-bottom: clamp(80px, 10vw, 140px);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 60px;
+}
+.hero-h1 {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: clamp(44px, 7vw, 96px);
+  line-height: 0.98;
+  letter-spacing: -0.025em;
+  margin-bottom: 32px;
+  max-width: 16ch;
+}
+.hero-h1 .highlight {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+}
+.hero-sub {
+  font-size: clamp(18px, 1.6vw, 22px);
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 60ch;
+  margin-bottom: 48px;
+  font-weight: 300;
+}
+.hero-cta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 40px;
+}
+.btn-primary {
+  display: inline-block;
+  background: var(--accent);
+  color: var(--bg);
+  padding: 18px 32px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  border: 1px solid var(--accent);
+  transition: all 0.25s ease;
+  font-family: var(--font-body);
+}
+.btn-primary:hover {
+  background: var(--ink);
+  border-color: var(--ink);
+  transform: translateY(-1px);
+}
+.btn-secondary {
+  display: inline-block;
+  color: var(--ink);
+  padding: 18px 0;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 16px;
+  border-bottom: 1px solid var(--ink);
+  transition: all 0.2s;
+}
+.btn-secondary:hover { color: var(--accent); border-color: var(--accent); }
+
+.hero-meta {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink-soft);
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  padding-top: 32px;
+  border-top: 1px solid var(--rule);
+}
+.hero-meta div { display: flex; align-items: center; gap: 8px; }
+.hero-meta .check { color: var(--moss-dark); font-weight: 500; }
+
+/* IS-IT-YOU — list of pains */
+.pains {
+  background: var(--bg-elev);
+  margin: 0;
+  padding: clamp(80px, 10vw, 140px) var(--gutter);
+  position: relative;
+  z-index: 2;
+}
+.pains-inner { max-width: var(--max); margin: 0 auto; }
+.pains h2 {
+  max-width: 18ch;
+  margin-bottom: 64px;
+}
+.pains-list {
+  list-style: none;
+  display: grid;
+  gap: 0;
+  border-top: 1px solid var(--rule);
+}
+.pains-list li {
+  border-bottom: 1px solid var(--rule);
+  padding: 28px 0 28px 60px;
+  font-size: clamp(17px, 1.4vw, 19px);
+  line-height: 1.5;
+  position: relative;
+  color: var(--ink-soft);
+  transition: color 0.2s, padding-left 0.25s;
+}
+.pains-list li::before {
+  content: counter(pain, decimal-leading-zero);
+  counter-increment: pain;
+  position: absolute;
+  left: 0;
+  top: 32px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+.pains-list { counter-reset: pain; }
+.pains-list li:hover { color: var(--ink); padding-left: 70px; }
+
+/* WHY-NOT-WORK */
+.why {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 80px;
+  align-items: start;
+}
+.why-marker { position: sticky; top: 32px; }
+.why-body p {
+  font-size: clamp(18px, 1.4vw, 21px);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  color: var(--ink);
+  max-width: 60ch;
+}
+.why-body p.lead {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 300;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  margin-bottom: 40px;
+  color: var(--ink);
+}
+.why-body strong { font-weight: 500; }
+
+/* OUTCOMES — before/after */
+.outcomes {
+  background: var(--ink);
+  color: var(--bg);
+  margin: 0;
+  padding: clamp(80px, 10vw, 140px) var(--gutter);
+  position: relative;
+  z-index: 2;
+}
+.outcomes-inner { max-width: var(--max); margin: 0 auto; }
+.outcomes .section-marker { color: var(--ink-faint); }
+.outcomes .section-marker .num { color: var(--accent-soft); }
+.outcomes h2 { color: var(--bg); max-width: 18ch; margin-bottom: 80px; }
+.outcomes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+.outcome-row {
+  display: contents;
+}
+.outcome-cell {
+  background: var(--ink);
+  padding: 32px 32px;
+}
+.outcome-cell.before {
+  color: var(--ink-faint);
+  font-size: 16px;
+  line-height: 1.5;
+}
+.outcome-cell.after {
+  color: var(--bg);
+  font-size: 18px;
+  line-height: 1.5;
+  font-weight: 400;
+}
+.outcome-cell.after strong { color: var(--moss-dark); font-weight: 500; }
+.outcomes-headers {
+  display: contents;
+}
+.outcomes-headers .header-cell {
+  background: var(--ink);
+  padding: 16px 32px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faint);
+}
+
+/* PROGRAMME — weekly structure */
+.programme {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: 80px;
+  align-items: start;
+}
+.prog-marker { position: sticky; top: 32px; }
+.prog-marker h2 { font-size: clamp(36px, 4vw, 56px); margin-bottom: 24px; }
+.prog-marker p { color: var(--ink-soft); font-size: 16px; line-height: 1.5; max-width: 30ch; }
+.programme-subtitle {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--accent);
+  letter-spacing: 0.03em;
+  margin-top: -8px;
+  margin-bottom: 20px;
+}
+
+.prog-weeks { display: grid; gap: 0; border-top: 1px solid var(--rule); }
+.prog-week {
+  padding: 36px 0;
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+.prog-week .week-tag {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  text-transform: uppercase;
+  padding-top: 12px;
+}
+.prog-week h3 { margin-bottom: 12px; font-size: clamp(22px, 2.2vw, 28px); }
+.prog-week p { color: var(--ink-soft); margin-bottom: 16px; max-width: 60ch; }
+.prog-bullets {
+  list-style: none;
+  margin: 0;
+}
+.prog-bullets li {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink-soft);
+  padding: 4px 0 4px 18px;
+  position: relative;
+}
+.prog-bullets li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+/* WHAT-INSIDE — cards */
+.inside h2 { max-width: 16ch; margin-bottom: 64px; }
+.inside-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+}
+.inside-card {
+  background: var(--bg-card);
+  padding: 40px;
+  position: relative;
+}
+.inside-card .num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  color: var(--accent);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: block;
+}
+.inside-card h3 {
+  font-size: clamp(22px, 2vw, 28px);
+  margin-bottom: 16px;
+  max-width: 18ch;
+}
+.inside-card p {
+  color: var(--ink-soft);
+  margin-bottom: 12px;
+  font-size: 15px;
+  line-height: 1.55;
+}
+.inside-card ul {
+  list-style: none;
+  margin-top: 16px;
+}
+.inside-card ul li {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink-soft);
+  padding: 4px 0;
+  border-bottom: 1px dotted var(--rule);
+}
+
+/* HOSTS */
+.hosts h2 { max-width: 14ch; margin-bottom: 64px; }
+.hosts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+}
+.host {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 24px;
+}
+.host-photo {
+  aspect-ratio: 4/5;
+  background: var(--bg-elev);
+  position: relative;
+  overflow: hidden;
+}
+.host-photo .placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--ink-faint);
+  letter-spacing: 0.08em;
+}
+.host-name {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 2.4vw, 32px);
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+.host-role {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+}
+.host-bio {
+  color: var(--ink-soft);
+  font-size: 15px;
+  line-height: 1.55;
+}
+.host-bio strong { color: var(--ink); font-weight: 500; }
+
+/* PRICING */
+.pricing {
+  background: var(--bg-elev);
+  margin: 0;
+  padding: clamp(80px, 10vw, 140px) var(--gutter);
+  position: relative;
+  z-index: 2;
+}
+.pricing-inner { max-width: var(--max); margin: 0 auto; }
+.pricing h2 { max-width: 14ch; margin-bottom: 16px; }
+.pricing-sub {
+  color: var(--ink-soft);
+  font-size: 16px;
+  margin-bottom: 64px;
+  max-width: 60ch;
+}
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+}
+.tier {
+  background: var(--bg-card);
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+.tier.featured {
+  background: var(--ink);
+  color: var(--bg);
+}
+.tier.featured h3 { color: var(--bg); }
+.tier.featured .tier-price { color: var(--accent-soft); }
+.tier.featured .tier-feature-list li { color: var(--bg); border-color: rgba(255,255,255,0.15); }
+.tier.featured .tier-feature-list li::before { color: var(--accent-soft); }
+.tier.featured .tier-cta {
+  background: var(--bg);
+  color: var(--ink);
+  border-color: var(--bg);
+}
+.tier.featured .tier-cta:hover { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+.tier.featured .tier-recommended { color: var(--accent-soft); }
+
+.tier-recommended {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 16px;
+  height: 16px;
+}
+.tier h3 {
+  font-size: clamp(22px, 2vw, 28px);
+  margin-bottom: 8px;
+  font-family: var(--font-display);
+  font-weight: 400;
+}
+.tier-price {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 4vw, 48px);
+  font-weight: 300;
+  margin-bottom: 32px;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+}
+.tier-price small {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--ink-faint);
+  display: block;
+  margin-top: 4px;
+  letter-spacing: 0.04em;
+}
+.tier-feature-list {
+  list-style: none;
+  margin-bottom: 32px;
+  flex: 1;
+}
+.tier-feature-list li {
+  padding: 14px 0 14px 24px;
+  border-bottom: 1px dotted var(--rule);
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  position: relative;
+}
+.tier-feature-list li::before {
+  content: '+';
+  position: absolute;
+  left: 0;
+  top: 14px;
+  color: var(--accent);
+  font-weight: 500;
+}
+.tier-feature-list li.muted::before { content: '–'; color: var(--ink-faint); }
+.tier-feature-list li.muted { color: var(--ink-faint); }
+.tier-cta {
+  display: block;
+  text-align: center;
+  background: var(--ink);
+  color: var(--bg);
+  padding: 16px 24px;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 15px;
+  border: 1px solid var(--ink);
+  transition: all 0.2s;
+}
+.tier-cta:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.pricing-note {
+  margin-top: 32px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--ink-soft);
+  max-width: 60ch;
+}
+.pricing-note a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+
+/* FAQ */
+.faq h2 { max-width: 16ch; margin-bottom: 64px; }
+.faq-list {
+  border-top: 1px solid var(--rule);
+}
+details {
+  border-bottom: 1px solid var(--rule);
+  padding: 24px 0;
+}
+summary {
+  cursor: pointer;
+  font-size: clamp(17px, 1.4vw, 20px);
+  font-weight: 500;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding-right: 32px;
+  position: relative;
+  transition: color 0.2s;
+}
+summary::-webkit-details-marker { display: none; }
+summary::after {
+  content: '+';
+  position: absolute;
+  right: 0;
+  font-family: var(--font-mono);
+  font-size: 24px;
+  color: var(--accent);
+  transition: transform 0.25s;
+  font-weight: 300;
+}
+details[open] summary::after { transform: rotate(45deg); }
+summary:hover { color: var(--accent); }
+.q-num {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+  font-weight: 400;
+  flex-shrink: 0;
+}
+details > div {
+  padding: 16px 0 8px 56px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  font-size: 16px;
+  max-width: 70ch;
+}
+details > div p { margin-bottom: 12px; }
+details > div p:last-child { margin-bottom: 0; }
+
+/* FINAL CTA */
+.final {  background: var(--ink);
+  color: var(--bg);
+  margin: 0;
+  padding: clamp(80px, 10vw, 140px) var(--gutter);
+  position: relative;
+  z-index: 2;
+  text-align: left;
+  overflow: hidden;
+}
+.final::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -10%;
+  width: 120%;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--accent) 50%, transparent);
+  opacity: 0.3;
+}
+.final-inner { max-width: var(--max); margin: 0 auto; }
+.final .section-marker { color: rgba(245,239,228,0.45); }
+.final h2 {
+  color: var(--bg);
+  font-size: clamp(40px, 5vw, 72px);
+  max-width: 14ch;
+  margin-bottom: 32px;
+  font-weight: 300;
+}
+.final h2 em { color: var(--accent-soft); font-style: italic; font-weight: 400; }
+.final p {
+  font-size: clamp(17px, 1.4vw, 20px);
+  color: var(--bg);
+  opacity: 0.7;
+  max-width: 60ch;
+  margin-bottom: 40px;
+}
+.final .btn-primary {
+  background: var(--bg);
+  color: var(--ink);
+  border-color: var(--bg);
+}
+.final .btn-primary:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent-soft);
+  color: var(--bg);
+}
+.final-meta {
+  margin-top: 48px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 28px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: rgba(245,239,228,0.5);
+  padding-top: 32px;
+  border-top: 1px solid rgba(255,255,255,0.15);
+}
+
+/* FOOTER */
+footer {
+  padding: 48px var(--gutter);
+  background: var(--bg);
+  position: relative;
+  z-index: 2;
+  border-top: 1px solid var(--rule);
+}
+.footer-inner {
+  max-width: var(--max);
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 32px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+  letter-spacing: 0.03em;
+}
+.footer-inner a { color: var(--ink-soft); text-decoration: none; transition: color 0.2s; }
+.footer-inner a:hover { color: var(--accent); }
+.footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+
+/* INTERSECTION REVEAL */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* HERO ENTRANCE */
+.hero-h1 { animation: rise 1s 0.1s ease both; }
+.hero-sub { animation: rise 1s 0.3s ease both; }
+.hero-cta-row { animation: rise 1s 0.5s ease both; }
+.hero-meta { animation: rise 1s 0.7s ease both; }
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* TABLET */
+@media (max-width: 1024px) {
+  .why, .programme { grid-template-columns: 1fr; gap: 32px; }
+  .why-marker, .prog-marker { position: static; }
+  .tiers { grid-template-columns: 1fr; }
+  .inside-grid { grid-template-columns: 1fr; }
+  .hosts-grid { grid-template-columns: 1fr; gap: 48px; }
+  .outcomes-grid { grid-template-columns: 1fr; }
+  .outcomes-headers .header-cell.label-after { display: none; }
+  .outcomes-headers .header-cell.label-before::after {
+    content: ' → ПОСЛЕ';
+    color: var(--accent-soft);
+  }
+}
+
+/* MOBILE */
+@media (max-width: 640px) {
+  body { font-size: 16px; }
+  nav ul { display: none; }
+  .nav-mobile-cta { display: inline-block !important; }
+  header { padding: 20px var(--gutter); }
+  .pilot-strip { font-size: 11px; padding: 8px 16px; }
+  .hero { padding-top: 60px; padding-bottom: 60px; }
+  .hero-cta-row { flex-direction: column; align-items: stretch; }
+  .btn-primary, .btn-secondary { text-align: center; padding: 16px 24px; }
+  .pains-list li { padding-left: 48px; }
+  .pains-list li:hover { padding-left: 48px; }
+  .prog-week { grid-template-columns: 1fr; gap: 12px; }
+  .inside-card { padding: 28px 24px; }
+  .tier { padding: 32px 24px; }
+  details > div { padding-left: 48px; }
+  .footer-inner { flex-direction: column; }
+}
+
+.nav-mobile-cta { display: none; }
+</style>
+</head>
+<body>
+
+<div class="pilot-strip">
+  <span>↓ PILOT COHORT</span> · Первый поток — открытый набор · Скидка 30% за обмен на отзыв и публикуемый кейс
+</div>
+
+<header>
+  <div class="brand">Лидер<span>·</span>практик</div>
+  <nav>
+    <ul>
+      <li><a href="#programme">Программа</a></li>
+      <li><a href="#inside">Что внутри</a></li>
+      <li><a href="#pricing">Тарифы</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#final" class="nav-cta">Записаться</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="section-marker"><span class="num">§ 00</span> Ситуационное управление для тимлидов в B2C digital</div>
+    <h1 class="hero-h1">Управляй командой, а не <span class="highlight">разгребай пожары</span></h1>
+    <p class="hero-sub">21 день, 30 кейсов из практики команд в e-com, финтех, edtech и медиа. Свой алгоритм для сеньоров, джунов и распределённых команд&nbsp;— без курсов общего менеджмента и без книг для CEO.</p>
+    <div class="hero-cta-row">
+      <a href="#pricing" class="btn-primary">Записаться в поток</a>
+      <a href="#programme" class="btn-secondary">Посмотреть программу →</a>
+    </div>
+    <div class="hero-meta">
+      <div><span class="check">✓</span> Старт ближайшего потока: <strong>[TODO: дата]</strong></div>
+      <div><span class="check">✓</span> Гарантия возврата 30 дней</div>
+      <div><span class="check">✓</span> Открытый набор первого потока</div>
+    </div>
+  </div>
+</section>
+
+<!-- PAINS -->
+<div class="pains">
+  <div class="pains-inner">
+    <div class="section-marker reveal"><span class="num">§ 01</span> Это про тебя, если</div>
+    <h2 class="reveal">Ты узнаёшь себя в этом</h2>
+    <ol class="pains-list">
+      <li class="reveal">Сеньор на ретро снова сказал, что твой план&nbsp;— фигня, и ты не нашёл, что ответить</li>
+      <li class="reveal">Джун, который месяц назад был «всё понятно», теперь третий день молчит на дейли, а задача&nbsp;— в Jira</li>
+      <li class="reveal">Удалённый разработчик «пропал»: онлайн в Slack, Jira-задача стоит, на 1:1 говорит «всё нормально»</li>
+      <li class="reveal">Готовишься к 1:1 как к дуэли&nbsp;— потому что сеньор закрывает код-ревью без обсуждения, и непонятно, как это останавливать</li>
+      <li class="reveal">Performance review через две недели&nbsp;— нужно сказать мидлу, что повышения не будет; и непонятно, как сказать без потери человека</li>
+      <li class="reveal">Делегируешь и видишь, что сам сделал бы за час, а так&nbsp;— три дня и переоткрытие</li>
+      <li class="reveal">Сам пришёл из senior IC, теперь тимлид&nbsp;— и каждую пятницу думаешь: «что я сделал на этой неделе, GitHub показывает 0 коммитов»</li>
+    </ol>
+  </div>
+</div>
+
+<!-- WHY -->
+<section class="why">
+  <div class="why-marker reveal">
+    <div class="section-marker"><span class="num">§ 02</span> Почему общие курсы не работают</div>
+  </div>
+  <div class="why-body reveal">
+    <p class="lead">Курсы по менеджменту проектируются не для тебя&nbsp;— там спринта нет, команды другие, и «трудный разговор» — это не 1:1 с сеньором в пятницу.</p>
+    <p>Книги для CEO&nbsp;— про другой масштаб и другие проблемы. Курсы общего менеджмента&nbsp;— про PowerPoint и SMART-цели, которые в команде разработки звучат странно. Классическое ситуационное лидерство (Hersey-Blanchard)&nbsp;— академическое: не учитывает удалёнку, AI-ассистентов и матричные команды без прямой административной власти.</p>
+    <p><strong>«Лидер-практик: Ситуационное управление»</strong> построен от обратного: с чего начинается твой день в Jira и Slack, и какие управленческие решения тебе нужно принять до конца спринта. Не «коуч-позиция» и «ассертивность» в общих словах&nbsp;— конкретные ходы в конкретных ритуалах: 1:1, ретро, code review, planning, performance review.</p>
+  </div>
+</section>
+
+<!-- OUTCOMES -->
+<div class="outcomes">
+  <div class="outcomes-inner">
+    <div class="section-marker reveal"><span class="num">§ 03</span> Что меняется через 21 день</div>
+    <h2 class="reveal">До курса и после</h2>
+    <div class="outcomes-grid">
+      <div class="outcomes-headers">
+        <div class="header-cell label-before">Сейчас</div>
+        <div class="header-cell label-after">После курса</div>
+      </div>
+      <div class="outcome-row">
+        <div class="outcome-cell before reveal">Готовишься к 1:1 с сеньором как к дуэли&nbsp;— и часто проигрываешь</div>
+        <div class="outcome-cell after reveal">Знаешь алгоритм для трёх типов сложных разговоров: <strong>сопротивление, выгорание, низкий confidence</strong></div>
+      </div>
+      <div class="outcome-row">
+        <div class="outcome-cell before reveal">Перформанс-цикл&nbsp;— стресс. Боишься «не повышаем» сказать так, чтобы человек не ушёл</div>
+        <div class="outcome-cell after reveal">Есть протокол сложных perf-разговоров&nbsp;— и <strong>конкретные слова, которые работают</strong></div>
+      </div>
+      <div class="outcome-row">
+        <div class="outcome-cell before reveal">Делегируешь и переделываешь сам&nbsp;— потому что не знаешь, насколько отпускать</div>
+        <div class="outcome-cell after reveal">Используешь шкалу из <strong>7 уровней делегирования</strong>. Под каждого человека&nbsp;— свой уровень</div>
+      </div>
+      <div class="outcome-row">
+        <div class="outcome-cell before reveal">Удалённый «пропал» — пишешь в Slack, получаешь «всё нормально». Дальше не знаешь, что делать</div>
+        <div class="outcome-cell after reveal">Знаешь сигналы выгорания vs сопротивления vs внешних обстоятельств&nbsp;— и <strong>три разных протокола</strong></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- PROGRAMME -->
+<section id="programme" class="programme">
+  <div class="prog-marker reveal">
+    <div class="section-marker"><span class="num">§ 04</span> Структура программы</div>
+    <h2>21 день, три недели + финиш</h2>
+    <p class="programme-subtitle">Ситуационное управление — метод, который работает в Jira, на ретро и в 1:1</p>
+    <p>Каждый день&nbsp;— два кейса на платформе и один шаблон. В&nbsp;конце недели&nbsp;— интервизия в группе.</p>
+  </div>
+  <div class="prog-weeks">
+    <div class="prog-week reveal">
+      <div class="week-tag">Неделя 01</div>
+      <div>
+        <h3>Диагностика: что у тебя в команде на самом деле</h3>
+        <p>Учишься смотреть на команду через артефакты, которые и так перед глазами: Jira, GitHub, Slack, ритуалы. Появляется язык для того, что раньше звучало как «у Дениса что-то не так».</p>
+        <ul class="prog-bullets">
+          <li>14 кейсов на платформе (по 2 в день)</li>
+          <li>1 интервизия в группе по 8 человек</li>
+          <li>Шаблон диагностической карты для каждого человека в команде</li>
+        </ul>
+      </div>
+    </div>
+    <div class="prog-week reveal">
+      <div class="week-tag">Неделя 02</div>
+      <div>
+        <h3>Стилевая работа: как разговаривать в&nbsp;шести типичных ситуациях</h3>
+        <p>Алгоритмы для конкретных ситуаций: сеньор-сопротивленец, выгорающий сеньор, джун в ступоре, мидл на плато. Что делать на 1:1, на ретро, в code review.</p>
+        <ul class="prog-bullets">
+          <li>14 кейсов на платформе</li>
+          <li>1 интервизия</li>
+          <li>Шаблоны разговоров для каждого стиля</li>
+        </ul>
+      </div>
+    </div>
+    <div class="prog-week reveal">
+      <div class="week-tag">Неделя 03</div>
+      <div>
+        <h3>Делегирование и системные эффекты</h3>
+        <p>Когда отпустить, когда вмешаться. Что меняется через спринт, через квартал. Где стилевая работа не поможет&nbsp;— нужен структурный фикс.</p>
+        <ul class="prog-bullets">
+          <li>12 кейсов на платформе</li>
+          <li>1 интервизия</li>
+          <li>Матрица делегирования на твою команду</li>
+        </ul>
+      </div>
+    </div>
+    <div class="prog-week reveal">
+      <div class="week-tag">Финиш</div>
+      <div>
+        <h3>Защита итогового кейса</h3>
+        <p>Сводный план работы с командой на следующий квартал. Финальная интервизия и сертификат.</p>
+        <ul class="prog-bullets">
+          <li>1 интервизия</li>
+          <li>Сертификат участника</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSIDE -->
+<section id="inside" class="inside">
+  <div class="section-marker reveal"><span class="num">§ 05</span> Содержимое</div>
+  <h2 class="reveal">Что внутри</h2>
+  <div class="inside-grid">
+    <div class="inside-card reveal">
+      <span class="num">01 / Кейсы</span>
+      <h3>30 кейсов из практики тимлидов B2C digital</h3>
+      <p>По 2 кейса в день. Не «у вас есть сотрудник, который…»&nbsp;— конкретные ситуации из спринта, ретро и code review.</p>
+      <ul>
+        <li>Сеньор саботирует план миграции на gRPC</li>
+        <li>Джун с Cursor выглядит как мидл, но на ревью не объясняет решения</li>
+        <li>Performance review: как сказать «не повышаем»</li>
+      </ul>
+    </div>
+    <div class="inside-card reveal">
+      <span class="num">02 / Интервизии</span>
+      <h3>4 интервизии (5 в&nbsp;тарифе&nbsp;Pro)</h3>
+      <p>Группа из 6–8 тимлидов, 90 минут синхронно. Ты приносишь свой реальный кейс&nbsp;— Илья и Татьяна разбирают его вместе с участниками.</p>
+      <ul>
+        <li>Без записи — для безопасности обсуждения</li>
+        <li>Группа фиксирована на весь поток</li>
+      </ul>
+    </div>
+    <div class="inside-card reveal">
+      <span class="num">03 / Шаблоны</span>
+      <h3>Методички и&nbsp;рабочие шаблоны</h3>
+      <p>Доступ — навсегда. Шаблоны — в Notion, можно скопировать в свой workspace.</p>
+      <ul>
+        <li>Диагностика D-уровня через артефакты Jira/GitHub/Slack</li>
+        <li>Алгоритмы 1:1 для шести типичных ситуаций</li>
+        <li>Гибкое делегирование в команде разработки</li>
+        <li>Performance review без потери человека</li>
+      </ul>
+    </div>
+    <div class="inside-card reveal">
+      <span class="num">04 / Сообщество</span>
+      <h3>Чат потока</h3>
+      <p>Канал в Telegram на время курса + 30 дней после. Илья отвечает на вопросы. Другие тимлиды&nbsp;— твоя peer-группа, с которой можно обсуждать рабочие ситуации.</p>
+      <ul>
+        <li>21 день курса + 30 дней после</li>
+        <li>Закрытая группа, только участники потока</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- HOSTS -->
+<section class="hosts">
+  <div class="section-marker reveal"><span class="num">§ 06</span> Кто ведёт</div>
+  <h2 class="reveal">Ведущие</h2>
+  <div class="hosts-grid">
+    <div class="host reveal">
+      <div class="host-photo"><div class="placeholder">[ TODO: фото Ильи ]</div></div>
+      <div>
+        <div class="host-name">Илья Кириенков</div>
+        <div class="host-role">Автор курса</div>
+        <p class="host-bio"><strong>23 года в IT и продуктовом менеджменте.</strong> Был Product Owner и Delivery Manager в FESCO (CRM для логистики), Сбере (B2B-лояльность), Raiffeisen, Vsegda Da (финтех, кредитный брокер). Управлял сетью из 20 франшизных школ KIBERone&nbsp;— детское программирование. Работал с распределёнными командами и до удалёнки, и после.</p>
+      </div>
+    </div>
+    <div class="host reveal">
+      <div class="host-photo"><div class="placeholder">[ TODO: фото Татьяны ]</div></div>
+      <div>
+        <div class="host-name">Татьяна Шевчук</div>
+        <div class="host-role">ICF-сертифицированный коуч</div>
+        <p class="host-bio">[ TODO: bio в 2–3 предложениях, релевантных IT-аудитории. Желательно угол: «N лет в распределённых командах в [индустрия] — те же вопросы текучки, удалёнки и performance review, что в IT, на бóльшем масштабе» ]. В курсе ведёт интервизии и индивидуальные сессии в тарифе Pro.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<div id="pricing" class="pricing">
+  <div class="pricing-inner">
+    <div class="section-marker reveal"><span class="num">§ 07</span> Тарифы</div>
+    <h2 class="reveal">Три тарифа</h2>
+    <p class="pricing-sub reveal">Гарантия возврата 30 дней действует на любой тариф. Если не зайдёт&nbsp;— вернём полную сумму без вопросов.</p>
+    <div class="tiers">
+      <div class="tier reveal">
+        <div class="tier-recommended">&nbsp;</div>
+        <h3>База</h3>
+        <div class="tier-price">14 990&nbsp;₽<small>21 день</small></div>
+        <ul class="tier-feature-list">
+          <li>30 кейсов на платформе</li>
+          <li>Методички и шаблоны Notion</li>
+          <li>Чат потока: 21 день курса + 30 дней после</li>
+          <li class="muted">Без интервизий</li>
+          <li class="muted">Без обратной связи на итоговый кейс</li>
+        </ul>
+        <a href="#" class="tier-cta">Выбрать «База»</a>
+      </div>
+      <div class="tier featured reveal">
+        <div class="tier-recommended">→ Рекомендуем</div>
+        <h3>С обратной связью</h3>
+        <div class="tier-price">24 990&nbsp;₽<small>21 день · стандартный</small></div>
+        <ul class="tier-feature-list">
+          <li>Всё из «Базы»</li>
+          <li>4 интервизии в группе по 8 человек</li>
+          <li>Письменный разбор твоего итогового кейса от Ильи</li>
+          <li>Сертификат участника</li>
+        </ul>
+        <a href="#" class="tier-cta">Выбрать «С обратной связью»</a>
+      </div>
+      <div class="tier reveal">
+        <div class="tier-recommended">&nbsp;</div>
+        <h3>С коучингом</h3>
+        <div class="tier-price">49 990&nbsp;₽<small>21 день · pro</small></div>
+        <ul class="tier-feature-list">
+          <li>Всё из «С обратной связью»</li>
+          <li>5 интервизий вместо 4</li>
+          <li>2 индивидуальные сессии с Татьяной по 60 минут</li>
+          <li>Расширенный сертификат</li>
+        </ul>
+        <a href="#" class="tier-cta">Выбрать «С коучингом»</a>
+      </div>
+    </div>
+    <p class="pricing-note reveal">Оплата от юрлица&nbsp;— напишите в&nbsp;<a href="#">Telegram</a> или на&nbsp;<a href="mailto:#">email</a>. Выставим счёт и закрывающие документы.</p>
+  </div>
+</div>
+
+<!-- FAQ -->
+<section id="faq" class="faq">
+  <div class="section-marker reveal"><span class="num">§ 08</span> Возражения</div>
+  <h2 class="reveal">Что обычно спрашивают</h2>
+  <div class="faq-list">
+    <details class="reveal">
+      <summary><span class="q-num">01</span><span>У меня в этот период два спринта. Не вытяну.</span></summary>
+      <div>
+        <p>Курс рассчитан на 30–60 минут в день. Кейсы можно проходить в обеденный перерыв или вечером. Интервизии&nbsp;— раз в неделю, 90 минут, дата согласовывается с группой.</p>
+        <p>Если случился аврал&nbsp;— материалы остаются у тебя, кейсы можно догнать. Главное&nbsp;— не пропускать интервизии: они синхронные, не записываются.</p>
+      </div>
+    </details>
+    <details class="reveal">
+      <summary><span class="q-num">02</span><span>А методология не противоречит agile / scrum-практикам?</span></summary>
+      <div>
+        <p>Нет. Курс прямо опирается на ритуалы команды разработки: 1:1, ретро, planning, code review, performance cycle. Все алгоритмы&nbsp;— про то, что делать <strong>внутри</strong> этих ритуалов.</p>
+        <p>Никаких параллельных встреч, отчётов и форм для HR&nbsp;— мы про твою настоящую работу.</p>
+      </div>
+    </details>
+    <details class="reveal">
+      <summary><span class="q-num">03</span><span>Я уже читал The Manager's Path и An Elegant Puzzle. Чем отличается?</span></summary>
+      <div>
+        <p><strong>The Manager's Path</strong>&nbsp;— про карьерный путь от IC до VPE, общие принципы. <strong>An Elegant Puzzle</strong>&nbsp;— сборник случаев Will Larson, уровень Engineering Director.</p>
+        <p>«Лидер-практик: Ситуационное управление»&nbsp;— про конкретные алгоритмы первого года тимлида: что сказать на 1:1 с сеньором, который сильнее тебя; что делать с джуном через Cursor; как провести performance review. Не «о чём думать», а «что делать в понедельник утром».</p>
+      </div>
+    </details>
+    <details class="reveal">
+      <summary><span class="q-num">04</span><span>Мне курс нужен от компании. Можно по&nbsp;счёту от&nbsp;юрлица?</span></summary>
+      <div>
+        <p>Да. Напишите в Telegram [TODO: контакт] или email [TODO: email]&nbsp;— выставим счёт и подготовим закрывающие документы (акт, справки). Возможна оплата с НДС или без&nbsp;— зависит от вашей системы налогообложения.</p>
+      </div>
+    </details>
+    <details class="reveal">
+      <summary><span class="q-num">05</span><span>Команда у меня меньше 5 человек / распределена по трём проектам. Сработает?</span></summary>
+      <div>
+        <p>Да. Часть кейсов&nbsp;— про команды 5–8 человек, но методика применяется и на двух подчинённых, и на матричной структуре без прямой власти.</p>
+        <p>На интервизиях разбираем твой реальный сетап&nbsp;— алгоритмы адаптируем под него.</p>
+      </div>
+    </details>
+    <details class="reveal">
+      <summary><span class="q-num">06</span><span>А если не зайдёт?</span></summary>
+      <div>
+        <p>Возврат полной оплаты в течение 30 дней с момента старта потока, без объяснения причин. Просто пишешь в Telegram, мы возвращаем&nbsp;— без вопросов и удержаний.</p>
+      </div>
+    </details>
+    <details class="reveal">
+      <summary><span class="q-num">07</span><span>У меня смешанная команда: половина по-русски, половина англоговорящие. Подойдёт?</span></summary>
+      <div>
+        <p>Курс на русском. Алгоритмы и шаблоны разговоров переносятся на английский&nbsp;— лексика 1:1, code review, performance review и так на английском в большинстве команд.</p>
+        <p>Шаблоны переводов на английский&nbsp;— отдельный материал в курсе [TODO: подтвердить, что это будет].</p>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<div id="final" class="final">
+  <div class="final-inner">
+    <div class="section-marker reveal"><span class="num" style="color: var(--accent-soft);">§ 09</span> Записаться</div>
+    <h2 class="reveal">Старт ближайшего потока&nbsp;— <em>[TODO: дата]</em></h2>
+    <p class="reveal">Группа на интервизии не больше 8 человек. Если набор закрыт&nbsp;— запишись в лист ожидания, пришлём уведомление за 2 недели до следующего потока.</p>
+    <a href="#pricing" class="btn-primary reveal">Записаться в поток</a>
+    <div class="final-meta">
+      <div>↳ Открытый набор первого потока</div>
+      <div>↳ Скидка 30% за публикуемый кейс</div>
+      <div>↳ Гарантия возврата 30 дней</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <div>© 2026 · Лидер-практик: Ситуационное управление · [TODO: реквизиты ИП/ООО]</div>
+    <div class="footer-links">
+      <a href="#">Политика конфиденциальности</a>
+      <a href="#">Оферта</a>
+      <a href="#">Контакты</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Intersection-based reveal
+const observer = new IntersectionObserver(entries => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('in'), i * 60);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -10% 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// Smooth scroll for anchor links (fallback for older browsers)
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const id = a.getAttribute('href');
+    if (id === '#') return;
+    const t = document.querySelector(id);
+    if (t) {
+      e.preventDefault();
+      t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+
+<script>
+// Сообщаем высоту страницы в родительский фрейм (для Тильды)
+function reportHeight() {
+  var height = document.documentElement.scrollHeight;
+  window.parent.postMessage({ type: 'lp-height', height: height }, '*');
+}
+window.addEventListener('load', reportHeight);
+window.addEventListener('resize', reportHeight);
+// Повторяем несколько раз пока грузятся шрифты
+setTimeout(reportHeight, 500);
+setTimeout(reportHeight, 1500);
+setTimeout(reportHeight, 3000);
+</script>
+
+</body>
+</html>
