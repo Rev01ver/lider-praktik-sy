@@ -25,6 +25,7 @@
   --red-bg:     #fdecea;
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
 html { scroll-behavior: smooth; scroll-padding-top: 56px; }
 body {
   font-family: 'Manrope', sans-serif;
@@ -39,7 +40,7 @@ body {
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 9999;
   background: var(--ink);
   transition: box-shadow .2s;
 }
@@ -112,7 +113,7 @@ body {
   color: var(--white);
   padding: 4.5rem 2rem 3.5rem;
   position: relative;
-  overflow: hidden;
+  overflow: clip;
 }
 .hero::before {
   content: '';
@@ -346,11 +347,12 @@ hr.rule-dark { border: none; border-top: 1px solid rgba(255,255,255,.08); }
 </style>
 </head>
 <body>
+<div id="scroll-root" style="overflow-y:auto;height:100dvh;position:relative;">
 
 <!-- STICKY HEADER -->
 <header class="site-header" id="site-header">
   <div class="header-top">
-    <div class="nav-brand">Лидер-практик <span>·</span> Ситуационное управление <span>·</span> РОП</div>
+    <div class="nav-brand">Лидер-практик <span>·</span> Ситуационное управление <span>·</span> Руководитель отдела продаж</div>
     <nav class="nav-links">
       <a href="#programme">Программа</a>
       <a href="#inside">Что внутри</a>
@@ -364,7 +366,7 @@ hr.rule-dark { border: none; border-top: 1px solid rgba(255,255,255,.08); }
 <!-- HERO -->
 <div class="hero">
   <div class="hero-inner">
-    <div class="hero-tag">Ситуационное управление · Руководитель отдела продаж</div>
+    <div class="hero-tag">Ситуационное управление · РОП</div>
     <h1>Перестань продавать<br>вместо своей команды.<br><em>Начни ею управлять.</em></h1>
     <p class="hero-sub">
       <strong>21 день, 30 кейсов</strong> из практики отделов продаж — B2B, ретейл, финансы, недвижимость.
@@ -651,23 +653,23 @@ hr.rule-dark { border: none; border-top: 1px solid rgba(255,255,255,.08); }
     <div class="instr-grid">
       <div class="instr-card">
         <div class="instr-top">
-          <div class="instr-avatar">ИК</div>
+          <img src="data:image/jpeg;base64,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" style="width:80px;height:80px;border-radius:50%;object-fit:cover;object-position:center top;flex-shrink:0;" alt="">
           <div>
-            <div class="instr-name">Илья Кириенков</div>
-            <div class="instr-title">Автор курса</div>
+            <div class="instr-name">Татьяна Шевчук</div>
+            <div class="instr-title">Эксперт</div>
           </div>
         </div>
-        <div class="instr-bio">23 года в IT и продуктовом менеджменте. Product Owner и Delivery Manager в FESCO (CRM для логистики), Сбере (B2B-лояльность), Raiffeisen, Vsegda Da. Управлял сетью из 20 франшизных школ KIBERone. Работал с распределёнными командами и до удалёнки, и после.</div>
+        <div class="instr-bio">Ex-Топ менеджер с 16-летним опытом в рознице, бизнес-коуч ICF.</div>
       </div>
       <div class="instr-card">
         <div class="instr-top">
-          <div class="instr-avatar">ТШ</div>
+          <img src="data:image/jpeg;base64,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" style="width:80px;height:80px;border-radius:50%;object-fit:cover;object-position:center top;flex-shrink:0;" alt="">
           <div>
-            <div class="instr-name">Татьяна Шевчук</div>
-            <div class="instr-title">ICF-сертифицированный коуч</div>
+            <div class="instr-name">Наталья Сергеева</div>
+            <div class="instr-title">Эксперт</div>
           </div>
         </div>
-        <div class="instr-bio">Ведёт интервизии и индивидуальные сессии в тарифе «С коучингом». Специализация — управленческие переговоры и работа с командным сопротивлением. Сертификат ICF ACC.</div>
+        <div class="instr-bio">Тренер по развитию команд, бизнес-коуч PCC ICF, HR-эксперт.</div>
       </div>
     </div>
   </div>
@@ -707,16 +709,16 @@ hr.rule-dark { border: none; border-top: 1px solid rgba(255,255,255,.08); }
         <a href="#" class="btn-price">Записаться →</a>
       </div>
       <div class="price-card">
-        <div class="price-tier">С коучингом</div>
+        <div class="price-tier">С менторингом</div>
         <div class="price-num">49&thinsp;990<span class="price-cur"> ₽</span></div>
         <div class="price-period">21 день · pro</div>
         <ul class="price-features">
           <li><span class="check">✓</span>Всё из «С обратной связью»</li>
           <li><span class="check">✓</span>5 интервизий вместо 4</li>
-          <li><span class="check">✓</span>2 индивидуальные сессии с Татьяной по 60 минут</li>
+          <li><span class="check">✓</span>2 индивидуальные сессии с Татьяной или Натальей по 60 минут</li>
           <li><span class="check">✓</span>Расширенный сертификат</li>
         </ul>
-        <a href="#" class="btn-price">Выбрать «С коучингом»</a>
+        <a href="#" class="btn-price">Выбрать «С менторингом»</a>
       </div>
     </div>
     <p class="price-note">Оплата от юрлица — напишите в <a href="#" style="color:var(--accent)">Telegram</a> или на <a href="#" style="color:var(--accent)">email</a></p>
@@ -791,8 +793,9 @@ hr.rule-dark { border: none; border-top: 1px solid rgba(255,255,255,.08); }
 
 <script>
 const header = document.getElementById('site-header');
-window.addEventListener('scroll', () => {
-  header.classList.toggle('scrolled', window.scrollY > 10);
+const root = document.getElementById('scroll-root');
+root.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', root.scrollTop > 10);
 });
 
 const sections = ['programme','inside','pricing','faq'];
@@ -812,5 +815,6 @@ sections.forEach(id => {
   if (el) obs.observe(el);
 });
 </script>
+</div>
 </body>
 </html>
