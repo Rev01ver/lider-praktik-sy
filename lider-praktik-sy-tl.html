@@ -30,29 +30,28 @@
   --shadow:    0 2px 16px rgba(0,0,0,.45);
 }
 [data-theme="light"] {
-  --bg:        #ffffff;
-  --bg-2:      #f7f7fb;
-  --bg-3:      #eeeef5;
-  --border:    #e5e7ec;
-  --border-2:  #dce0e8;
+  --bg:        #f0f2f7;   /* тёплый slate — не белый лист */
+  --bg-2:      #f8f9fc;   /* карточки чуть светлее фона */
+  --bg-3:      #e8eaf2;   /* тёмные секции — заметно темнее */
+  --border:    #d4d8e8;
+  --border-2:  #c4c9dd;
   --text:      #0d1b2a;
-  --text-2:    #5a7a99;
-  --text-3:    #9ca3af;
+  --text-2:    #4a6280;
+  --text-3:    #8896aa;
   --accent:    #4f46e5;
   --accent-h:  #4338ca;
-  --accent-bg: rgba(79,70,229,.10);
+  --accent-bg: rgba(79,70,229,.09);
   --green:     #0a6b3d;
-  --green-bg:  rgba(34,197,94,.12);
+  --green-bg:  rgba(34,197,94,.13);
   --red:       #c12626;
   --red-bg:    rgba(239,68,68,.10);
   --red-text:  #7c1c1c;
   --green-text:#064e30;
-  --shadow:    0 2px 16px rgba(13,27,42,.10);
+  --shadow:    0 2px 16px rgba(13,27,42,.12);
 }
 
 /* ─── RESET ─── */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html, body { height: 100%; }
 html { scroll-behavior: smooth; scroll-padding-top: 56px; }
 body {
   font-family: 'Manrope', sans-serif;
@@ -91,15 +90,17 @@ body {
   white-space: normal;
 }
 .ph-photo {
-  width: 80px; height: 80px; border-radius: 50%;
+  width: 96px; height: 96px; border-radius: 50%;
   background: var(--accent-bg);
   border: 1.5px dashed var(--accent);
+  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--accent-h);
   display: flex; align-items: center; justify-content: center;
   color: var(--accent);
   font-family: 'JetBrains Mono', monospace;
   font-size: 10px; text-align: center;
   flex-shrink: 0;
 }
+@media (max-width: 600px) { .ph-photo { width: 80px; height: 80px; } }
 
 /* ─── STICKY HEADER ─── */
 .site-header {
@@ -462,6 +463,13 @@ hr.rule { border: none; border-top: 1px solid var(--border); }
 }
 .instr-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
 .instr-name { font-size: 15px; font-weight: 700; color: var(--text); }
+.instr-photo {
+  width: 96px; height: 96px; border-radius: 50%;
+  object-fit: cover; object-position: center top;
+  flex-shrink: 0;
+  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--accent-h);
+}
+@media (max-width: 600px) { .instr-photo { width: 80px; height: 80px; } }
 .instr-title {
   font-size: 12px; color: var(--text-2);
   text-transform: uppercase; letter-spacing: .06em; margin-top: 2px;
