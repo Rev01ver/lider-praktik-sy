@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ситуационное управление для тимлидов в ИТ — Лидер-практик</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ─── THEME TOKENS ─── */
+[data-theme="dark"] {
+  --bg:        #0a0a0f;
+  --bg-2:      #111118;
+  --bg-3:      #1a1a24;
+  --border:    rgba(255,255,255,.08);
+  --border-2:  rgba(255,255,255,.12);
+  --text:      #e8e8f0;
+  --text-2:    #9898aa;
+  --text-3:    #55556a;
+  --accent:    #6366f1;
+  --accent-h:  #818cf8;
+  --accent-bg: rgba(99,102,241,.12);
+  --green:     #22c55e;
+  --green-bg:  rgba(34,197,94,.10);
+  --red:       #ef4444;
+  --red-bg:    rgba(239,68,68,.10);
+  --red-text:  #fca5a5;
+  --green-text:#86efac;
+  --shadow:    0 2px 16px rgba(0,0,0,.45);
+}
+[data-theme="light"] {
+  --bg:        #ffffff;
+  --bg-2:      #f7f7fb;
+  --bg-3:      #eeeef5;
+  --border:    #e5e7ec;
+  --border-2:  #dce0e8;
+  --text:      #0d1b2a;
+  --text-2:    #5a7a99;
+  --text-3:    #9ca3af;
+  --accent:    #4f46e5;
+  --accent-h:  #4338ca;
+  --accent-bg: rgba(79,70,229,.10);
+  --green:     #0a6b3d;
+  --green-bg:  rgba(34,197,94,.12);
+  --red:       #c12626;
+  --red-bg:    rgba(239,68,68,.10);
+  --red-text:  #7c1c1c;
+  --green-text:#064e30;
+  --shadow:    0 2px 16px rgba(13,27,42,.10);
+}
+
+/* ─── RESET ─── */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+html { scroll-behavior: smooth; scroll-padding-top: 56px; }
+body {
+  font-family: 'Manrope', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 16px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  transition: background .2s, color .2s;
+}
+
+/* ─── PLACEHOLDER STYLE ─── */
+.ph {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .85em;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 1px dashed var(--accent);
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0;
+  white-space: nowrap;
+}
+.ph-block {
+  display: block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .85em;
+  color: var(--accent);
+  background: var(--accent-bg);
+  border: 1px dashed var(--accent);
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin: 4px 0;
+  line-height: 1.5;
+  white-space: normal;
+}
+.ph-photo {
+  width: 80px; height: 80px; border-radius: 50%;
+  background: var(--accent-bg);
+  border: 1.5px dashed var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; text-align: center;
+  flex-shrink: 0;
+}
+
+/* ─── STICKY HEADER ─── */
+.site-header {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--bg-2);
+  border-bottom: 1px solid var(--border);
+  transition: box-shadow .2s, background .2s;
+}
+.site-header.scrolled { box-shadow: var(--shadow); }
+.header-top {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 2rem; height: 56px; gap: 1rem;
+  max-width: 1200px; margin: 0 auto;
+}
+.nav-brand {
+  font-size: 13px; font-weight: 600;
+  color: var(--text-2); letter-spacing: .02em;
+  white-space: nowrap; flex-shrink: 0;
+}
+.nav-brand b { color: var(--text); font-weight: 700; }
+.nav-brand span { color: var(--accent-h); }
+
+.nav-links {
+  display: flex; align-items: center; gap: 4px;
+  flex: 1; justify-content: center;
+}
+.nav-links a {
+  font-size: 13px; font-weight: 500;
+  color: var(--text-2); text-decoration: none;
+  padding: 6px 12px; border-radius: 5px;
+  transition: color .15s, background .15s;
+  white-space: nowrap;
+}
+.nav-links a:hover { color: var(--text); background: var(--bg-3); }
+.nav-links a.active { color: var(--accent-h); }
+
+.header-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+.theme-toggle {
+  width: 34px; height: 34px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid var(--border); background: transparent;
+  border-radius: 6px; cursor: pointer; color: var(--text-2);
+  transition: color .15s, border-color .15s, background .15s;
+}
+.theme-toggle:hover { color: var(--text); border-color: var(--border-2); background: var(--bg-3); }
+.theme-toggle svg { width: 16px; height: 16px; }
+[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+[data-theme="light"] .theme-toggle .icon-sun { display: none; }
+[data-theme="light"] .theme-toggle .icon-moon { display: block; }
+
+.nav-cta {
+  font-size: 13px; font-weight: 700;
+  background: var(--accent); color: #fff;
+  padding: 7px 18px; border-radius: 5px;
+  text-decoration: none; white-space: nowrap;
+  transition: background .15s;
+}
+.nav-cta:hover { background: var(--accent-h); }
+
+@media (max-width: 700px) {
+  .nav-links { display: none; }
+  .nav-brand { font-size: 11px; }
+  .header-top { padding: 0 1rem; gap: .5rem; }
+  .nav-cta { padding: 7px 12px; font-size: 12px; }
+}
+
+/* ─── HERO ─── */
+.hero {
+  background: var(--bg);
+  padding: 4.5rem 2rem 3.5rem;
+  position: relative; overflow: clip;
+  border-bottom: 1px solid var(--border);
+}
+.hero::before {
+  content: ''; position: absolute;
+  top: -120px; right: -80px;
+  width: 460px; height: 460px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--accent-bg) 0%, transparent 70%);
+  pointer-events: none; opacity: .9;
+}
+.hero-inner { max-width: 780px; margin: 0 auto; position: relative; }
+
+.hero-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent-h); margin-bottom: 1.25rem;
+}
+.hero-tag::before {
+  content: ''; display: block; width: 28px; height: 2px;
+  background: var(--accent);
+}
+.hero h1 {
+  font-size: clamp(1.95rem, 4.5vw, 3rem);
+  font-weight: 800; line-height: 1.15; letter-spacing: -.025em;
+  margin-bottom: 1rem; color: var(--text);
+}
+.hero h1 em { font-style: normal; color: var(--accent-h); }
+
+.hero-sub {
+  font-size: 1.05rem; color: var(--text-2);
+  max-width: 560px; margin-bottom: 1.75rem; line-height: 1.65;
+}
+.hero-sub strong { color: var(--text); font-weight: 600; }
+
+.hero-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 2rem; }
+.pill {
+  display: flex; align-items: center; gap: 6px;
+  background: var(--bg-3); border: 1px solid var(--border);
+  border-radius: 100px; padding: 6px 14px;
+  font-size: 14px; font-weight: 600; color: var(--text);
+}
+.pill .n { font-family: 'JetBrains Mono', monospace; color: var(--accent-h); font-size: 15px; }
+.pill .mono { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--accent-h); }
+
+.hero-cta-row {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem; margin-bottom: 2rem;
+}
+.btn-main {
+  display: inline-block; background: var(--accent); color: #fff;
+  font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 700;
+  padding: 14px 30px; border-radius: 6px; text-decoration: none;
+  transition: background .18s, transform .12s; border: none; cursor: pointer;
+}
+.btn-main:hover { background: var(--accent-h); transform: translateY(-1px); }
+.btn-main:active { transform: translateY(0); }
+.hero-anchor {
+  font-size: 14px; color: var(--text-2); text-decoration: none;
+  border-bottom: 1px solid var(--border-2); padding-bottom: 1px;
+  transition: color .15s, border-color .15s;
+}
+.hero-anchor:hover { color: var(--text); border-color: var(--accent); }
+
+.urgency {
+  background: var(--bg-3); border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: 8px; padding: 12px 16px;
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: 12px;
+}
+.urgency-text { font-size: 14px; color: var(--text-2); }
+.urgency-text strong { color: var(--text); }
+.urgency-bar { display: flex; align-items: center; gap: 8px; }
+.progress-track { width: 120px; height: 6px; background: var(--border-2); border-radius: 3px; overflow: hidden; }
+.progress-fill { width: 62.5%; height: 100%; background: var(--accent); border-radius: 3px; }
+.urgency-seats { font-size: 13px; color: var(--accent-h); font-weight: 600; }
+
+/* ─── COMMON SECTION ─── */
+section { padding: 3.5rem 2rem; }
+@media (max-width: 600px) { section { padding: 2.5rem 1.25rem; } }
+.container { max-width: 780px; margin: 0 auto; }
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--text-2); margin-bottom: 1rem;
+}
+.section-label .n { font-family: 'JetBrains Mono', monospace; color: var(--accent); }
+h2.section-h {
+  font-size: clamp(1.45rem, 3vw, 1.85rem); font-weight: 800;
+  line-height: 1.25; letter-spacing: -.02em; color: var(--text);
+  margin-bottom: .75rem;
+}
+.section-sub { font-size: 15px; color: var(--text-2); margin-bottom: 1.75rem; }
+hr.rule { border: none; border-top: 1px solid var(--border); }
+
+/* ─── §01 RECOGNITION ─── */
+.recog { background: var(--bg-2); }
+.recog-list { list-style: none; border-top: 1px solid var(--border); }
+.recog-list li {
+  display: grid; grid-template-columns: 32px 1fr; gap: 12px;
+  padding: 1rem 0; border-bottom: 1px solid var(--border);
+  align-items: start; font-size: 15px; color: var(--text-2); line-height: 1.6;
+}
+.recog-list li .nn {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  color: var(--accent); font-weight: 500; padding-top: 3px;
+}
+
+/* ─── §02 WHY-NOT ─── */
+.why-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 1.5rem;
+}
+@media (max-width: 600px) { .why-grid { grid-template-columns: 1fr; } }
+.why-card {
+  background: var(--bg-2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 1.25rem;
+}
+.why-card.star { background: var(--accent-bg); border-color: var(--accent); }
+.why-card h3 {
+  font-size: 13px; font-weight: 700; color: var(--text);
+  margin-bottom: 6px; text-transform: uppercase; letter-spacing: .04em;
+}
+.why-card.star h3 { color: var(--accent-h); }
+.why-card p { font-size: 14px; color: var(--text-2); line-height: 1.6; }
+
+/* ─── §03 TRANSFORMATION ─── */
+.transform-grid { display: grid; gap: 10px; margin-top: 1.5rem; }
+.tf-card {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
+  font-size: 14px;
+}
+.tf-before {
+  background: var(--red-bg); color: var(--red-text);
+  border-right: 1px solid var(--border);
+  padding: 14px 16px; line-height: 1.55;
+}
+.tf-after {
+  background: var(--green-bg); color: var(--green-text);
+  padding: 14px 16px; line-height: 1.55; font-weight: 500;
+}
+.tf-tag {
+  font-size: 11px; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; margin-bottom: 5px; opacity: .75;
+}
+@media (max-width: 560px) {
+  .tf-card { grid-template-columns: 1fr; }
+  .tf-before { border-right: none; border-bottom: 1px solid var(--border); }
+}
+
+/* ─── §04 ROI ─── */
+.roi { background: var(--bg-3); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.roi-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 1.5rem;
+}
+@media (max-width: 600px) { .roi-grid { grid-template-columns: 1fr; } }
+.roi-card {
+  background: var(--bg-2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 1.25rem;
+}
+.roi-number {
+  font-family: 'JetBrains Mono', monospace; font-size: 2rem;
+  font-weight: 500; color: var(--accent-h); line-height: 1; margin-bottom: 6px;
+}
+.roi-label { font-size: 14px; color: var(--text); font-weight: 600; margin-bottom: 5px; }
+.roi-desc { font-size: 13px; color: var(--text-2); line-height: 1.55; }
+
+/* ─── §05 PROGRAMME + TIMELINE SVG ─── */
+.timeline {
+  margin: 1.75rem 0 2rem;
+  background: var(--bg-2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 1.5rem 1rem 1.25rem;
+  overflow-x: auto;
+}
+.timeline svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+.timeline-text-track { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: var(--text-2); }
+.timeline-text-week { font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 700; fill: var(--text); }
+.prog-grid { display: grid; gap: 8px; margin-top: 1rem; }
+.prog-card {
+  display: grid; grid-template-columns: 100px 1fr; gap: 16px;
+  background: var(--bg-2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 1.1rem 1.25rem; align-items: start;
+}
+@media (max-width: 600px) { .prog-card { grid-template-columns: 1fr; gap: 4px; } }
+.prog-week {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  color: var(--accent); font-weight: 500; text-transform: uppercase;
+  letter-spacing: .06em; padding-top: 2px;
+}
+.prog-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.prog-desc { font-size: 14px; color: var(--text-2); line-height: 1.55; }
+
+/* ─── §06 INSIDE + ICONS ─── */
+.inside-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 1.5rem;
+}
+@media (max-width: 600px) { .inside-grid { grid-template-columns: 1fr; } }
+.inside-card {
+  background: var(--bg-2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 1.25rem;
+  display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start;
+}
+.inside-icon {
+  width: 44px; height: 44px;
+  background: var(--accent-bg); border: 1px solid var(--border-2);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--accent-h);
+}
+.inside-icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.6; }
+.inside-num {
+  font-family: 'JetBrains Mono', monospace; font-size: 11px;
+  color: var(--accent); font-weight: 500; margin-bottom: 4px;
+  text-transform: uppercase; letter-spacing: .06em;
+}
+.inside-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+.inside-desc { font-size: 14px; color: var(--text-2); line-height: 1.6; }
+.inside-list { list-style: none; margin-top: 8px; }
+.inside-list li {
+  font-size: 13px; color: var(--text-2);
+  padding: 3px 0; display: flex; gap: 7px;
+}
+.inside-list li::before { content: '→'; color: var(--accent); flex-shrink: 0; }
+
+/* ─── §07 PROOF ─── */
+.proof { background: var(--bg-2); }
+.proof-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 1.5rem;
+}
+@media (max-width: 700px) { .proof-grid { grid-template-columns: 1fr; } }
+.proof-card {
+  background: var(--bg); border: 1px solid var(--border);
+  border-radius: 8px; padding: 1.25rem;
+}
+.proof-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.proof-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--accent-bg); display: flex; align-items: center;
+  justify-content: center; font-size: 14px; font-weight: 700;
+  color: var(--accent-h); flex-shrink: 0;
+  border: 1px dashed var(--accent);
+}
+.proof-name { font-size: 15px; font-weight: 700; color: var(--text); }
+.proof-role { font-size: 13px; color: var(--text-2); margin-top: 1px; }
+.proof-quote { font-size: 14px; color: var(--text-2); line-height: 1.6; }
+.proof-result {
+  margin-top: 10px; display: inline-block;
+  background: var(--green-bg); color: var(--green-text);
+  font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 4px;
+}
+
+/* ─── LEAD MAGNET ─── */
+.leadmag {
+  background: var(--accent-bg); border-top: 2px solid var(--accent);
+  padding: 2.5rem 2rem;
+}
+.leadmag-inner {
+  max-width: 780px; margin: 0 auto;
+  display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center;
+}
+@media (max-width: 620px) { .leadmag-inner { grid-template-columns: 1fr; } }
+.leadmag-title { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.leadmag-sub { font-size: 14px; color: var(--text-2); }
+.leadmag-form { display: flex; gap: 8px; flex-wrap: wrap; }
+.leadmag-form input {
+  flex: 1; min-width: 200px; padding: 11px 14px;
+  border: 1.5px solid var(--border-2); border-radius: 6px;
+  font-size: 14px; font-family: 'Manrope', sans-serif;
+  outline: none; background: var(--bg); color: var(--text);
+}
+.leadmag-form input:focus { border-color: var(--accent); }
+.btn-lead {
+  background: var(--accent); color: #fff;
+  font-family: 'Manrope', sans-serif; font-size: 14px; font-weight: 700;
+  padding: 11px 20px; border: none; border-radius: 6px;
+  cursor: pointer; white-space: nowrap; transition: background .15s;
+}
+.btn-lead:hover { background: var(--accent-h); }
+
+/* ─── §08 INSTRUCTORS ─── */
+.instructors { background: var(--bg-3); }
+.instr-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 1.5rem;
+}
+@media (max-width: 600px) { .instr-grid { grid-template-columns: 1fr; } }
+.instr-card {
+  background: var(--bg-2); border: 1px solid var(--border);
+  border-radius: 8px; padding: 1.25rem;
+}
+.instr-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+.instr-name { font-size: 15px; font-weight: 700; color: var(--text); }
+.instr-title {
+  font-size: 12px; color: var(--text-2);
+  text-transform: uppercase; letter-spacing: .06em; margin-top: 2px;
+}
+.instr-bio { font-size: 14px; color: var(--text-2); line-height: 1.6; }
+
+/* ─── §09 PRICING ─── */
+.pricing-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 1.5rem;
+}
+@media (max-width: 720px) { .pricing-grid { grid-template-columns: 1fr; } }
+.price-card {
+  border: 1.5px solid var(--border-2); border-radius: 10px;
+  padding: 1.5rem; position: relative;
+  background: var(--bg-2);
+}
+.price-card.feat { border-color: var(--accent); border-width: 2px; background: var(--bg-2); }
+.feat-badge {
+  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+  background: var(--accent); color: #fff;
+  font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+  padding: 4px 12px; border-radius: 20px; white-space: nowrap;
+}
+.price-tier {
+  font-size: 12px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: .08em; color: var(--text-2); margin-bottom: 8px;
+}
+.price-num {
+  font-family: 'JetBrains Mono', monospace; font-size: 2rem;
+  font-weight: 500; color: var(--text); line-height: 1;
+}
+.price-cur { font-size: 1rem; font-weight: 400; font-family: 'Manrope', sans-serif; }
+.price-period { font-size: 13px; color: var(--text-2); margin: 4px 0 1rem; }
+.price-features { list-style: none; margin-bottom: 1.25rem; font-size: 14px; color: var(--text-2); }
+.price-features li {
+  padding: 5px 0; border-bottom: 1px solid var(--border);
+  display: flex; gap: 8px; align-items: flex-start;
+}
+.price-features li .check { color: var(--green); flex-shrink: 0; }
+.btn-price {
+  display: block; text-align: center; padding: 12px;
+  font-size: 14px; font-weight: 700; font-family: 'Manrope', sans-serif;
+  border: 1.5px solid var(--border-2); border-radius: 6px;
+  background: transparent; color: var(--text); text-decoration: none;
+  cursor: pointer; transition: all .18s;
+}
+.btn-price:hover { border-color: var(--accent); color: var(--accent-h); }
+.price-card.feat .btn-price { background: var(--accent); color: #fff; border-color: var(--accent); }
+.price-card.feat .btn-price:hover { background: var(--accent-h); border-color: var(--accent-h); }
+.price-note { font-size: 13px; color: var(--text-2); margin-top: 14px; text-align: center; }
+.price-note .ph { white-space: normal; }
+
+/* ─── §10 FAQ ─── */
+.faq-section { background: var(--bg-2); }
+.faq-list { margin-top: 1.5rem; border-top: 1px solid var(--border); }
+.faq-item { border-bottom: 1px solid var(--border); padding: 1.1rem 0; }
+.faq-q {
+  font-size: 15px; font-weight: 600; color: var(--text);
+  margin-bottom: 6px; display: flex; gap: 10px;
+}
+.faq-q .nn {
+  font-family: 'JetBrains Mono', monospace; font-size: 12px;
+  color: var(--accent); font-weight: 500; padding-top: 3px; flex-shrink: 0;
+}
+.faq-a { font-size: 14px; color: var(--text-2); line-height: 1.7; padding-left: 22px; }
+
+/* ─── FINAL CTA ─── */
+.final-cta {
+  background: var(--bg-3); color: var(--text);
+  text-align: center; padding: 4.5rem 2rem;
+  border-top: 1px solid var(--border);
+}
+.final-cta h2 {
+  font-size: clamp(1.5rem, 3.5vw, 2rem); font-weight: 800;
+  letter-spacing: -.015em; margin-bottom: .75rem;
+}
+.final-cta h2 span { color: var(--accent-h); }
+.final-cta p { font-size: 15px; color: var(--text-2); max-width: 440px; margin: 0 auto 2rem; }
+.final-badges {
+  display: flex; flex-wrap: wrap; justify-content: center;
+  gap: 1.25rem 1.5rem; margin-top: 1.5rem;
+}
+.f-badge { font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 6px; }
+.f-badge::before { content: '✓'; color: var(--accent-h); font-weight: 700; }
+
+/* ─── FOOTER ─── */
+footer {
+  background: var(--bg); color: var(--text-3);
+  text-align: center; padding: 1.75rem 2rem;
+  font-size: 13px; border-top: 1px solid var(--border);
+}
+footer a { color: var(--text-3); text-decoration: none; }
+footer a:hover { color: var(--text-2); }
+
+/* ─── STICKY MOBILE CTA ─── */
+.mobile-cta {
+  display: none;
+  position: fixed; left: 12px; right: 12px; bottom: 12px;
+  z-index: 90;
+  background: var(--accent); color: #fff;
+  border-radius: 8px; padding: 12px 16px;
+  font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 700;
+  text-decoration: none; text-align: center;
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+  transform: translateY(100px); transition: transform .25s ease, opacity .25s;
+  opacity: 0; pointer-events: none;
+}
+.mobile-cta.show {
+  transform: translateY(0); opacity: 1; pointer-events: auto;
+}
+.mobile-cta .small {
+  font-family: 'JetBrains Mono', monospace; font-weight: 500;
+  font-size: 12px; opacity: .85; margin-left: 6px;
+}
+@media (max-width: 700px) {
+  .mobile-cta { display: block; }
+  body { padding-bottom: 70px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ──────────── STICKY HEADER ──────────── -->
+<header class="site-header" id="site-header">
+  <div class="header-top">
+    <div class="nav-brand"><b>Лидер-практик</b> <span>·</span> Ситуационное управление <span>·</span> Тимлиды в ИТ</div>
+    <nav class="nav-links">
+      <a href="#programme">Программа</a>
+      <a href="#inside">Что внутри</a>
+      <a href="#proof">Отзывы</a>
+      <a href="#pricing">Тарифы</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="header-right">
+      <button class="theme-toggle" id="theme-toggle" aria-label="Переключить тему">
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <a href="#pricing" class="nav-cta">Записаться →</a>
+    </div>
+  </div>
+</header>
+
+<!-- ──────────── HERO ──────────── -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="hero-tag">Ситуационное управление · тимлиды в ИТ</div>
+    <h1>Перестань разгребать пожары.<br><em>Начни управлять командой.</em></h1>
+    <p class="hero-sub">
+      <strong>21 день, 30 кейсов</strong> из практики команд в e-com, финтех, edtech и медиа.
+      Свой алгоритм для сеньоров, джунов и распределённых команд —
+      без курсов общего менеджмента и без книг для CEO.
+    </p>
+    <div class="hero-pills">
+      <div class="pill"><span class="n">21</span> день</div>
+      <div class="pill"><span class="n">30</span> кейсов из digital</div>
+      <div class="pill"><span class="n">6</span> алгоритмов</div>
+      <div class="pill"><span class="mono">0 commits</span> → не твоя проблема</div>
+    </div>
+    <div class="hero-cta-row">
+      <a href="#pricing" class="btn-main">Записаться в поток →</a>
+      <a href="#programme" class="hero-anchor">Посмотреть программу</a>
+    </div>
+    <div class="urgency">
+      <div class="urgency-text">Старт: <strong><span class="ph">{{ДАТА_СТАРТА — например: 15 сентября 2026}}</span></strong> · Группа закрывается <strong><span class="ph">{{ДАТА_ЗАКРЫТИЯ_ГРУППЫ}}</span></strong></div>
+      <div class="urgency-bar">
+        <div class="progress-track"><div class="progress-fill"></div></div>
+        <span class="urgency-seats"><span class="ph">{{ОСТАЛОСЬ_N_МЕСТ_ИЗ_8}}</span></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ──────────── §01 RECOGNITION ──────────── -->
+<section class="recog">
+  <div class="container">
+    <div class="section-label"><span class="n">§01</span> Это про тебя, если</div>
+    <h2 class="section-h">Ты узнаёшь себя в этом</h2>
+    <ul class="recog-list">
+      <li><span class="nn">01</span>Сеньор на ретро снова сказал, что твой план — фигня, и ты не нашёл, что ответить так, чтобы не потерять человека и не потерять авторитет.</li>
+      <li><span class="nn">02</span>Джун, который месяц назад говорил «всё понятно», теперь третий день молчит на дейли, а задача стоит в Jira. Непонятно, что происходит.</li>
+      <li><span class="nn">03</span>Удалённый разработчик «пропал»: онлайн в Slack, Jira-задача стоит, на 1:1 говорит «всё нормально». Что делать дальше — неясно.</li>
+      <li><span class="nn">04</span>Готовишься к 1:1 с сеньором как к дуэли — потому что он закрывает код-ревью без обсуждения, и непонятно, как это останавливать без конфликта.</li>
+      <li><span class="nn">05</span>Performance review через две недели — нужно сказать мидлу, что повышения не будет. Непонятно, как сказать так, чтобы человек не ушёл.</li>
+      <li><span class="nn">06</span>Делегируешь и видишь, что сам сделал бы за час, а так — три дня и переоткрытие задачи. Переделываешь сам — и так каждый раз.</li>
+      <li><span class="nn">07</span>Сам пришёл из senior IC, теперь тимлид — и каждую пятницу думаешь: «что я сделал на этой неделе? GitHub показывает 0 коммитов».</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ──────────── §02 WHY-NOT ──────────── -->
+<section>
+  <div class="container">
+    <div class="section-label"><span class="n">§02</span> Почему стандартные курсы не работают</div>
+    <h2 class="section-h">Курсы по менеджменту проектируются не для тебя</h2>
+    <p class="section-sub">Там нет спринта, команды другие, и «трудный разговор» — это не 1:1 с сеньором в пятницу.</p>
+    <div class="why-grid">
+      <div class="why-card">
+        <h3>Книги для CEO</h3>
+        <p>Про другой масштаб и другие проблемы. У тебя нет Chief of Staff и P&amp;L — есть Jira и ретро в понедельник.</p>
+      </div>
+      <div class="why-card">
+        <h3>Курсы общего менеджмента</h3>
+        <p>Про PowerPoint и SMART-цели, которые в команде разработки звучат странно. Не про тебя.</p>
+      </div>
+      <div class="why-card">
+        <h3>Классический Hersey-Blanchard</h3>
+        <p>Академический: не учитывает удалёнку, AI-ассистентов и матричные команды без прямой административной власти.</p>
+      </div>
+      <div class="why-card star">
+        <h3>Лидер-практик для тимлидов</h3>
+        <p>Построен от твоего дня в Jira и Slack. Конкретные ходы в конкретных ритуалах: 1:1, ретро, code review, planning, perf review.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ──────────── §03 TRANSFORMATION ──────────── -->
+<section>
+  <div class="container">
+    <div class="section-label"><span class="n">§03</span> До и после</div>
+    <h2 class="section-h">Что меняется через 21 день</h2>
+    <div class="transform-grid">
+      <div class="tf-card">
+        <div class="tf-before"><div class="tf-tag">Сейчас</div>Готовишься к 1:1 с сеньором как к дуэли — и часто проигрываешь или выходишь без результата</div>
+        <div class="tf-after"><div class="tf-tag">После курса</div>Алгоритм для 3 типов: сопротивление, выгорание, низкий confidence — знаешь, что делать в каждом</div>
+      </div>
+      <div class="tf-card">
+        <div class="tf-before"><div class="tf-tag">Сейчас</div>Performance cycle — стресс. Боишься «не повышаем» сказать так, чтобы человек не ушёл</div>
+        <div class="tf-after"><div class="tf-tag">После курса</div>Протокол сложных perf-разговоров. Конкретные слова, которые работают без потери человека</div>
+      </div>
+      <div class="tf-card">
+        <div class="tf-before"><div class="tf-tag">Сейчас</div>Делегируешь и переделываешь сам — не знаешь, насколько отпускать контроль</div>
+        <div class="tf-after"><div class="tf-tag">После курса</div>7 уровней делегирования. Под каждого человека в команде — свой уровень и своя точка контроля</div>
+      </div>
+      <div class="tf-card">
+        <div class="tf-before"><div class="tf-tag">Сейчас</div>Удалённый «пропал» — пишешь в Slack, получаешь «всё нормально». Дальше не знаешь, что делать</div>
+        <div class="tf-after"><div class="tf-tag">После курса</div>Знаешь сигналы выгорания vs сопротивления vs внешних обстоятельств — и три разных протокола</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── §04 ROI ──────────── -->
+<section class="roi">
+  <div class="container">
+    <div class="section-label"><span class="n">§04</span> Цена отсутствия системы</div>
+    <h2 class="section-h">Что стоит работа без управленческого инструмента</h2>
+    <p class="section-sub">Пока тимлид пишет код вместо команды — он не управляет командой.</p>
+    <div class="roi-grid">
+      <div class="roi-card">
+        <div class="roi-number">8–12</div>
+        <div class="roi-label">часов в неделю</div>
+        <div class="roi-desc">теряет тимлид, который сам закрывает задачи вместо инженеров — это полноценный спринт-план</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-number">×2–3</div>
+        <div class="roi-label">выше текучка</div>
+        <div class="roi-desc">в командах без регулярных 1:1 и развивающего фидбэка — люди уходят без предупреждения</div>
+      </div>
+      <div class="roi-card">
+        <div class="roi-number">1 спринт</div>
+        <div class="roi-label">до деградации</div>
+        <div class="roi-desc">средний срок, за который команда без диагностики D-уровней начинает терять скорость и качество</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── §05 PROGRAMME + TIMELINE ──────────── -->
+<section id="programme">
+  <div class="container">
+    <div class="section-label"><span class="n">§05</span> Программа</div>
+    <h2 class="section-h">21 день, три недели + финиш</h2>
+    <p class="section-sub">По 2 кейса из практики тимлидов B2C digital в день + шаблон. Конец каждой недели — интервизия в группе до 8 человек.</p>
+
+    <div class="timeline" aria-label="Таймлайн программы">
+      <svg viewBox="0 0 720 120" xmlns="http://www.w3.org/2000/svg" role="img">
+        <!-- track -->
+        <line x1="60" y1="50" x2="660" y2="50" stroke="var(--border-2)" stroke-width="2" stroke-dasharray="4 4"/>
+        <line x1="60" y1="50" x2="660" y2="50" stroke="var(--accent)" stroke-width="2" opacity=".7"/>
+        <!-- nodes -->
+        <g>
+          <circle cx="60"  cy="50" r="12" fill="var(--bg-2)" stroke="var(--accent)" stroke-width="2"/>
+          <text x="60"  y="54" text-anchor="middle" class="timeline-text-track" fill="var(--accent)">01</text>
+          <text x="60"  y="22" text-anchor="middle" class="timeline-text-week">Неделя 01</text>
+          <text x="60"  y="80" text-anchor="middle" class="timeline-text-track">Диагностика</text>
+          <text x="60"  y="96" text-anchor="middle" class="timeline-text-track">14 кейсов</text>
+        </g>
+        <g>
+          <circle cx="260" cy="50" r="12" fill="var(--bg-2)" stroke="var(--accent)" stroke-width="2"/>
+          <text x="260" y="54" text-anchor="middle" class="timeline-text-track" fill="var(--accent)">02</text>
+          <text x="260" y="22" text-anchor="middle" class="timeline-text-week">Неделя 02</text>
+          <text x="260" y="80" text-anchor="middle" class="timeline-text-track">Стилевая работа</text>
+          <text x="260" y="96" text-anchor="middle" class="timeline-text-track">14 кейсов</text>
+        </g>
+        <g>
+          <circle cx="460" cy="50" r="12" fill="var(--bg-2)" stroke="var(--accent)" stroke-width="2"/>
+          <text x="460" y="54" text-anchor="middle" class="timeline-text-track" fill="var(--accent)">03</text>
+          <text x="460" y="22" text-anchor="middle" class="timeline-text-week">Неделя 03</text>
+          <text x="460" y="80" text-anchor="middle" class="timeline-text-track">Делегирование</text>
+          <text x="460" y="96" text-anchor="middle" class="timeline-text-track">12 кейсов</text>
+        </g>
+        <g>
+          <circle cx="660" cy="50" r="14" fill="var(--accent)" stroke="var(--accent-h)" stroke-width="2"/>
+          <text x="660" y="55" text-anchor="middle" class="timeline-text-track" fill="#fff" font-weight="700">★</text>
+          <text x="660" y="22" text-anchor="middle" class="timeline-text-week">Финиш</text>
+          <text x="660" y="80" text-anchor="middle" class="timeline-text-track">Защита кейса</text>
+          <text x="660" y="96" text-anchor="middle" class="timeline-text-track">+ сертификат</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="prog-grid">
+      <div class="prog-card">
+        <div class="prog-week">Неделя 01</div>
+        <div>
+          <div class="prog-title">Диагностика: что у тебя в команде на самом деле</div>
+          <div class="prog-desc">Учишься смотреть на команду через артефакты, которые и так перед глазами: Jira, GitHub, Slack, ритуалы. Появляется язык для того, что раньше звучало как «у Дениса что-то не так». 14 кейсов + диагностическая карта на каждого человека.</div>
+        </div>
+      </div>
+      <div class="prog-card">
+        <div class="prog-week">Неделя 02</div>
+        <div>
+          <div class="prog-title">Стилевая работа: алгоритмы для 6 типичных ситуаций</div>
+          <div class="prog-desc">Сеньор-сопротивленец, выгорающий сеньор, джун в ступоре, мидл на плато. Что делать на 1:1, на ретро, в code review. 14 кейсов + шаблоны разговоров для каждого стиля.</div>
+        </div>
+      </div>
+      <div class="prog-card">
+        <div class="prog-week">Неделя 03</div>
+        <div>
+          <div class="prog-title">Делегирование и системные эффекты</div>
+          <div class="prog-desc">Когда отпустить, когда вмешаться. Что меняется через спринт, через квартал. Где стилевая работа не поможет — нужен структурный фикс. 12 кейсов + матрица делегирования на твою команду.</div>
+        </div>
+      </div>
+      <div class="prog-card">
+        <div class="prog-week">Финиш</div>
+        <div>
+          <div class="prog-title">Защита итогового кейса</div>
+          <div class="prog-desc">Сводный план работы с командой на следующий квартал. Финальная интервизия. Сертификат участника.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="rule">
+
+<!-- ──────────── §06 INSIDE + ICONS ──────────── -->
+<section id="inside">
+  <div class="container">
+    <div class="section-label"><span class="n">§06</span> Что внутри</div>
+    <h2 class="section-h">Из чего состоит курс</h2>
+    <div class="inside-grid">
+      <!-- 01 — терминал/код -->
+      <div class="inside-card">
+        <div class="inside-icon">
+          <svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+        </div>
+        <div>
+          <div class="inside-num">01 / Кейсы</div>
+          <div class="inside-title">30 кейсов из практики тимлидов B2C digital</div>
+          <div class="inside-desc">По 2 кейса в день. Не «у вас есть сотрудник, который…» — конкретные ситуации со стэка, спринта, ретро.</div>
+          <ul class="inside-list">
+            <li>Сеньор саботирует план миграции на gRPC</li>
+            <li>Джун с Cursor выглядит как мидл, но на ревью не объясняет решения</li>
+            <li>Performance review: как сказать «не повышаем»</li>
+          </ul>
+        </div>
+      </div>
+      <!-- 02 — две головы -->
+      <div class="inside-card">
+        <div class="inside-icon">
+          <svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3"/><circle cx="16" cy="11" r="2.4"/><path d="M3 19c0-3 2.5-5 6-5s6 2 6 5"/><path d="M14 19c0-2 1.6-3.5 3.5-3.5S21 17 21 19"/></svg>
+        </div>
+        <div>
+          <div class="inside-num">02 / Интервизии</div>
+          <div class="inside-title">4 интервизии (5 в тарифе Pro)</div>
+          <div class="inside-desc">Группа из 6–8 тимлидов, 90 минут синхронно. Ты приносишь свой реальный кейс — Илья и Надежда разбирают его вместе с участниками.</div>
+          <ul class="inside-list">
+            <li>Без записи — для безопасности обсуждения</li>
+            <li>Группа фиксирована на весь поток</li>
+          </ul>
+        </div>
+      </div>
+      <!-- 03 — документ-чеклист -->
+      <div class="inside-card">
+        <div class="inside-icon">
+          <svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><polyline points="9 13 11 15 15 11"/><line x1="9" y1="18" x2="15" y2="18"/></svg>
+        </div>
+        <div>
+          <div class="inside-num">03 / Шаблоны</div>
+          <div class="inside-title">Методички и рабочие шаблоны</div>
+          <div class="inside-desc">Доступ навсегда. Шаблоны в Notion — можно скопировать в свой workspace.</div>
+          <ul class="inside-list">
+            <li>Диагностика D-уровня через Jira / GitHub / Slack</li>
+            <li>Алгоритмы 1:1 для шести типичных ситуаций</li>
+            <li>Performance review без потери человека</li>
+          </ul>
+        </div>
+      </div>
+      <!-- 04 — чат-bubble -->
+      <div class="inside-card">
+        <div class="inside-icon">
+          <svg viewBox="0 0 24 24"><path d="M3 6h18v11H8l-5 4z"/><line x1="7" y1="11" x2="13" y2="11"/><line x1="7" y1="14" x2="16" y2="14"/></svg>
+        </div>
+        <div>
+          <div class="inside-num">04 / Сообщество</div>
+          <div class="inside-title">Чат потока в Telegram</div>
+          <div class="inside-desc">Канал на время курса + 30 дней после. Илья отвечает на вопросы. Другие тимлиды — твоя peer-группа.</div>
+          <ul class="inside-list">
+            <li>21 день курса + 30 дней после</li>
+            <li>Закрытая группа, только участники потока</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── §07 PROOF ──────────── -->
+<section class="proof" id="proof">
+  <div class="container">
+    <div class="section-label"><span class="n">§07</span> Отзывы участников</div>
+    <h2 class="section-h">Что говорят тимлиды после курса</h2>
+    <p class="section-sub">Реальные отзывы появятся после первого потока. Сейчас — структурный шаблон карточек.</p>
+    <div class="proof-grid">
+      <div class="proof-card">
+        <div class="proof-head">
+          <div class="proof-avatar">??</div>
+          <div>
+            <div class="proof-name"><span class="ph">{{ОТЗЫВ_1_ИМЯ}}</span></div>
+            <div class="proof-role"><span class="ph">{{ДОЛЖНОСТЬ_КОМПАНИЯ_ГОРОД}}</span></div>
+          </div>
+        </div>
+        <div class="proof-quote"><span class="ph-block">{{ОТЗЫВ_1_ЦИТАТА — 2-3 предложения, конкретный инсайт от участника}}</span></div>
+        <div class="proof-result"><span class="ph">{{МЕТРИКА_РЕЗУЛЬТАТА_1}}</span></div>
+      </div>
+      <div class="proof-card">
+        <div class="proof-head">
+          <div class="proof-avatar">??</div>
+          <div>
+            <div class="proof-name"><span class="ph">{{ОТЗЫВ_2_ИМЯ}}</span></div>
+            <div class="proof-role"><span class="ph">{{ДОЛЖНОСТЬ_КОМПАНИЯ_ГОРОД}}</span></div>
+          </div>
+        </div>
+        <div class="proof-quote"><span class="ph-block">{{ОТЗЫВ_2_ЦИТАТА}}</span></div>
+        <div class="proof-result"><span class="ph">{{МЕТРИКА_РЕЗУЛЬТАТА_2}}</span></div>
+      </div>
+      <div class="proof-card">
+        <div class="proof-head">
+          <div class="proof-avatar">??</div>
+          <div>
+            <div class="proof-name"><span class="ph">{{ОТЗЫВ_3_ИМЯ}}</span></div>
+            <div class="proof-role"><span class="ph">{{ДОЛЖНОСТЬ_КОМПАНИЯ_ГОРОД}}</span></div>
+          </div>
+        </div>
+        <div class="proof-quote"><span class="ph-block">{{ОТЗЫВ_3_ЦИТАТА}}</span></div>
+        <div class="proof-result"><span class="ph">{{МЕТРИКА_РЕЗУЛЬТАТА_3}}</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── LEAD MAGNET ──────────── -->
+<div class="leadmag">
+  <div class="leadmag-inner">
+    <div>
+      <div class="leadmag-title">Получи бесплатно: <span class="ph">{{LEAD_MAGNET_НАЗВАНИЕ — например: «7 сигналов выгорания сеньора»}}</span></div>
+      <div class="leadmag-sub">Скинем в Telegram или на email. Без спама — только материалы курса.</div>
+    </div>
+    <form class="leadmag-form" action="{{LEAD_MAGNET_ENDPOINT}}" method="post">
+      <input type="email" name="email" placeholder="Твой email" required>
+      <button type="submit" class="btn-lead">Получить чек-лист →</button>
+    </form>
+  </div>
+</div>
+
+<!-- ──────────── §08 INSTRUCTORS ──────────── -->
+<section class="instructors">
+  <div class="container">
+    <div class="section-label"><span class="n">§08</span> Кто ведёт</div>
+    <h2 class="section-h">Ведущие</h2>
+    <div class="instr-grid">
+      <div class="instr-card">
+        <div class="instr-top">
+          <div class="ph-photo">{{ФОТО<br>ИЛЬИ}}</div>
+          <div>
+            <div class="instr-name">Илья Кириенков</div>
+            <div class="instr-title">Автор курса</div>
+          </div>
+        </div>
+        <div class="instr-bio"><span class="ph-block">{{БИО_ИЛЬИ — 2-3 предложения: компании по именам, реальные роли с датами, ссылка на LinkedIn / Habr / выступления. Минимум один верифицируемый артефакт публичной экспертизы}}</span></div>
+      </div>
+      <div class="instr-card">
+        <div class="instr-top">
+          <div class="ph-photo">{{ФОТО<br>НАДЕЖДЫ}}</div>
+          <div>
+            <div class="instr-name">Надежда Вихарева</div>
+            <div class="instr-title">Эксперт</div>
+          </div>
+        </div>
+        <div class="instr-bio"><span class="ph-block">{{БИО_НАДЕЖДЫ — релевантность IT-аудитории: с какими IT-командами работала, какая роль в курсе для всех тарифов, не только Pro}}</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── §09 PRICING ──────────── -->
+<section id="pricing">
+  <div class="container">
+    <div class="section-label"><span class="n">§09</span> Тарифы</div>
+    <h2 class="section-h">Три тарифа</h2>
+    <p class="section-sub">Гарантия возврата 30 дней на любой тариф. Оплата от юрлица — выставим счёт и закрывающие документы.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tier">База</div>
+        <div class="price-num">14&thinsp;990<span class="price-cur"> ₽</span></div>
+        <div class="price-period">21 день</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span>30 кейсов на платформе</li>
+          <li><span class="check">✓</span>Методички и шаблоны Notion</li>
+          <li><span class="check">✓</span>Чат потока: курс + 30 дней после</li>
+        </ul>
+        <a href="{{ССЫЛКА_ОПЛАТЫ_БАЗА}}" class="btn-price">Выбрать «База»</a>
+      </div>
+      <div class="price-card feat">
+        <div class="feat-badge">Рекомендуем</div>
+        <div class="price-tier">С обратной связью</div>
+        <div class="price-num">24&thinsp;990<span class="price-cur"> ₽</span></div>
+        <div class="price-period">21 день · стандартный</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span>Всё из «Базы»</li>
+          <li><span class="check">✓</span>4 интервизии в группе по 8 тимлидов</li>
+          <li><span class="check">✓</span>Письменный разбор итогового кейса от Ильи</li>
+          <li><span class="check">✓</span>Сертификат участника</li>
+        </ul>
+        <a href="{{ССЫЛКА_ОПЛАТЫ_СТАНДАРТ}}" class="btn-price">Записаться →</a>
+      </div>
+      <div class="price-card">
+        <div class="price-tier">С менторингом</div>
+        <div class="price-num">49&thinsp;990<span class="price-cur"> ₽</span></div>
+        <div class="price-period">21 день · pro</div>
+        <ul class="price-features">
+          <li><span class="check">✓</span>Всё из «С обратной связью»</li>
+          <li><span class="check">✓</span>5 интервизий вместо 4</li>
+          <li><span class="check">✓</span>2 индивидуальные сессии с Надеждой по 60 минут</li>
+          <li><span class="check">✓</span>Расширенный сертификат</li>
+        </ul>
+        <a href="{{ССЫЛКА_ОПЛАТЫ_ПРО}}" class="btn-price">Выбрать «С менторингом»</a>
+      </div>
+    </div>
+    <p class="price-note">
+      Оплата от юрлица — напишите в
+      <a href="{{TELEGRAM_ССЫЛКА}}" style="color:var(--accent-h)">Telegram</a> или на
+      <a href="{{EMAIL_ССЫЛКА}}" style="color:var(--accent-h)">email</a>
+    </p>
+  </div>
+</section>
+
+<!-- ──────────── §10 FAQ ──────────── -->
+<section class="faq-section" id="faq">
+  <div class="container">
+    <div class="section-label"><span class="n">§10</span> Часто спрашивают</div>
+    <h2 class="section-h">Возражения и ответы</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <div class="faq-q"><span class="nn">01</span>У меня в этот период два спринта. Не вытяну.</div>
+        <div class="faq-a">Курс рассчитан на 30–60 минут в день. Кейсы можно проходить в обеденный перерыв или вечером. Интервизии — раз в неделю, 90 минут, дата согласовывается с группой. Если случился аврал — материалы остаются навсегда, кейсы можно догнать. Главное — не пропускать интервизии: они синхронные и не записываются.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="nn">02</span>А методология не противоречит agile / scrum-практикам?</div>
+        <div class="faq-a">Нет. Курс прямо опирается на ритуалы команды разработки: 1:1, ретро, planning, code review, performance cycle. Все алгоритмы — про то, что делать внутри этих ритуалов. Никаких параллельных встреч, отчётов и форм для HR.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="nn">03</span>Я уже читал The Manager's Path и An Elegant Puzzle. Чем отличается?</div>
+        <div class="faq-a">The Manager's Path — про карьерный путь от IC до VPE, общие принципы. An Elegant Puzzle — сборник случаев Will Larson, уровень Engineering Director. «Лидер-практик» — про конкретные алгоритмы первого года тимлида: что сказать на 1:1 с сеньором, который сильнее тебя; что делать с джуном через Cursor; как провести performance review. Не «о чём думать» — «что делать в понедельник утром».</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="nn">04</span>Мне курс нужен от компании. Можно по счёту от юрлица?</div>
+        <div class="faq-a">Да. Напишите в Telegram или email — выставим счёт и подготовим закрывающие документы (акт, справки). Возможна оплата с НДС или без.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="nn">05</span>Команда у меня меньше 5 человек / распределена по трём проектам. Сработает?</div>
+        <div class="faq-a">Да. Часть кейсов — про команды 5–8 человек, но методика применяется и на двух подчинённых, и на матричной структуре без прямой власти. На интервизиях разбираем твой реальный сетап.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="nn">06</span>А если не зайдёт?</div>
+        <div class="faq-a">Возврат полной оплаты в течение 30 дней с момента старта потока, без объяснения причин. Просто пишешь в Telegram — возвращаем без вопросов и удержаний.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q"><span class="nn">07</span>У меня смешанная команда: половина по-русски, половина англоговорящие.</div>
+        <div class="faq-a">Курс на русском. Алгоритмы и шаблоны разговоров переносятся на английский — лексика 1:1, code review, performance review и так на английском в большинстве команд.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ──────────── FINAL CTA ──────────── -->
+<div class="final-cta">
+  <div class="container">
+    <h2>Старт <span><span class="ph">{{ДАТА_СТАРТА}}</span></span> — осталось <span class="ph">{{N}}</span> мест</h2>
+    <p>Группа на интервизии не больше 8 тимлидов. Если набор закрыт — запишись в лист ожидания, пришлём уведомление за 2 недели.</p>
+    <a href="#pricing" class="btn-main">Перестать разгребать пожары самому →</a>
+    <div class="final-badges">
+      <div class="f-badge">Открытый набор первого потока</div>
+      <div class="f-badge">Скидка 30% за публикуемый кейс</div>
+      <div class="f-badge">Гарантия возврата 30 дней</div>
+      <div class="f-badge">Оплата от юрлица</div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 · Лидер-практик: Ситуационное управление для тимлидов в ИТ · <span class="ph">{{ИП_ООО_РЕКВИЗИТЫ}}</span></p>
+  <p style="margin-top:6px;">
+    <a href="{{ССЫЛКА_ПОЛИТИКИ}}">Политика конфиденциальности</a> &nbsp;·&nbsp;
+    <a href="{{ССЫЛКА_ОФЕРТЫ}}">Оферта</a> &nbsp;·&nbsp;
+    <a href="{{TELEGRAM_ССЫЛКА}}">Контакты</a>
+  </p>
+</footer>
+
+<!-- ──────────── STICKY MOBILE CTA ──────────── -->
+<a href="#pricing" class="mobile-cta" id="mobile-cta">Записаться в поток <span class="small">от 14 990 ₽</span></a>
+
+<script>
+/* ─── THEME TOGGLE (persistent) ─── */
+(function () {
+  const root = document.documentElement;
+  const stored = localStorage.getItem('lp-theme');
+  if (stored === 'light' || stored === 'dark') root.setAttribute('data-theme', stored);
+  const toggle = document.getElementById('theme-toggle');
+  toggle.addEventListener('click', () => {
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', next);
+    localStorage.setItem('lp-theme', next);
+  });
+})();
+
+/* ─── STICKY HEADER SHADOW ─── */
+(function () {
+  const header = document.getElementById('site-header');
+  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 10);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+})();
+
+/* ─── ACTIVE NAV LINK ─── */
+(function () {
+  const links = document.querySelectorAll('.nav-links a');
+  const ids = ['programme', 'inside', 'proof', 'pricing', 'faq'];
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-40% 0px -55% 0px' });
+  ids.forEach(id => { const el = document.getElementById(id); if (el) obs.observe(el); });
+})();
+
+/* ─── MOBILE STICKY CTA ─── */
+(function () {
+  const cta = document.getElementById('mobile-cta');
+  const hero = document.querySelector('.hero');
+  const pricing = document.getElementById('pricing');
+  if (!cta || !hero || !pricing) return;
+  let pastHero = false;
+  let inPricing = false;
+  const update = () => {
+    cta.classList.toggle('show', pastHero && !inPricing);
+  };
+  const heroObs = new IntersectionObserver(([e]) => {
+    pastHero = !e.isIntersecting; update();
+  }, { threshold: 0 });
+  const priceObs = new IntersectionObserver(([e]) => {
+    inPricing = e.isIntersecting; update();
+  }, { threshold: 0.1 });
+  heroObs.observe(hero);
+  priceObs.observe(pricing);
+})();
+</script>
+</body>
+</html>
