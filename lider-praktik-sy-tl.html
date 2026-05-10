@@ -1155,6 +1155,23 @@ footer a:hover { color: var(--text-2); }
   heroObs.observe(hero);
   priceObs.observe(pricing);
 })();
+
+/* ─── TILDA IFRAME HEIGHT REPORTER ─── */
+(function () {
+  function sendHeight() {
+    var h = document.documentElement.scrollHeight;
+    window.parent.postMessage({ type: 'lp-height', height: h }, '*');
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', sendHeight);
+  } else {
+    sendHeight();
+  }
+  window.addEventListener('load', sendHeight);
+  if (window.ResizeObserver) {
+    new ResizeObserver(sendHeight).observe(document.body);
+  }
+})();
 </script>
 </body>
 </html>
