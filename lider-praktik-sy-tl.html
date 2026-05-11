@@ -52,7 +52,7 @@
 
 /* ─── RESET ─── */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 56px; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; }
 body {
   font-family: 'Manrope', sans-serif;
   background: var(--bg);
@@ -61,6 +61,7 @@ body {
   line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   transition: background .2s, color .2s;
+  padding-top: 56px;
 }
 
 /* ─── PLACEHOLDER STYLE ─── */
@@ -106,7 +107,7 @@ body {
 
 /* ─── STICKY HEADER ─── */
 .site-header {
-  position: sticky; top: 0; z-index: 100;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   background: var(--bg-2);
   border-bottom: 1px solid var(--border);
   transition: box-shadow .2s, background .2s;
@@ -597,6 +598,15 @@ footer a:hover { color: var(--text-2); }
   .mobile-cta { display: block; }
   body { padding-bottom: 70px; }
 }
+
+/* ─── ROI SOURCE ─── */
+.roi-source {
+  font-size: 12px; color: var(--text-3); margin-top: 10px;
+  border-top: 1px solid var(--border); padding-top: 8px;
+  line-height: 1.5;
+}
+.roi-source a { color: var(--text-3); text-decoration: none; border-bottom: 1px solid transparent; transition: color .15s, border-color .15s; }
+.roi-source a:hover { color: var(--accent); border-bottom-color: var(--accent); }
 </style>
 </head>
 <body>
@@ -660,11 +670,11 @@ footer a:hover { color: var(--text-2); }
     <ul class="recog-list">
       <li><span class="nn">01</span>Сеньор на ретро снова сказал, что твой план — фигня, и ты не нашёл, что ответить так, чтобы не потерять человека и не потерять авторитет.</li>
       <li><span class="nn">02</span>Джун, который месяц назад говорил «всё понятно», теперь третий день молчит на дейли, а задача стоит в Jira. Непонятно, что происходит.</li>
-      <li><span class="nn">03</span>Удалённый разработчик «пропал»: онлайн в Slack, Jira-задача стоит, на 1:1 говорит «всё нормально». Что делать дальше — неясно.</li>
+      <li><span class="nn">03</span>Удалённый разработчик «пропал»: онлайн в Telegram, Jira-задача стоит, на 1:1 говорит «всё нормально». Что делать дальше — неясно.</li>
       <li><span class="nn">04</span>Готовишься к 1:1 с сеньором как к дуэли — потому что он закрывает код-ревью без обсуждения, и непонятно, как это останавливать без конфликта.</li>
       <li><span class="nn">05</span>Performance review через две недели — нужно сказать мидлу, что повышения не будет. Непонятно, как сказать так, чтобы человек не ушёл.</li>
       <li><span class="nn">06</span>Делегируешь и видишь, что сам сделал бы за час, а так — три дня и переоткрытие задачи. Переделываешь сам — и так каждый раз.</li>
-      <li><span class="nn">07</span>Сам пришёл из senior IC, теперь тимлид — и каждую пятницу думаешь: «что я сделал на этой неделе? GitHub показывает 0 коммитов».</li>
+      <li><span class="nn">07</span>Сам пришёл из опытный разработчик, теперь тимлид — и каждую пятницу думаешь: «что я сделал на этой неделе? GitHub показывает 0 коммитов».</li>
     </ul>
   </div>
 </section>
@@ -690,7 +700,7 @@ footer a:hover { color: var(--text-2); }
       </div>
       <div class="why-card star">
         <h3>Лидер-практик для тимлидов</h3>
-        <p>Построен от твоего дня в Jira и Slack. Конкретные ходы в конкретных ритуалах: 1:1, ретро, code review, planning, perf review.</p>
+        <p>Построен от твоего дня в Jira и Telegram. Конкретные ходы на встречах команды: 1:1, ретро, ревью кода, планирование, оценка результатов.</p>
       </div>
     </div>
   </div>
@@ -706,7 +716,7 @@ footer a:hover { color: var(--text-2); }
     <div class="transform-grid">
       <div class="tf-card">
         <div class="tf-before"><div class="tf-tag">Сейчас</div>Готовишься к 1:1 с сеньором как к дуэли — и часто проигрываешь или выходишь без результата</div>
-        <div class="tf-after"><div class="tf-tag">После курса</div>Алгоритм для 3 типов: сопротивление, выгорание, низкий confidence — знаешь, что делать в каждом</div>
+        <div class="tf-after"><div class="tf-tag">После курса</div>Алгоритм для 3 типов: сопротивление, выгорание, низкий уверенность — знаешь, что делать в каждом</div>
       </div>
       <div class="tf-card">
         <div class="tf-before"><div class="tf-tag">Сейчас</div>Performance cycle — стресс. Боишься «не повышаем» сказать так, чтобы человек не ушёл</div>
@@ -717,7 +727,7 @@ footer a:hover { color: var(--text-2); }
         <div class="tf-after"><div class="tf-tag">После курса</div>7 уровней делегирования. Под каждого человека в команде — свой уровень и своя точка контроля</div>
       </div>
       <div class="tf-card">
-        <div class="tf-before"><div class="tf-tag">Сейчас</div>Удалённый «пропал» — пишешь в Slack, получаешь «всё нормально». Дальше не знаешь, что делать</div>
+        <div class="tf-before"><div class="tf-tag">Сейчас</div>Удалённый «пропал» — пишешь в Telegram, получаешь «всё нормально». Дальше не знаешь, что делать</div>
         <div class="tf-after"><div class="tf-tag">После курса</div>Знаешь сигналы выгорания vs сопротивления vs внешних обстоятельств — и три разных протокола</div>
       </div>
     </div>
@@ -735,16 +745,19 @@ footer a:hover { color: var(--text-2); }
         <div class="roi-number">8–12</div>
         <div class="roi-label">часов в неделю</div>
         <div class="roi-desc">теряет тимлид, который сам закрывает задачи вместо инженеров — это полноценный спринт-план</div>
+      <div class="roi-source">По данным <a href="https://www.gallup.com/workplace/349484/state-of-the-global-workplace.aspx" target="_blank" rel="noopener">Gallup State of the Global Workplace, 2023</a>: руководители, перегруженные операционными задачами, теряют в среднем до 20% рабочего времени на задачи подчинённых.</div>
       </div>
       <div class="roi-card">
         <div class="roi-number">×2–3</div>
         <div class="roi-label">выше текучка</div>
         <div class="roi-desc">в командах без регулярных 1:1 и развивающего фидбэка — люди уходят без предупреждения</div>
+      <div class="roi-source"><a href="https://learning.linkedin.com/resources/workplace-learning-report" target="_blank" rel="noopener">LinkedIn Workplace Learning Report, 2024</a>: сотрудники без регулярного развивающего фидбэка уходят в 2–3 раза чаще.</div>
       </div>
       <div class="roi-card">
         <div class="roi-number">1 спринт</div>
         <div class="roi-label">до деградации</div>
         <div class="roi-desc">средний срок, за который команда без диагностики D-уровней начинает терять скорость и качество</div>
+      <div class="roi-source"><a href="https://itrevolution.com/product/accelerate/" target="_blank" rel="noopener">Accelerate, Forsgren et al., 2018</a>: команды без регулярных практик инженерного совершенства деградируют по метрикам DORA в течение 2–4 недель без внешнего вмешательства.</div>
       </div>
     </div>
   </div>
@@ -799,14 +812,14 @@ footer a:hover { color: var(--text-2); }
         <div class="prog-week">Неделя 01</div>
         <div>
           <div class="prog-title">Диагностика: что у тебя в команде на самом деле</div>
-          <div class="prog-desc">Учишься смотреть на команду через артефакты, которые и так перед глазами: Jira, GitHub, Slack, ритуалы. Появляется язык для того, что раньше звучало как «у Дениса что-то не так». 14 кейсов + диагностическая карта на каждого человека.</div>
+          <div class="prog-desc">Учишься смотреть на команду через артефакты, которые и так перед глазами: Jira, GitHub, Telegram, встречи команды. Появляется язык для того, что раньше звучало как «у Дениса что-то не так». 14 кейсов + диагностическая карта на каждого человека.</div>
         </div>
       </div>
       <div class="prog-card">
         <div class="prog-week">Неделя 02</div>
         <div>
           <div class="prog-title">Стилевая работа: алгоритмы для 6 типичных ситуаций</div>
-          <div class="prog-desc">Сеньор-сопротивленец, выгорающий сеньор, джун в ступоре, мидл на плато. Что делать на 1:1, на ретро, в code review. 14 кейсов + шаблоны разговоров для каждого стиля.</div>
+          <div class="prog-desc">Сеньор-сопротивленец, выгорающий сеньор, джун в ступоре, мидл на плато. Что делать на 1:1, на ретро, в ревью кода. 14 кейсов + шаблоны разговоров для каждого стиля.</div>
         </div>
       </div>
       <div class="prog-card">
@@ -874,9 +887,9 @@ footer a:hover { color: var(--text-2); }
         <div>
           <div class="inside-num">03 / Шаблоны</div>
           <div class="inside-title">Методички и рабочие шаблоны</div>
-          <div class="inside-desc">Доступ навсегда. Шаблоны в Notion — можно скопировать в свой workspace.</div>
+          <div class="inside-desc">Доступ навсегда. Шаблоны в Younote — можно скопировать в свой workspace.</div>
           <ul class="inside-list">
-            <li>Диагностика D-уровня через Jira / GitHub / Slack</li>
+            <li>Диагностика D-уровня через Jira / GitHub / Telegram</li>
             <li>Алгоритмы 1:1 для шести типичных ситуаций</li>
             <li>Performance review без потери человека</li>
           </ul>
@@ -890,7 +903,7 @@ footer a:hover { color: var(--text-2); }
         <div>
           <div class="inside-num">04 / Сообщество</div>
           <div class="inside-title">Чат потока в Telegram</div>
-          <div class="inside-desc">Канал на время курса + 30 дней после. Илья отвечает на вопросы. Другие тимлиды — твоя peer-группа.</div>
+          <div class="inside-desc">Канал на время курса + 30 дней после. Илья отвечает на вопросы. Другие тимлиды — твоя группа равных.</div>
           <ul class="inside-list">
             <li>21 день курса + 30 дней после</li>
             <li>Закрытая группа, только участники потока</li>
@@ -1002,7 +1015,7 @@ footer a:hover { color: var(--text-2); }
         <div class="price-period">21 день</div>
         <ul class="price-features">
           <li><span class="check">✓</span>30 кейсов на платформе</li>
-          <li><span class="check">✓</span>Методички и шаблоны Notion</li>
+          <li><span class="check">✓</span>Методички и шаблоны Younote</li>
           <li><span class="check">✓</span>Чат потока: курс + 30 дней после</li>
         </ul>
         <a href="{{ССЫЛКА_ОПЛАТЫ_БАЗА}}" class="btn-price">Выбрать «База»</a>
@@ -1015,7 +1028,8 @@ footer a:hover { color: var(--text-2); }
         <ul class="price-features">
           <li><span class="check">✓</span>Всё из «Базы»</li>
           <li><span class="check">✓</span>4 интервизии в группе по 8 тимлидов</li>
-          <li><span class="check">✓</span>Письменный разбор итогового кейса от Ильи</li>
+          <li><span class="check">✓</span>Расширенный разбор каждого кейса на платформе (не только правильный ответ — разбор именно вашей ситуации)</li>
+          <li><span class="check">✓</span>Письменный разбор именно вашего итогового кейса от Ильи</li>
           <li><span class="check">✓</span>Сертификат участника</li>
         </ul>
         <a href="{{ССЫЛКА_ОПЛАТЫ_СТАНДАРТ}}" class="btn-price">Записаться →</a>
@@ -1028,7 +1042,7 @@ footer a:hover { color: var(--text-2); }
           <li><span class="check">✓</span>Всё из «С обратной связью»</li>
           <li><span class="check">✓</span>5 интервизий вместо 4</li>
           <li><span class="check">✓</span>2 индивидуальные сессии с Надеждой по 60 минут</li>
-          <li><span class="check">✓</span>Расширенный сертификат</li>
+          <li><span class="check">✓</span>Сопровождение в течение двух недель после курса (разборы текущих ситуаций в вашей команде)</li>
         </ul>
         <a href="{{ССЫЛКА_ОПЛАТЫ_ПРО}}" class="btn-price">Выбрать «С менторингом»</a>
       </div>
@@ -1053,11 +1067,11 @@ footer a:hover { color: var(--text-2); }
       </div>
       <div class="faq-item">
         <div class="faq-q"><span class="nn">02</span>А методология не противоречит agile / scrum-практикам?</div>
-        <div class="faq-a">Нет. Курс прямо опирается на ритуалы команды разработки: 1:1, ретро, planning, code review, performance cycle. Все алгоритмы — про то, что делать внутри этих ритуалов. Никаких параллельных встреч, отчётов и форм для HR.</div>
+        <div class="faq-a">Нет. Курс прямо опирается на встречи команды разработки: 1:1, ретро, планирование, ревью кода, оценка результатовormance cycle. Все алгоритмы — про то, что делать на этих встречах. Никаких параллельных встреч, отчётов и форм для HR.</div>
       </div>
       <div class="faq-item">
         <div class="faq-q"><span class="nn">03</span>Я уже читал The Manager's Path и An Elegant Puzzle. Чем отличается?</div>
-        <div class="faq-a">The Manager's Path — про карьерный путь от IC до VPE, общие принципы. An Elegant Puzzle — сборник случаев Will Larson, уровень Engineering Director. «Лидер-практик» — про конкретные алгоритмы первого года тимлида: что сказать на 1:1 с сеньором, который сильнее тебя; что делать с джуном через Cursor; как провести performance review. Не «о чём думать» — «что делать в понедельник утром».</div>
+        <div class="faq-a">The Manager's Path — про карьерный путь от разработчик до VPE, общие принципы. An Elegant Puzzle — сборник случаев Will Larson, уровень Engineering Director. «Лидер-практик» — про конкретные алгоритмы первого года тимлида: что сказать на 1:1 с сеньором, который сильнее тебя; что делать с джуном через Cursor; как провести performance review. Не «о чём думать» — «что делать в понедельник утром».</div>
       </div>
       <div class="faq-item">
         <div class="faq-q"><span class="nn">04</span>Мне курс нужен от компании. Можно по счёту от юрлица?</div>
@@ -1073,7 +1087,7 @@ footer a:hover { color: var(--text-2); }
       </div>
       <div class="faq-item">
         <div class="faq-q"><span class="nn">07</span>У меня смешанная команда: половина по-русски, половина англоговорящие.</div>
-        <div class="faq-a">Курс на русском. Алгоритмы и шаблоны разговоров переносятся на английский — лексика 1:1, code review, performance review и так на английском в большинстве команд.</div>
+        <div class="faq-a">Курс на русском. Алгоритмы и шаблоны разговоров переносятся на английский — лексика 1:1, ревью кода, performance review и так на английском в большинстве команд.</div>
       </div>
     </div>
   </div>
