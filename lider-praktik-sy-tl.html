@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="dark">
+<html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,28 +8,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-/* ─── THEME TOKENS ─── */
-[data-theme="dark"] {
-  --bg:        #0a0a0f;
-  --bg-2:      #111118;
-  --bg-3:      #1a1a24;
-  --border:    rgba(255,255,255,.08);
-  --border-2:  rgba(255,255,255,.12);
-  --text:      #e8e8f0;
-  --text-2:    #9898aa;
-  --text-3:    #55556a;
-  --accent:    #6366f1;
-  --accent-h:  #818cf8;
-  --accent-bg: rgba(99,102,241,.12);
-  --green:     #22c55e;
-  --green-bg:  rgba(34,197,94,.10);
-  --red:       #ef4444;
-  --red-bg:    rgba(239,68,68,.10);
-  --red-text:  #fca5a5;
-  --green-text:#86efac;
-  --shadow:    0 2px 16px rgba(0,0,0,.45);
-}
-[data-theme="light"] {
+/* ─── TOKENS: светлая база ─── */
+:root {
   --bg:        #f5f6fa;
   --bg-2:      #ffffff;
   --bg-3:      #eceef5;
@@ -48,6 +28,30 @@
   --red-text:  #7c1c1c;
   --green-text:#064e30;
   --shadow:    0 2px 16px rgba(15,23,42,.12);
+}
+
+/* ─── TOKENS: тёмные секции ─── */
+.dark-section {
+  --bg:        #0a0a0f;
+  --bg-2:      #111118;
+  --bg-3:      #1a1a24;
+  --border:    rgba(255,255,255,.08);
+  --border-2:  rgba(255,255,255,.12);
+  --text:      #e8e8f0;
+  --text-2:    #9898aa;
+  --text-3:    #55556a;
+  --accent:    #6366f1;
+  --accent-h:  #818cf8;
+  --accent-bg: rgba(99,102,241,.12);
+  --green:     #22c55e;
+  --green-bg:  rgba(34,197,94,.10);
+  --red:       #ef4444;
+  --red-bg:    rgba(239,68,68,.10);
+  --red-text:  #fca5a5;
+  --green-text:#86efac;
+  --shadow:    0 4px 24px rgba(0,0,0,.5);
+  background: var(--bg);
+  color: var(--text);
 }
 
 /* ─── RESET ─── */
@@ -108,9 +112,11 @@ body {
 /* ─── STICKY HEADER ─── */
 .site-header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  background: var(--bg-2);
-  border-bottom: 1px solid var(--border);
-  transition: box-shadow .2s, background .2s;
+  background: rgba(245,246,250,.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(15,23,42,.08);
+  transition: box-shadow .2s;
 }
 .site-header.scrolled { box-shadow: var(--shadow); }
 .header-top {
@@ -141,19 +147,7 @@ body {
 .nav-links a.active { color: var(--accent-h); }
 
 .header-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-.theme-toggle {
-  width: 34px; height: 34px;
-  display: flex; align-items: center; justify-content: center;
-  border: 1px solid var(--border); background: transparent;
-  border-radius: 6px; cursor: pointer; color: var(--text-2);
-  transition: color .15s, border-color .15s, background .15s;
-}
-.theme-toggle:hover { color: var(--text); border-color: var(--border-2); background: var(--bg-3); }
-.theme-toggle svg { width: 16px; height: 16px; }
-[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
-[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
-[data-theme="light"] .theme-toggle .icon-sun { display: none; }
-[data-theme="light"] .theme-toggle .icon-moon { display: block; }
+/* theme toggle CSS removed */
 
 .nav-cta {
   font-size: 13px; font-weight: 700;
@@ -177,7 +171,6 @@ body {
   background: var(--bg);
   padding: 6rem 2rem 5rem;
   position: relative; overflow: clip;
-  border-bottom: 1px solid var(--border);
 }
 .hero::before {
   content: ''; position: absolute;
@@ -332,7 +325,7 @@ hr.rule { border: none; border-top: 1px solid var(--border); }
 }
 
 /* ─── §04 ROI ─── */
-.roi { background: var(--bg-3); border-top: 3px solid var(--accent); border-bottom: 1px solid var(--border); }
+.roi { border-bottom: 1px solid var(--border); }
 .roi-grid {
   display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 1.5rem;
 }
@@ -550,8 +543,7 @@ hr.rule { border: none; border-top: 1px solid var(--border); }
 .final-cta {
   background: var(--bg-3); color: var(--text);
   text-align: center; padding: 4.5rem 2rem;
-  border-top: 1px solid var(--border);
-}
+  }
 .final-cta h2 {
   font-size: clamp(1.5rem, 3.5vw, 2rem); font-weight: 800;
   letter-spacing: -.015em; margin-bottom: .75rem;
@@ -567,9 +559,8 @@ hr.rule { border: none; border-top: 1px solid var(--border); }
 
 /* ─── FOOTER ─── */
 footer {
-  background: var(--bg); color: var(--text-3);
   text-align: center; padding: 1.75rem 2rem;
-  font-size: 13px; border-top: 1px solid var(--border);
+  font-size: 13px;
 }
 footer a { color: var(--text-3); text-decoration: none; }
 footer a:hover { color: var(--text-2); }
@@ -607,6 +598,13 @@ footer a:hover { color: var(--text-2); }
 }
 .roi-source a { color: var(--text-3); text-decoration: none; border-bottom: 1px solid transparent; transition: color .15s, border-color .15s; }
 .roi-source a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ─── DARK SECTION OVERRIDES ─── */
+.dark-section footer a,
+footer.dark-section a { color: var(--text-3); }
+footer.dark-section a:hover { color: var(--text-2); }
+.dark-section .nav-brand b { color: var(--text); }
+.dark-section .feat-badge { background: var(--accent); }
 </style>
 </head>
 <body>
@@ -623,17 +621,14 @@ footer a:hover { color: var(--text-2); }
       <a href="#faq">FAQ</a>
     </nav>
     <div class="header-right">
-      <button class="theme-toggle" id="theme-toggle" aria-label="Переключить тему">
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-      </button>
+
       <a href="#pricing" class="nav-cta">Записаться →</a>
     </div>
   </div>
 </header>
 
 <!-- ──────────── HERO ──────────── -->
-<div class="hero">
+<div class="hero dark-section">
   <div class="hero-inner">
     <div class="hero-tag">Ситуационное управление · тимлиды в ИТ</div>
     <h1>Перестань разгребать пожары.<br><em>Начни управлять командой.</em></h1>
@@ -735,7 +730,7 @@ footer a:hover { color: var(--text-2); }
 </section>
 
 <!-- ──────────── §04 ROI ──────────── -->
-<section class="roi">
+<section class="roi dark-section">
   <div class="container">
     <div class="section-label"><span class="n">§04</span> Цена отсутствия системы</div>
     <h2 class="section-h">Что стоит работа без управленческого инструмента</h2>
@@ -1003,7 +998,7 @@ footer a:hover { color: var(--text-2); }
 </section>
 
 <!-- ──────────── §09 PRICING ──────────── -->
-<section id="pricing">
+<section id="pricing" class="dark-section">
   <div class="container">
     <div class="section-label"><span class="n">§09</span> Тарифы</div>
     <h2 class="section-h">Три тарифа</h2>
@@ -1094,7 +1089,7 @@ footer a:hover { color: var(--text-2); }
 </section>
 
 <!-- ──────────── FINAL CTA ──────────── -->
-<div class="final-cta">
+<div class="final-cta dark-section">
   <div class="container">
     <h2>Старт <span><span class="ph">{{ДАТА_СТАРТА}}</span></span> — осталось <span class="ph">{{N}}</span> мест</h2>
     <p>Группа на интервизии не больше 8 тимлидов. Если набор закрыт — запишись в лист ожидания, пришлём уведомление за 2 недели.</p>
@@ -1108,7 +1103,7 @@ footer a:hover { color: var(--text-2); }
   </div>
 </div>
 
-<footer>
+<footer class="dark-section">
   <p>© 2026 · Лидер-практик: Ситуационное управление для тимлидов в ИТ · <span class="ph">{{ИП_ООО_РЕКВИЗИТЫ}}</span></p>
   <p style="margin-top:6px;">
     <a href="{{ССЫЛКА_ПОЛИТИКИ}}">Политика конфиденциальности</a> &nbsp;·&nbsp;
@@ -1121,18 +1116,7 @@ footer a:hover { color: var(--text-2); }
 <a href="#pricing" class="mobile-cta" id="mobile-cta">Записаться в поток <span class="small">от 14 990 ₽</span></a>
 
 <script>
-/* ─── THEME TOGGLE (persistent) ─── */
-(function () {
-  const root = document.documentElement;
-  const stored = localStorage.getItem('lp-theme');
-  if (stored === 'light' || stored === 'dark') root.setAttribute('data-theme', stored);
-  const toggle = document.getElementById('theme-toggle');
-  toggle.addEventListener('click', () => {
-    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    root.setAttribute('data-theme', next);
-    localStorage.setItem('lp-theme', next);
-  });
-})();
+/* theme toggle removed */
 
 /* ─── STICKY HEADER SHADOW ─── */
 (function () {
