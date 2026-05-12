@@ -810,77 +810,7 @@ footer a:hover { color:var(--lt-ind); }
    DIAGONAL CUTS — угловые переходы между секциями
    Наклон ~2.5deg, острый геометрический срез
 ══════════════════════════════════════════════════ */
-/* ══ SECTION DIVIDERS — clean angled cuts ══
-   Using overflow:hidden + skewed pseudo-element technique
-   Produces a clean hard diagonal edge with zero artifacts
-══════════════════════════════════════════════════ */
-.cut-dk-lt,
-.cut-lt-dk,
-.cut-dk2-lt {
-  height:64px;
-  position:relative;
-  z-index:5;
-  overflow:hidden;
-  flex-shrink:0;
-}
-/* Dark → Light */
-.cut-dk-lt {
-  background:var(--dk-bg);
-}
-.cut-dk-lt::after {
-  content:'';
-  position:absolute;
-  left:-5%; right:-5%;
-  bottom:0;
-  height:130%;
-  background:var(--lt-bg);
-  transform:skewY(-2deg);
-  transform-origin:bottom left;
-}
-/* Light → Dark */
-.cut-lt-dk {
-  background:var(--lt-bg);
-}
-.cut-lt-dk::after {
-  content:'';
-  position:absolute;
-  left:-5%; right:-5%;
-  bottom:0;
-  height:130%;
-  background:var(--dk-bg);
-  transform:skewY(2deg);
-  transform-origin:bottom right;
-}
-
-/* ── Lead magnet on indigo bg ── */
-.ind-band .leadmag-title { color:var(--dk-t1); }
-.ind-band .leadmag-sub { color:var(--dk-t2); }
-.ind-band .leadmag-form input {
-  background:var(--dk-bg3); color:var(--dk-t1);
-  border:1px solid rgba(99,102,241,0.35);
-}
-.ind-band .leadmag-form input::placeholder { color:var(--dk-t3); }
-.ind-band .leadmag-form input:focus { border-color:var(--dk-ind); box-shadow:0 0 0 3px var(--dk-ind-bg); }
-.ind-band .btn-lead {
-  background:var(--dk-bg4); color:var(--dk-ind);
-  border:1px solid var(--dk-b2); font-weight:600;
-}
-.ind-band .btn-lead:hover { border-color:var(--dk-ind2); background:var(--dk-ind-bg); }
-.ind-band .ph { color:#A5B4FC; background:rgba(99,102,241,0.15); border-color:rgba(99,102,241,0.35); }
-
-/* Pricing gets extra vertical breathing room */
-#pricing { padding-top:5.5rem; padding-bottom:5.5rem; }
-#hero { /* hero already has min-height */ }
-
-/* Dark-2 → Light variant */
-.cut-dk2-lt {
-  background:var(--dk-bg2);
-}
-.cut-dk2-lt::after {
-  background:var(--lt-bg);
-}
-
-/* ── Atmospheric depth on dark sections ── */
+/* wave dividers removed *//* ── Atmospheric depth on dark sections ── */
 .dk:not(.hero)::before {
   content:'';
   position:absolute; inset:0; z-index:0; pointer-events:none;
@@ -911,23 +841,33 @@ h2.section-h { margin-top:.1rem; }
 body { font-size:15px; line-height:1.68; }
 
 
-/* ── Wave gap elimination ──
-   Sections following SVG wave dividers must overlap by 2px
-   to eliminate subpixel rendering gaps on HiDPI displays */
-[aria-hidden="true"] + section,
-[aria-hidden="true"] + .dk,
-[aria-hidden="true"] + .lt,
-[aria-hidden="true"] + .lt-section,
-[aria-hidden="true"] + .dk-section {
-  margin-top:-2px;
+/* ══ SECTION TRANSITIONS — clean, no artifacts ══
+   Используем отрицательный margin чтобы секции перекрывали друг друга
+   Переход создаётся самими фонами без отдельных div ══════════════════ */
+
+/* Светлые секции после тёмных подтягиваются вверх */
+.lt:not(:first-child),
+.lt-s:not(:first-child) {
   position:relative;
-  z-index:1;
+  z-index:2;
 }
-/* Ensure wave divs themselves have no gap */
-[aria-hidden="true"] {
-  display:block;
-  line-height:0;
-  font-size:0;
+
+/* Тёмные секции после светлых */
+.dk:not(.hero):not(:first-child),
+.dk-s:not(:first-child),
+.dk.dk-2:not(:first-child) {
+  position:relative;
+  z-index:2;
+}
+
+/* Разделители — тонкая indigo-линия вместо волн */
+.zone-break {
+  height:1px;
+  background:linear-gradient(90deg, transparent, rgba(99,102,241,0.25), transparent);
+  margin:0;
+  border:none;
+  position:relative;
+  z-index:3;
 }
 
 </style>
@@ -1013,13 +953,8 @@ body { font-size:15px; line-height:1.68; }
   </div>
 </section>
 
-<!-- ════ ZONE 2: СВЕТЛОЕ — трансформация + решение ════ -->
-<div aria-hidden="true" style="display:block;width:100%;overflow:hidden;line-height:0;font-size:0;margin-bottom:-2px;background:var(--dk-bg);">
-  <svg viewBox="0 0 1440 62" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,30 C360,60 1080,0 1440,40 L1440,60 L0,60 Z" fill="var(--lt-bg)"/>
-  </svg>
-</div>
-
+<hr class="zone-break">
+<!-- ════ ZONE 2 ════ -->
 <!-- ══ §03 TRANSFORMATION  (LIGHT) ══ -->
 <section class="lt" id="transform" data-theme="light">
   <div class="sec-wm">03</div>
@@ -1119,13 +1054,8 @@ body { font-size:15px; line-height:1.68; }
   </div>
 </section>
 
-<!-- ════ ZONE 3: ТЁМНОЕ — доверие + команда ════ -->
-<div aria-hidden="true" style="display:block;width:100%;overflow:hidden;line-height:0;font-size:0;margin-bottom:-2px;background:var(--lt-bg);">
-  <svg viewBox="0 0 1440 62" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,50 C200,10 500,60 800,20 C1100,-20 1350,50 1440,30 L1440,60 L0,60 Z" fill="var(--dk-bg)"/>
-  </svg>
-</div>
-
+<hr class="zone-break">
+<!-- ════ ZONE 3 ════ -->
 <!-- ══ §07 PROOF  (DARK — доверие) ══ -->
 <section class="dk" id="proof" data-theme="dark">
   <div class="sec-wm">07</div>
@@ -1165,13 +1095,8 @@ body { font-size:15px; line-height:1.68; }
   </div>
 </section>
 
-<!-- ════ ZONE 4: СВЕТЛОЕ — покупка + безопасность ════ -->
-<div aria-hidden="true" style="display:block;width:100%;overflow:hidden;line-height:0;font-size:0;margin-bottom:-2px;background:var(--dk-bg2);">
-  <svg viewBox="0 0 1440 62" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,10 C300,55 700,0 1100,45 C1280,60 1400,30 1440,20 L1440,60 L0,60 Z" fill="var(--lt-bg)"/>
-  </svg>
-</div>
-
+<!-- ════ ZONE 4 ════ -->
+<hr class="zone-break">
 <!-- ══ §09 PRICING  (LIGHT) ══ -->
 <section class="lt" id="pricing" data-theme="light">
   <div class="sec-wm">09</div>
@@ -1208,6 +1133,7 @@ body { font-size:15px; line-height:1.68; }
 
 
 
+<hr class="zone-break">
 <!-- ══ FINAL CTA  (DARK) ══ -->
 <div class="final-cta" data-theme="light">
   <div class="container">
