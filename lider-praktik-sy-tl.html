@@ -6,610 +6,935 @@
 <title>Ситуационное управление для тимлидов в ИТ — Лидер-практик</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-/* ─── TOKENS: светлая база ─── */
+/* ══════════════════════════════════════════════════
+   TOKENS
+══════════════════════════════════════════════════ */
 :root {
-  --bg:        #f5f6fa;
-  --bg-2:      #ffffff;
-  --bg-3:      #eceef5;
-  --border:    #e2e6f0;
-  --border-2:  #d0d5e8;
-  --text:      #0f172a;
-  --text-2:    #475569;
-  --text-3:    #94a3b8;
-  --accent:    #1e3a8a;
-  --accent-h:  #1d4ed8;
-  --accent-bg: rgba(30,58,138,.08);
-  --green:     #0a6b3d;
-  --green-bg:  rgba(34,197,94,.13);
-  --red:       #c12626;
-  --red-bg:    rgba(239,68,68,.10);
-  --red-text:  #7c1c1c;
-  --green-text:#064e30;
-  --shadow:    0 2px 16px rgba(15,23,42,.12);
+  /* dark palette */
+  --dk-bg:      #07080F;
+  --dk-bg2:     #0C0E1A;
+  --dk-bg3:     #111528;
+  --dk-bg4:     #161B35;
+  --dk-t1:      #EEF0FF;
+  --dk-t2:      #8892B8;
+  --dk-t3:      #4A5280;
+  --dk-b:       rgba(99,102,241,0.13);
+  --dk-b2:      rgba(99,102,241,0.28);
+  --dk-b3:      rgba(255,255,255,0.06);
+  --dk-ind:     #818CF8;
+  --dk-ind2:    #6366F1;
+  --dk-ind-bg:  rgba(99,102,241,0.10);
+  --dk-glow:    rgba(99,102,241,0.22);
+
+  /* light palette — WCAG AA compliant */
+  --lt-bg:      #F8F7FF;
+  --lt-bg2:     #F0EFFE;
+  --lt-bg3:     #E8E6FC;
+  --lt-t1:      #12122A;   /* 14.5:1 on lt-bg ✓ */
+  --lt-t2:      #2D3055;   /* 8.6:1 on lt-bg ✓ (was #4B4B80 = 5.4:1) */
+  --lt-t3:      #5A6290;   /* 4.6:1 on lt-bg ✓ (was #9090BB = 2.9:1) */
+  --lt-b:       rgba(79,70,229,0.15);
+  --lt-b2:      rgba(79,70,229,0.28);
+  --lt-b3:      rgba(79,70,229,0.08);
+  --lt-ind:     #4F46E5;
+  --lt-ind2:    #6366F1;
+  --lt-ind-bg:  rgba(79,70,229,0.08);
+  --lt-glow:    rgba(79,70,229,0.15);
+
+  /* shared */
+  --green:      #34D399;
+  --green-bg:   rgba(52,211,153,0.12);
+  --green-lt:   #059669;
+  --green-bg-lt:rgba(5,150,105,0.10);
 }
 
-/* ─── TOKENS: тёмные секции ─── */
-.dark-section {
-  --bg:        #0a0a0f;
-  --bg-2:      #111118;
-  --bg-3:      #1a1a24;
-  --border:    rgba(255,255,255,.08);
-  --border-2:  rgba(255,255,255,.12);
-  --text:      #e8e8f0;
-  --text-2:    #9898aa;
-  --text-3:    #55556a;
-  --accent:    #6366f1;
-  --accent-h:  #818cf8;
-  --accent-bg: rgba(99,102,241,.12);
-  --green:     #22c55e;
-  --green-bg:  rgba(34,197,94,.10);
-  --red:       #ef4444;
-  --red-bg:    rgba(239,68,68,.10);
-  --red-text:  #fca5a5;
-  --green-text:#86efac;
-  --shadow:    0 4px 24px rgba(0,0,0,.5);
-  background: var(--bg);
-  color: var(--text);
-}
-
-/* ─── RESET ─── */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+*, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+html { scroll-behavior:smooth; scroll-padding-top:64px; }
 body {
-  font-family: 'Manrope', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  font-size: 17px;
-  line-height: 1.7;
-  -webkit-font-smoothing: antialiased;
-  transition: background .2s, color .2s;
-  padding-top: 56px;
+  font-family:'Plus Jakarta Sans', sans-serif;
+  background:var(--dk-bg);
+  color:var(--dk-t1);
+  font-size:16px; line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  padding-top:64px;
+  overflow-x:hidden;
 }
 
-/* ─── PLACEHOLDER STYLE ─── */
+/* ══════════════════════════════════════════════════
+   PH HELPERS
+══════════════════════════════════════════════════ */
 .ph {
-  display: inline-block;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: .85em;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 1px dotted var(--accent);
-  padding: 2px 8px;
-  border-radius: 4px;
-  letter-spacing: 0;
-  white-space: nowrap;
-  opacity: .75;
+  display:inline-block; font-family:'Fira Code',monospace; font-size:.80em;
+  padding:2px 8px; border-radius:4px; white-space:nowrap;
+}
+.dk .ph, .dk-s .ph {
+  color:var(--dk-ind); background:var(--dk-ind-bg);
+  border:1px dashed rgba(129,140,248,0.35);
+}
+.lt .ph, .lt-s .ph {
+  color:var(--lt-ind); background:var(--lt-ind-bg);
+  border:1px dashed rgba(79,70,229,0.3);
 }
 .ph-block {
-  display: block;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: .85em;
-  color: var(--accent);
-  background: var(--accent-bg);
-  border: 1px dotted var(--accent);
-  padding: 10px 14px;
-  border-radius: 6px;
-  margin: 4px 0;
-  line-height: 1.5;
-  white-space: normal;
-  opacity: .75;
+  display:block; font-family:'Fira Code',monospace; font-size:.80em;
+  padding:10px 14px; border-radius:4px; margin:4px 0; line-height:1.5;
+}
+.dk .ph-block, .dk-s .ph-block {
+  color:#A5B4FC; background:rgba(99,102,241,0.08);
+  border:1px dashed rgba(165,180,252,0.3);
+}
+.lt .ph-block, .lt-s .ph-block {
+  color:var(--lt-ind); background:var(--lt-ind-bg);
+  border:1px dashed rgba(79,70,229,0.3);
 }
 .ph-photo {
-  width: 96px; height: 96px; border-radius: 50%;
-  background: var(--accent-bg);
-  border: 1.5px dashed var(--accent);
-  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--accent-h);
-  display: flex; align-items: center; justify-content: center;
-  color: var(--accent);
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 10px; text-align: center;
-  flex-shrink: 0;
+  width:96px; height:96px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-family:'Fira Code',monospace; font-size:9px; text-align:center; flex-shrink:0;
 }
-@media (max-width: 600px) { .ph-photo { width: 80px; height: 80px; } }
+.dk .ph-photo { background:var(--dk-ind-bg); border:1.5px dashed rgba(129,140,248,0.4); color:var(--dk-ind); box-shadow:0 0 0 3px var(--dk-bg2), 0 0 0 5px var(--dk-ind2); }
+.lt .ph-photo { background:var(--lt-ind-bg); border:1.5px dashed rgba(79,70,229,0.35); color:var(--lt-ind); box-shadow:0 0 0 3px var(--lt-bg2), 0 0 0 5px var(--lt-ind2); }
 
-/* ─── STICKY HEADER ─── */
+/* ══════════════════════════════════════════════════
+   HEADER
+══════════════════════════════════════════════════ */
 .site-header {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  background: rgba(245,246,250,.88);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-bottom: 1px solid rgba(15,23,42,.08);
-  transition: box-shadow .2s;
+  position:fixed; top:0; left:0; right:0; z-index:200;
+  background:rgba(7,8,15,0.82);
+  backdrop-filter:blur(20px) saturate(1.6);
+  border-bottom:1px solid transparent;
+  transition:border-color .3s, box-shadow .3s;
 }
-.site-header.scrolled { box-shadow: var(--shadow); }
+.site-header.scrolled { border-color:var(--dk-b); box-shadow:0 1px 48px rgba(0,0,0,.55); }
 .header-top {
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 2rem; height: 56px; gap: 1rem;
-  max-width: 1200px; margin: 0 auto;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 2rem; height:64px; gap:1.5rem;
+  max-width:1180px; margin:0 auto;
 }
-.nav-brand {
-  font-size: 13px; font-weight: 600;
-  color: var(--text-2); letter-spacing: .02em;
-  white-space: nowrap; flex-shrink: 0;
-}
-.nav-brand b { color: var(--text); font-weight: 700; }
-.nav-brand span { color: var(--accent-h); }
-
-.nav-links {
-  display: flex; align-items: center; gap: 4px;
-  flex: 1; justify-content: center;
-}
+.nav-brand { font-size:12px; font-weight:700; letter-spacing:.04em; color:var(--dk-t2); white-space:nowrap; flex-shrink:0; }
+.nav-brand b { color:var(--dk-t1); }
+.nav-brand span { color:var(--dk-ind); }
+.nav-links { display:flex; align-items:center; gap:2px; flex:1; justify-content:center; }
 .nav-links a {
-  font-size: 13px; font-weight: 500;
-  color: var(--text-2); text-decoration: none;
-  padding: 6px 12px; border-radius: 5px;
-  transition: color .15s, background .15s;
-  white-space: nowrap;
+  font-size:12px; font-weight:500; color:var(--dk-t2); text-decoration:none;
+  padding:7px 14px; border-radius:6px;
+  transition:color .15s, background .15s; white-space:nowrap;
 }
-.nav-links a:hover { color: var(--text); background: var(--bg-3); }
-.nav-links a.active { color: var(--accent-h); }
-
-.header-right { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
-/* theme toggle CSS removed */
-
+.nav-links a:hover { color:var(--dk-t1); background:var(--dk-bg4); }
+.nav-links a.active { color:var(--dk-ind); }
 .nav-cta {
-  font-size: 13px; font-weight: 700;
-  background: var(--accent); color: #fff;
-  padding: 8px 20px; border-radius: 6px;
-  text-decoration: none; white-space: nowrap;
-  letter-spacing: .01em;
-  transition: background .15s;
+  font-size:13px; font-weight:700;
+  background:linear-gradient(135deg, #6366F1, #818CF8);
+  color:#fff; padding:9px 24px; border-radius:8px;
+  text-decoration:none; box-shadow:0 0 20px var(--dk-glow);
+  transition:opacity .15s, transform .12s; flex-shrink:0;
 }
-.nav-cta:hover { background: var(--accent-h); }
+.nav-cta:hover { opacity:.9; transform:translateY(-1px); }
 
-@media (max-width: 700px) {
-  .nav-links { display: none; }
-  .nav-brand { font-size: 11px; }
-  .header-top { padding: 0 1rem; gap: .5rem; }
-  .nav-cta { padding: 7px 12px; font-size: 12px; }
+/* Header adapts to current section theme */
+.site-header.light-mode {
+  background:rgba(247,248,255,0.93);
+  border-bottom-color:rgba(0,0,0,0.08);
+}
+.site-header.light-mode.scrolled { box-shadow:0 1px 32px rgba(0,0,0,0.10); }
+.site-header.light-mode .nav-brand { color:var(--lt-t2); }
+.site-header.light-mode .nav-brand b { color:var(--lt-t1); }
+.site-header.light-mode .nav-links a { color:var(--lt-t2); }
+.site-header.light-mode .nav-links a:hover { color:var(--lt-t1); background:var(--lt-bg2); }
+.site-header.light-mode .nav-links a.active { color:var(--lt-ind); }
+
+@media(max-width:720px) { .nav-links{display:none;} .header-top{padding:0 1.25rem;} .nav-cta{padding:8px 16px; font-size:12px;} }
+
+/* ══════════════════════════════════════════════════
+   SECTION SYSTEM — dk / lt
+══════════════════════════════════════════════════ */
+.dk, .dk-s { background:var(--dk-bg); color:var(--dk-t1); }
+.dk.dk-2 { background:var(--dk-bg2); }
+.ind-band { background:#16153A; color:#fff; border-top:1px solid rgba(99,102,241,0.3); border-bottom:1px solid rgba(99,102,241,0.3); }
+.lt, .lt-s { background:var(--lt-bg); color:var(--lt-t1); }
+/* Dot pattern texture on light sections */
+.lt::before, .lt-s::before {
+  content:'';
+  position:absolute; inset:0; pointer-events:none; z-index:0;
+  background-image:radial-gradient(circle, rgba(99,102,241,0.11) 1px, transparent 1px);
+  background-size:32px 32px;
+  opacity:.3;
 }
 
-/* ─── HERO ─── */
+/* padding */
+.dk, .lt { padding:4.5rem 2rem; position:relative; overflow:hidden; }
+@media(max-width:600px) { .dk, .lt { padding:3rem 1.25rem; } }
+
+.container { max-width:880px; margin:0 auto; position:relative; z-index:2; }
+.container-wide { max-width:1180px; margin:0 auto; position:relative; z-index:2; }
+
+/* ── section labels ── */
+.section-label {
+  display:inline-flex; align-items:center; gap:8px;
+  font-family:'Fira Code',monospace; font-size:11px;
+  font-weight:600; letter-spacing:.18em; text-transform:uppercase;
+  margin-bottom:1.1rem;
+}
+.dk .section-label, .dk-s .section-label { color:var(--dk-t3); }
+.dk .section-label .n, .dk-s .section-label .n { color:var(--dk-ind); }
+.lt .section-label, .lt-s .section-label { color:var(--lt-t3); }
+.lt .section-label .n, .lt-s .section-label .n { color:var(--lt-ind); }
+
+/* ── section headings ── */
+h2.section-h {
+  font-family:'Syne', sans-serif;
+  font-size:clamp(1.75rem,3.5vw,2.5rem); font-weight:800;
+  line-height:1.12; letter-spacing:-.025em; margin-bottom:.75rem;
+  font-feature-settings:"kern" 1;
+}
+.dk h2.section-h, .dk-s h2.section-h { color:var(--dk-t1); }
+.lt h2.section-h, .lt-s h2.section-h { color:var(--lt-t1); }
+
+.dk .section-sub, .dk-s .section-sub { font-size:14px; color:var(--dk-t2); margin-bottom:1.25rem; line-height:1.7; font-weight:300; }
+.lt .section-sub, .lt-s .section-sub { font-size:14px; color:var(--lt-t2); margin-bottom:1.25rem; line-height:1.7; font-weight:300; }
+
+/* ── watermarks ── */
+.sec-wm {
+  position:absolute; right:-10px; top:50%; transform:translateY(-50%);
+  font-family:'Syne',sans-serif; font-size:clamp(100px,16vw,200px);
+  font-weight:800; line-height:1; pointer-events:none; z-index:1;
+  user-select:none; letter-spacing:-.05em;
+}
+.dk .sec-wm, .dk-s .sec-wm { color:rgba(99,102,241,0.04); }
+.lt .sec-wm, .lt-s .sec-wm { color:rgba(79,70,229,0.055); }
+
+/* ── diagonal dividers ── */
+/* Each section gets a ::after pseudo that cuts diagonally into the next */
+.diag-bottom::after {
+  content:''; display:block; position:absolute;
+  bottom:-40px; left:0; right:0; height:80px; z-index:10;
+  pointer-events:none;
+}
+/* dark → light */
+.diag-dk-lt::after {
+  background:var(--lt-bg);
+  clip-path:polygon(0 60%, 100% 0, 100% 100%, 0 100%);
+}
+/* light → dark */
+.diag-lt-dk::after {
+  background:var(--dk-bg);
+  clip-path:polygon(0 0, 100% 60%, 100% 100%, 0 100%);
+}
+
+/* ══════════════════════════════════════════════════
+   HERO  (DARK)
+══════════════════════════════════════════════════ */
 .hero {
-  background: var(--bg);
-  padding: 6rem 2rem 5rem;
-  position: relative; overflow: clip;
+  background:var(--dk-bg); color:var(--dk-t1);
+  position:relative; min-height:calc(100vh - 64px);
+  display:flex; align-items:flex-start;
+  padding:clamp(4rem, 10vh, 7rem) 2rem 4rem;
+  overflow:hidden;
 }
+#hero-canvas { position:absolute; inset:0; z-index:0; opacity:.5; }
 .hero::before {
-  content: ''; position: absolute;
-  top: -120px; right: -80px;
-  width: 460px; height: 460px;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--accent-bg) 0%, transparent 70%);
-  pointer-events: none; opacity: .9;
+  content:''; position:absolute; top:-20%; right:-8%; width:650px; height:650px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(99,102,241,0.13) 0%, transparent 65%);
+  z-index:1; pointer-events:none; animation:blob1 12s ease-in-out infinite alternate;
 }
-.hero-inner { max-width: 780px; margin: 0 auto; position: relative; }
+.hero::after {
+  content:''; position:absolute; bottom:-15%; left:-5%; width:480px; height:480px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(129,140,248,0.07) 0%, transparent 65%);
+  z-index:1; pointer-events:none; animation:blob2 15s ease-in-out infinite alternate;
+}
+@keyframes blob1 { from{transform:translate(0,0) scale(1);} to{transform:translate(-30px,25px) scale(1.08);} }
+@keyframes blob2 { from{transform:translate(0,0);} to{transform:translate(25px,-18px) scale(1.05);} }
 
+.hero-inner { max-width:880px; margin:0 auto; position:relative; z-index:2; }
 .hero-tag {
-  display: inline-flex; align-items: center; gap: 10px;
-  font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
-  color: var(--accent-h); margin-bottom: 1.5rem;
+  display:inline-flex; align-items:center; gap:10px;
+  font-family:'Fira Code',monospace; font-size:11px; font-weight:500;
+  letter-spacing:.18em; text-transform:uppercase;
+  color:var(--dk-ind); background:var(--dk-ind-bg);
+  border:1px solid var(--dk-b2); border-radius:100px;
+  padding:6px 14px; margin-bottom:2rem;
+  animation:fadeUp .6s ease both;
 }
-.hero-tag::before {
-  content: ''; display: block; width: 36px; height: 2px;
-  background: var(--accent);
-  box-shadow: 0 5px 0 var(--accent);
-  flex-shrink: 0;
-}
+.hero-tag::before { content:'▸'; opacity:.7; }
 .hero h1 {
-  font-size: clamp(2.2rem, 5vw, 3.4rem);
-  font-weight: 800; line-height: 1.12; letter-spacing: -.03em;
-  margin-bottom: 1.25rem; color: var(--text);
+  font-family:'Syne', sans-serif;
+  font-size:clamp(2.6rem,6vw,4.4rem); font-weight:800;
+  line-height:1.04; letter-spacing:-.04em; font-feature-settings:"kern" 1,"liga" 1;
+  color:var(--dk-t1); margin-bottom:1.5rem;
+  animation:fadeUp .7s .1s ease both;
 }
-.hero h1 em { font-style: normal; color: var(--accent-h); }
-
+.hero h1 em {
+  font-style:normal;
+  background:linear-gradient(135deg, #818CF8 0%, #A5B4FC 55%, #C4B5FD 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
 .hero-sub {
-  font-size: 1.15rem; color: var(--text-2);
-  max-width: 560px; margin-bottom: 1.75rem; line-height: 1.7;
+  font-size:1.1rem; color:var(--dk-t2); max-width:620px;
+  margin-bottom:2rem; line-height:1.75; font-weight:300;
+  animation:fadeUp .7s .2s ease both;
 }
-.hero-sub strong { color: var(--text); font-weight: 600; }
+.hero-sub strong { color:var(--dk-t1); font-weight:600; }
+.hero-pills { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:2.25rem; animation:fadeUp .7s .3s ease both; }
 
-.hero-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 2rem; }
+/* shared pill — adapts to context */
 .pill {
-  display: flex; align-items: center; gap: 6px;
-  background: var(--bg-3); border: 1px solid var(--border);
-  border-radius: 100px; padding: 6px 14px;
-  font-size: 14px; font-weight: 600; color: var(--text);
+  display:inline-flex; align-items:center; gap:7px;
+  border-radius:8px; padding:7px 14px;
+  font-size:13px; font-weight:500;
+  transition:border-color .2s, background .2s, transform .2s;
 }
-.pill .n { font-family: 'JetBrains Mono', monospace; color: var(--accent-h); font-size: 15px; }
-.pill .mono { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--accent-h); }
+.pill:hover { transform:translateY(-1px); }
+.hero .pill, .dk .pill, .dk-s .pill {
+  background:var(--dk-bg3); border:1px solid var(--dk-b); color:var(--dk-t1);
+}
+.hero .pill:hover, .dk .pill:hover { border-color:var(--dk-b2); background:var(--dk-bg4); }
+.lt .pill { background:var(--lt-bg2); border:1px solid var(--lt-b); color:var(--lt-t1); }
+.lt .pill:hover { border-color:var(--lt-b2); background:var(--lt-bg3); }
+.pill .n { font-family:'Fira Code',monospace; font-weight:600; font-size:14px; }
+.hero .pill .n, .dk .pill .n { color:var(--dk-ind); }
+.lt .pill .n { color:var(--lt-ind); }
+.pill .mono { font-family:'Fira Code',monospace; font-size:12px; }
+.hero .pill .mono, .dk .pill .mono { color:var(--dk-ind); }
+.lt .pill .mono { color:var(--lt-ind); }
 
-.hero-cta-row {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem; margin-bottom: 2rem;
-}
+.hero-cta-row { display:flex; flex-wrap:wrap; align-items:center; gap:1.25rem; margin-bottom:2.25rem; animation:fadeUp .7s .4s ease both; }
 .btn-main {
-  display: inline-block; background: var(--accent); color: #fff;
-  font-family: 'Manrope', sans-serif; font-size: 16px; font-weight: 700;
-  padding: 16px 36px; border-radius: 8px; text-decoration: none;
-  letter-spacing: .01em;
-  transition: background .18s, transform .12s; border: none; cursor: pointer;
+  display:inline-flex; align-items:center; gap:8px;
+  background:linear-gradient(135deg, #6366F1 0%, #818CF8 100%);
+  color:#fff; font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:16px; font-weight:700; padding:15px 38px; border-radius:8px;
+  text-decoration:none; border:none; cursor:pointer;
+  box-shadow:0 4px 28px rgba(99,102,241,0.38);
+  transition:opacity .15s, transform .12s, box-shadow .2s; position:relative; overflow:hidden;
 }
-.btn-main:hover { background: var(--accent-h); transform: translateY(-1px); }
-.btn-main:active { transform: translateY(0); }
+.btn-main::after { content:''; position:absolute; inset:0; background:linear-gradient(135deg,rgba(255,255,255,.08),transparent); border-radius:inherit; }
+.btn-main:hover { opacity:.91; transform:translateY(-2px); box-shadow:0 8px 40px rgba(99,102,241,0.45); }
+.btn-main:active { transform:translateY(0); }
+
+/* btn-main on light bg */
+.lt .btn-main { box-shadow:0 4px 24px rgba(79,70,229,0.28); }
+.lt .btn-main:hover { box-shadow:0 8px 36px rgba(79,70,229,0.38); }
+
 .hero-anchor {
-  font-size: 14px; color: var(--text-2); text-decoration: none;
-  border-bottom: 1px solid var(--border-2); padding-bottom: 1px;
-  transition: color .15s, border-color .15s;
+  font-size:14px; text-decoration:none; border-bottom:1px solid; padding-bottom:2px;
+  transition:color .15s, border-color .15s;
+  color:var(--dk-t2); border-color:var(--dk-b2);
 }
-.hero-anchor:hover { color: var(--text); border-color: var(--accent); }
+.hero-anchor:hover { color:var(--dk-ind); border-color:var(--dk-ind); }
 
 .urgency {
-  background: var(--bg-3); border: 1px solid var(--border);
-  border-left: 3px solid var(--accent);
-  border-radius: 8px; padding: 12px 16px;
-  display: flex; align-items: center; justify-content: space-between;
-  flex-wrap: wrap; gap: 12px;
+  background:var(--dk-bg2); border:1px solid var(--dk-b);
+  border-left:3px solid var(--dk-ind2); border-radius:8px;
+  padding:14px 18px; display:flex; align-items:center; justify-content:space-between;
+  flex-wrap:wrap; gap:12px; animation:fadeUp .7s .5s ease both;
 }
-.urgency-text { font-size: 14px; color: var(--text-2); }
-.urgency-text strong { color: var(--text); }
-.urgency-bar { display: flex; align-items: center; gap: 8px; }
-.progress-track { width: 120px; height: 6px; background: var(--border-2); border-radius: 3px; overflow: hidden; }
-.progress-fill { width: 62.5%; height: 100%; background: var(--accent); border-radius: 3px; }
-.urgency-seats { font-size: 13px; color: var(--accent-h); font-weight: 600; }
+.urgency-text { font-size:13px; color:var(--dk-t2); }
+.urgency-text strong { color:var(--dk-t1); font-weight:600; }
+.urgency-bar { display:flex; align-items:center; gap:10px; }
+.progress-track { width:120px; height:5px; background:var(--dk-bg4); border-radius:3px; overflow:hidden; }
+.progress-fill { width:62.5%; height:100%; background:linear-gradient(90deg, #4F46E5, #818CF8); border-radius:3px; }
+.urgency-seats { font-family:'Fira Code',monospace; font-size:12px; color:var(--dk-ind); font-weight:600; }
 
-/* ─── COMMON SECTION ─── */
-section { padding: 5rem 2rem; }
-@media (max-width: 600px) { section { padding: 3rem 1.25rem; } }
-.container { max-width: 780px; margin: 0 auto; }
-.section-label {
-  display: inline-flex; align-items: center; gap: 8px;
-  font-size: 13px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--text-2); margin-bottom: 1rem;
-}
-.section-label .n { font-family: 'JetBrains Mono', monospace; color: var(--accent); }
-h2.section-h {
-  font-size: clamp(1.65rem, 3.2vw, 2.1rem); font-weight: 800;
-  line-height: 1.2; letter-spacing: -.022em; color: var(--text);
-  margin-bottom: .85rem;
-}
-.section-sub { font-size: 15px; color: var(--text-2); margin-bottom: 2rem; }
-hr.rule { border: none; border-top: 1px solid var(--border); }
 
-/* ─── §01 RECOGNITION ─── */
-.recog { background: var(--bg-2); border-top: 3px solid var(--accent); }
-.recog-list { list-style: none; border-top: 1px solid var(--border); }
+
+/* animations */
+@keyframes fadeUp { from{opacity:0;transform:translateY(26px);} to{opacity:1;transform:translateY(0);} }
+@keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+
+/* ══════════════════════════════════════════════════
+   SCROLL REVEAL
+══════════════════════════════════════════════════ */
+.reveal { opacity:0; transform:translateY(24px); transition:opacity .6s ease, transform .6s ease; }
+.reveal.in { opacity:1; transform:none; }
+
+/* ══════════════════════════════════════════════════
+   §01 RECOGNITION  (LIGHT)
+══════════════════════════════════════════════════ */
+.recog { /* inherits .dk padding */ }
+.recog-list { list-style:none; border-top:1px solid; }
+.dk .recog-list, .dk-s .recog-list { border-color:var(--dk-b3); }
+.lt .recog-list { border-color:var(--lt-b3); }
 .recog-list li {
-  display: grid; grid-template-columns: 32px 1fr; gap: 12px;
-  padding: 1rem 0; border-bottom: 1px solid var(--border);
-  align-items: start; font-size: 15px; color: var(--text-2); line-height: 1.6;
+  display:grid; grid-template-columns:40px 1fr; gap:16px;
+  padding:1.15rem 1rem; border-bottom:1px solid;
+  align-items:start; font-size:14px; line-height:1.65;
+  margin:0 -1rem; transition:background .2s, padding-left .2s;
 }
-.recog-list li .nn {
-  font-family: 'JetBrains Mono', monospace; font-size: 12px;
-  color: var(--accent); font-weight: 500; padding-top: 3px;
-}
+.lt .recog-list li { color:var(--lt-t2); border-color:var(--lt-b3); }
+.lt .recog-list li:hover { background:var(--lt-bg2); padding-left:1.5rem; color:var(--lt-t1); }
+.dk .recog-list li { color:var(--dk-t2); border-color:var(--dk-b3); }
+.dk .recog-list li:hover { background:var(--dk-bg4); padding-left:1.5rem; color:var(--dk-t1); border-left:2px solid var(--dk-ind); }
+.recog-list li .nn { font-family:'Fira Code',monospace; font-size:11px; font-weight:600; padding-top:3px; letter-spacing:.04em; }
+.lt .recog-list li .nn { color:var(--lt-ind); }
+.dk .recog-list li .nn { color:var(--dk-ind); }
 
-/* ─── §02 WHY-NOT ─── */
-.why-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 1.5rem;
-}
-@media (max-width: 600px) { .why-grid { grid-template-columns: 1fr; } }
+/* ══════════════════════════════════════════════════
+   §02 WHY-NOT  (DARK)
+══════════════════════════════════════════════════ */
+.why-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:1.25rem; }
+@media(max-width:600px) { .why-grid { grid-template-columns:1fr; } }
 .why-card {
-  background: var(--bg-2); border: 1px solid var(--border);
-  border-radius: 8px; padding: 1.75rem;
+  border-radius:8px; padding:1.75rem;
+  transition:border-color .2s, background .2s, transform .2s, box-shadow .2s;
 }
-.why-card.star { background: var(--accent-bg); border-color: var(--accent); }
-.why-card h3 {
-  font-size: 13px; font-weight: 700; color: var(--text);
-  margin-bottom: 6px; text-transform: uppercase; letter-spacing: .04em;
+.why-card:hover { transform:translateY(-2px); }
+.dk .why-card {
+  background:var(--dk-bg2); border:1px solid var(--dk-b3);
 }
-.why-card.star h3 { color: var(--accent-h); }
-.why-card p { font-size: 14px; color: var(--text-2); line-height: 1.6; }
+.dk .why-card:hover { border-color:var(--dk-b); background:var(--dk-bg3); box-shadow:0 8px 28px rgba(0,0,0,.3); }
+.lt .why-card { background:var(--lt-bg2); border:1px solid var(--lt-b3); }
+.lt .why-card:hover { border-color:var(--lt-b2); background:var(--lt-bg3); box-shadow:0 12px 32px rgba(79,70,229,.14), 0 2px 8px rgba(79,70,229,.08); }
 
-/* ─── §03 TRANSFORMATION ─── */
-.transform-grid { display: grid; gap: 10px; margin-top: 1.5rem; }
+.why-card.star { position:relative; overflow:hidden; }
+.dk .why-card.star { background:var(--dk-ind-bg); border-color:rgba(99,102,241,0.35); }
+.dk .why-card.star::before { content:''; position:absolute; top:-40px; right:-40px; width:100px; height:100px; border-radius:50%; background:radial-gradient(circle, var(--dk-glow) 0%, transparent 70%); }
+.lt .why-card.star { background:rgba(79,70,229,0.07); border-color:rgba(79,70,229,0.28); }
+
+.why-card h3 { font-size:12px; font-weight:700; margin-bottom:8px; text-transform:uppercase; letter-spacing:.08em; }
+.dk .why-card h3 { color:var(--dk-t2); }
+.dk .why-card.star h3 { color:var(--dk-ind); }
+.lt .why-card h3 { color:var(--lt-t2); }
+.lt .why-card.star h3 { color:var(--lt-ind); }
+.why-card p { font-size:13px; line-height:1.65; font-weight:300; }
+.dk .why-card p { color:var(--dk-t2); }
+.lt .why-card p { color:var(--lt-t2); }
+
+/* ══════════════════════════════════════════════════
+   §03 TRANSFORMATION  (LIGHT)
+══════════════════════════════════════════════════ */
+.transform-grid { display:grid; gap:10px; margin-top:1.25rem; }
 .tf-card {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 0;
-  border: 1px solid var(--border); border-radius: 8px; overflow: hidden;
-  font-size: 14px;
+  display:grid; grid-template-columns:1fr 1fr; gap:0;
+  border-radius:12px; overflow:hidden; font-size:14px;
+  transition:box-shadow .2s;
 }
-.tf-before {
-  background: var(--bg-3); color: var(--text-2);
-  border-right: 1px solid var(--border);
-  border-left: 3px solid var(--text-3);
-  padding: 14px 16px; line-height: 1.55;
-}
-.tf-after {
-  background: var(--bg-2); color: var(--text-2);
-  border-left: 3px solid var(--accent);
-  padding: 14px 16px; line-height: 1.55; font-weight: 500;
-}
-.tf-tag {
-  font-size: 10px; font-weight: 700; letter-spacing: .08em;
-  text-transform: uppercase; margin-bottom: 5px; opacity: .6; color: var(--text-3);
-}
-@media (max-width: 560px) {
-  .tf-card { grid-template-columns: 1fr; }
-  .tf-before { border-right: none; border-bottom: 1px solid var(--border); }
-}
+.lt .tf-card { border:1px solid var(--lt-b3); }
+.lt .tf-card:hover { box-shadow:0 4px 20px rgba(79,70,229,0.13); }
+.dk .tf-card { border:1px solid var(--dk-b3); }
+.dk .tf-card:hover { box-shadow:0 4px 20px rgba(0,0,0,.25); }
 
-/* ─── §04 ROI ─── */
-.roi { border-bottom: 1px solid var(--border); }
-.roi-grid {
-  display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 1.5rem;
-}
-@media (max-width: 600px) { .roi-grid { grid-template-columns: 1fr; } }
+.tf-before { padding:16px 18px; line-height:1.6; font-weight:300; }
+.lt .tf-before { background:var(--lt-bg2); color:var(--lt-t3); border-right:1px solid var(--lt-b3); border-left:3px solid var(--lt-b2); }
+.dk .tf-before { background:var(--dk-bg2); color:var(--dk-t3); border-right:1px solid var(--dk-b3); border-left:3px solid rgba(255,255,255,0.12); }
+.tf-after { padding:16px 18px; line-height:1.6; font-weight:500; }
+.lt .tf-after { background:var(--lt-bg3); color:var(--lt-t2); border-left:3px solid var(--lt-ind); }
+.dk .tf-after { background:var(--dk-bg3); color:var(--dk-t2); border-left:3px solid var(--dk-ind2); }
+
+.tf-tag { font-family:'Fira Code',monospace; font-size:9px; font-weight:600; letter-spacing:.18em; text-transform:uppercase; margin-bottom:6px; }
+.lt .tf-before .tf-tag { color:var(--lt-t3); }
+.lt .tf-after .tf-tag { color:var(--lt-ind); }
+.dk .tf-before .tf-tag { color:var(--dk-t3); }
+.dk .tf-after .tf-tag { color:var(--dk-ind); }
+
+@media(max-width:560px) { .tf-card{grid-template-columns:1fr;} .tf-before{border-right:none; border-bottom:1px solid;} }
+
+/* ══════════════════════════════════════════════════
+   §04 ROI  (DARK)
+══════════════════════════════════════════════════ */
+.roi-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:1.25rem; }
+@media(max-width:600px) { .roi-grid{grid-template-columns:1fr;} }
 .roi-card {
-  background: var(--bg-2); border: 1px solid var(--border);
-  border-radius: 8px; padding: 1.75rem;
+  border-radius:8px; padding:2rem; position:relative; overflow:hidden;
+  transition:border-color .2s, transform .2s, box-shadow .2s;
 }
-.roi-number {
-  font-family: 'JetBrains Mono', monospace; font-size: 2.2rem;
-  font-weight: 500; color: var(--text); line-height: 1; margin-bottom: 6px;
-}
-.roi-label { font-size: 14px; color: var(--text); font-weight: 600; margin-bottom: 5px; }
-.roi-desc { font-size: 13px; color: var(--text-2); line-height: 1.55; }
+.roi-card:hover { transform:translateY(-3px); }
+.roi-card::after { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:linear-gradient(90deg, transparent, var(--dk-ind2), transparent); opacity:0; transition:opacity .2s; }
+.roi-card:hover::after { opacity:1; }
+.dk .roi-card { background:var(--dk-bg3); border:1px solid var(--dk-b3); border-top:2px solid var(--dk-ind2); }
+.dk .roi-card:hover { border-color:var(--dk-b2); box-shadow:0 12px 40px rgba(0,0,0,.35); }
+.lt .roi-card { background:white; border:1px solid var(--lt-b); border-top:2px solid var(--lt-ind); }
+.lt .roi-card:hover { border-color:var(--lt-b2); box-shadow:0 12px 36px rgba(79,70,229,0.12); }
+.lt .roi-card::after { background:linear-gradient(90deg, transparent, var(--lt-ind), transparent); }
+.roi-number { font-family:'Fira Code',monospace; font-size:2.6rem; font-weight:600; line-height:1; margin-bottom:8px; }
+.dk .roi-number { color:var(--dk-ind); }
+.lt .roi-number { color:var(--lt-ind); }
+.roi-label { font-size:13px; font-weight:700; margin-bottom:6px; }
+.dk .roi-label { color:var(--dk-t1); }
+.lt .roi-label { color:var(--lt-t1); }
+.roi-desc { font-size:13px; line-height:1.6; font-weight:300; }
+.dk .roi-desc { color:var(--dk-t2); }
+.lt .roi-desc { color:var(--lt-t2); }
+.roi-source { font-size:11px; margin-top:14px; border-top:1px solid; padding-top:10px; line-height:1.5; }
+.dk .roi-source { color:var(--dk-t3); border-color:var(--dk-b3); }
+.lt .roi-source { color:var(--lt-t3); border-color:var(--lt-b3); }
+.roi-source a { text-decoration:none; transition:color .15s; }
+.dk .roi-source a { color:var(--dk-t3); }
+.dk .roi-source a:hover { color:var(--dk-ind); }
+.lt .roi-source a { color:var(--lt-t3); }
+.lt .roi-source a:hover { color:var(--lt-ind); }
 
-/* ─── §05 PROGRAMME + TIMELINE SVG ─── */
+/* ══════════════════════════════════════════════════
+   §05 PROGRAMME  (LIGHT)
+══════════════════════════════════════════════════ */
 .timeline {
-  margin: 1.75rem 0 2rem;
-  background: var(--bg-2); border: 1px solid var(--border);
-  border-radius: 10px; padding: 1.5rem 1rem 1.25rem;
-  overflow-x: auto;
+  margin:1.5rem 0; border-radius:8px; padding:1.75rem 1.25rem 1.5rem; overflow-x:auto;
 }
-.timeline svg { display: block; margin: 0 auto; max-width: 100%; height: auto; }
-.timeline-text-track { font-family: 'JetBrains Mono', monospace; font-size: 11px; fill: var(--text-2); }
-.timeline-text-week { font-family: 'Manrope', sans-serif; font-size: 13px; font-weight: 700; fill: var(--text); }
-.prog-grid { display: grid; gap: 8px; margin-top: 1rem; }
+.lt .timeline { background:white; border:1px solid var(--lt-b3); }
+.dk .timeline { background:var(--dk-bg2); border:1px solid var(--dk-b3); }
+.timeline svg { display:block; margin:0 auto; max-width:100%; }
+
+.prog-grid { display:grid; gap:8px; margin-top:1rem; }
 .prog-card {
-  display: grid; grid-template-columns: 100px 1fr; gap: 16px;
-  background: var(--bg-2); border: 1px solid var(--border);
-  border-radius: 8px; padding: 1.75rem; align-items: start;
+  display:grid; grid-template-columns:120px 1fr; gap:0;
+  border-radius:8px; padding:1.75rem; align-items:start;
+  transition:border-color .2s, background .2s, transform .2s;
 }
-@media (max-width: 600px) { .prog-card { grid-template-columns: 1fr; gap: 4px; } }
-.prog-week {
-  font-family: 'JetBrains Mono', monospace; font-size: 12px;
-  color: var(--accent); font-weight: 500; text-transform: uppercase;
-  letter-spacing: .06em; padding-top: 2px;
-}
-.prog-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-.prog-desc { font-size: 14px; color: var(--text-2); line-height: 1.55; }
+.prog-card:hover { transform:translateX(4px); }
+.lt .prog-card { background:white; border:1px solid var(--lt-b3); }
+.lt .prog-card:hover { border-color:var(--lt-b2); background:var(--lt-bg2); box-shadow:0 8px 24px rgba(79,70,229,.1); }
+.dk .prog-card { background:var(--dk-bg2); border:1px solid var(--dk-b3); }
+.dk .prog-card:hover { border-color:var(--dk-b2); background:var(--dk-bg3); }
+@media(max-width:600px) { .prog-card{grid-template-columns:1fr; gap:6px;} }
+.prog-week { font-family:'Fira Code',monospace; font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.1em; padding-top:2px; }
+.lt .prog-week { color:var(--lt-ind); }
+.dk .prog-week { color:var(--dk-ind); }
+.prog-title { font-family:'Syne',sans-serif; font-size:15px; font-weight:700; margin-bottom:5px; letter-spacing:-.01em; }
+.lt .prog-title { color:var(--lt-t1); }
+.dk .prog-title { color:var(--dk-t1); }
+.prog-desc { font-size:14px; line-height:1.65; font-weight:300; }
+.lt .prog-desc { color:var(--lt-t2); }
+.dk .prog-desc { color:var(--dk-t2); }
 
-/* ─── §06 INSIDE + ICONS ─── */
-.inside-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 1.5rem;
-}
-@media (max-width: 600px) { .inside-grid { grid-template-columns: 1fr; } }
+/* ══════════════════════════════════════════════════
+   §06 INSIDE  (DARK)
+══════════════════════════════════════════════════ */
+.inside-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:1.25rem; }
+@media(max-width:600px) { .inside-grid{grid-template-columns:1fr;} }
 .inside-card {
-  background: var(--bg-2); border: 1px solid var(--border);
-  border-radius: 8px; padding: 1.75rem;
-  display: grid; grid-template-columns: 44px 1fr; gap: 14px; align-items: start;
+  border-radius:8px; padding:1.75rem;
+  display:grid; grid-template-columns:52px 1fr; gap:14px; align-items:start;
+  transition:border-color .2s, background .2s, transform .2s, box-shadow .2s;
 }
+.inside-card:hover { transform:translateY(-2px); }
+.dk .inside-card { background:var(--dk-bg2); border:1px solid var(--dk-b3); }
+.dk .inside-card:hover { border-color:var(--dk-b2); background:var(--dk-bg3); box-shadow:0 8px 28px rgba(0,0,0,.3); }
+.lt .inside-card { background:white; border:1px solid var(--lt-b3); }
+.lt .inside-card:hover { border-color:var(--lt-b2); background:var(--lt-bg2); box-shadow:0 14px 36px rgba(79,70,229,.16), 0 2px 8px rgba(79,70,229,.08); transform:translateY(-3px); }
 .inside-icon {
-  width: 44px; height: 44px;
-  background: var(--accent-bg); border: 1px solid var(--border-2);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--accent-h);
+  width:52px; height:52px; border-radius:10px;
+  display:flex; align-items:center; justify-content:center; flex-shrink:0;
 }
-.inside-icon svg { width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 1.6; }
-.inside-num {
-  font-family: 'JetBrains Mono', monospace; font-size: 11px;
-  color: var(--accent); font-weight: 500; margin-bottom: 4px;
-  text-transform: uppercase; letter-spacing: .06em;
-}
-.inside-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-.inside-desc { font-size: 14px; color: var(--text-2); line-height: 1.6; }
-.inside-list { list-style: none; margin-top: 8px; }
+.dk .inside-icon { background:var(--dk-ind-bg); border:1px solid var(--dk-b2); color:var(--dk-ind); box-shadow:0 0 14px rgba(99,102,241,0.15); }
+.lt .inside-icon { background:var(--lt-ind-bg); border:1px solid var(--lt-b2); color:var(--lt-ind); }
+.inside-icon svg { width:22px; height:22px; stroke:currentColor; fill:none; stroke-width:1.5; }
+.inside-num { font-family:'Fira Code',monospace; font-size:10px; font-weight:600; margin-bottom:4px; text-transform:uppercase; letter-spacing:.1em; }
+.dk .inside-num { color:var(--dk-ind); }
+.lt .inside-num { color:var(--lt-ind); }
+.inside-title { font-family:'Syne',sans-serif; font-size:15px; font-weight:700; margin-bottom:6px; letter-spacing:-.01em; }
+.dk .inside-title { color:var(--dk-t1); }
+.lt .inside-title { color:var(--lt-t1); }
+.inside-desc { font-size:14px; line-height:1.65; font-weight:300; }
+.dk .inside-desc { color:var(--dk-t2); }
+.lt .inside-desc { color:var(--lt-t2); }
+.inside-list { list-style:none; margin-top:10px; }
 .inside-list li {
-  font-size: 13px; color: var(--text-2);
-  padding: 3px 0; display: flex; gap: 7px;
+  font-size:12px; color:var(--dk-t3); padding:3px 0;
+  padding-left:14px; position:relative; line-height:1.55;
 }
-.inside-list li::before { content: '→'; color: var(--accent); flex-shrink: 0; }
+.lt .inside-list li { color:var(--lt-t3); }
+.inside-list li::before {
+  content:'·'; position:absolute; left:0;
+  font-size:14px; line-height:1.2;
+}
+.dk .inside-list li::before { color:var(--dk-ind); }
+.lt .inside-list li::before { color:var(--lt-ind); }
 
-/* ─── §07 PROOF ─── */
-.proof { background: var(--bg-2); border-top: 3px solid var(--accent); }
-.proof-grid {
-  display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 1.5rem;
-}
-@media (max-width: 700px) { .proof-grid { grid-template-columns: 1fr; } }
+/* ══════════════════════════════════════════════════
+   §07 PROOF  (LIGHT)
+══════════════════════════════════════════════════ */
+.proof-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:1.25rem; }
+@media(max-width:700px) { .proof-grid{grid-template-columns:1fr;} }
 .proof-card {
-  background: var(--bg); border: 1px solid var(--border);
-  border-top: 3px solid var(--accent);
-  border-radius: 8px; padding: 1.5rem;
+  padding:1.5rem; border-radius:8px;
+  transition:background .2s, transform .2s;
 }
-.proof-head { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+.proof-card:hover { transform:translateY(-2px); }
+.lt .proof-card { background:white; border:1px solid var(--lt-b3); border-top:2px solid var(--lt-ind); }
+.lt .proof-card:hover { background:var(--lt-bg2); box-shadow:0 12px 32px rgba(79,70,229,.13); transform:translateY(-3px); }
+.dk .proof-card { background:var(--dk-bg2); border:1px solid var(--dk-b3); border-top:2px solid var(--dk-ind2); }
+.dk .proof-card:hover { background:var(--dk-bg3); }
+.proof-head { display:flex; align-items:center; gap:10px; margin-bottom:14px; }
 .proof-avatar {
-  width: 44px; height: 44px; border-radius: 50%;
-  background: var(--accent-bg); display: flex; align-items: center;
-  justify-content: center; font-size: 14px; font-weight: 700;
-  color: var(--accent-h); flex-shrink: 0;
-  border: 2px solid var(--accent);
+  width:44px; height:44px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:700; flex-shrink:0;
 }
-.proof-name { font-size: 15px; font-weight: 700; color: var(--text); }
-.proof-role { font-size: 13px; color: var(--text-2); margin-top: 1px; }
-.proof-quote { font-size: 14px; color: var(--text-2); line-height: 1.6; }
+.lt .proof-avatar { background:var(--lt-ind-bg); color:var(--lt-ind); border:2px solid var(--lt-b2); }
+.dk .proof-avatar { background:var(--dk-ind-bg); color:var(--dk-ind); border:2px solid var(--dk-b2); }
+.proof-name { font-size:14px; font-weight:700; }
+.lt .proof-name { color:var(--lt-t1); }
+.dk .proof-name { color:var(--dk-t1); }
+.proof-role { font-size:12px; margin-top:1px; }
+.lt .proof-role { color:var(--lt-t2); }
+.dk .proof-role { color:var(--dk-t2); }
+.proof-quote { font-size:14px; line-height:1.7; font-weight:300; }
+.lt .proof-quote { color:var(--lt-t2); }
+.dk .proof-quote { color:var(--dk-t2); }
 .proof-result {
-  margin-top: 10px; display: inline-block;
-  background: var(--green-bg); color: var(--green-text);
-  font-size: 13px; font-weight: 700; padding: 4px 10px; border-radius: 4px;
+  margin-top:12px; display:inline-block;
+  font-family:'Fira Code',monospace; font-size:12px; font-weight:600;
+  padding:4px 10px; border-radius:4px;
 }
+.lt .proof-result { background:rgba(5,150,105,.10); color:var(--green-lt); }
+.dk .proof-result { background:var(--green-bg); color:var(--green); }
 
-/* ─── LEAD MAGNET ─── */
-.leadmag {
-  background: var(--accent-bg); border-top: 2px solid var(--accent);
-  padding: 2.5rem 2rem;
-}
-.leadmag-inner {
-  max-width: 780px; margin: 0 auto;
-  display: grid; grid-template-columns: 1fr auto; gap: 2rem; align-items: center;
-}
-@media (max-width: 620px) { .leadmag-inner { grid-template-columns: 1fr; } }
-.leadmag-title { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
-.leadmag-sub { font-size: 14px; color: var(--text-2); }
-.leadmag-form { display: flex; gap: 8px; flex-wrap: wrap; }
+/* ══════════════════════════════════════════════════
+   LEAD MAGNET  (DARK)
+══════════════════════════════════════════════════ */
+.leadmag { padding:2rem 2rem; }
+.dk .leadmag-inner, .leadmag-inner { max-width:800px; margin:0 auto; display:grid; grid-template-columns:1fr auto; gap:2.5rem; align-items:center; }
+@media(max-width:620px) { .leadmag-inner{grid-template-columns:1fr;} }
+.leadmag-title { font-size:16px; font-weight:700; margin-bottom:4px; }
+.dk .leadmag-title { color:var(--dk-t1); }
+.leadmag-sub { font-size:13px; font-weight:300; }
+.dk .leadmag-sub { color:var(--dk-t2); }
+.leadmag-form { display:flex; gap:8px; flex-wrap:wrap; }
 .leadmag-form input {
-  flex: 1; min-width: 200px; padding: 11px 14px;
-  border: 1.5px solid var(--border-2); border-radius: 6px;
-  font-size: 14px; font-family: 'Manrope', sans-serif;
-  outline: none; background: var(--bg); color: var(--text);
+  flex:1; min-width:200px; padding:11px 14px; border-radius:8px;
+  font-size:13px; font-family:'Plus Jakarta Sans',sans-serif; outline:none;
+  transition:border-color .15s, box-shadow .15s;
 }
-.leadmag-form input:focus { border-color: var(--accent); }
+.dk .leadmag-form input { background:var(--dk-bg3); color:var(--dk-t1); border:1px solid var(--dk-b2); }
+.dk .leadmag-form input::placeholder { color:var(--dk-t3); }
+.dk .leadmag-form input:focus { border-color:var(--dk-ind2); box-shadow:0 0 0 3px var(--dk-ind-bg); }
 .btn-lead {
-  background: var(--accent); color: #fff;
-  font-family: 'Manrope', sans-serif; font-size: 14px; font-weight: 700;
-  padding: 11px 20px; border: none; border-radius: 6px;
-  cursor: pointer; white-space: nowrap; transition: background .15s;
+  border-radius:8px; font-family:'Plus Jakarta Sans',sans-serif;
+  font-size:13px; font-weight:600; padding:11px 20px; cursor:pointer; white-space:nowrap;
+  transition:all .15s;
 }
-.btn-lead:hover { background: var(--accent-h); }
+.dk .btn-lead { background:var(--dk-bg4); color:var(--dk-t1); border:1px solid var(--dk-b2); }
+.dk .btn-lead:hover { border-color:var(--dk-ind2); color:var(--dk-ind); background:var(--dk-ind-bg); }
 
-/* ─── §08 INSTRUCTORS ─── */
-.instructors { background: var(--bg-3); border-top: 3px solid var(--accent); }
-.instr-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 1.5rem;
-}
-@media (max-width: 600px) { .instr-grid { grid-template-columns: 1fr; } }
+/* ══════════════════════════════════════════════════
+   §08 INSTRUCTORS  (DARK)
+══════════════════════════════════════════════════ */
+.instr-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:1.25rem; }
+@media(max-width:600px) { .instr-grid{grid-template-columns:1fr;} }
 .instr-card {
-  background: var(--bg-2); border: 1px solid var(--border);
-  border-radius: 8px; padding: 1.75rem;
+  border-radius:8px; padding:1.75rem;
+  transition:border-color .2s, transform .2s;
 }
-.instr-top { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
-.instr-name { font-size: 15px; font-weight: 700; color: var(--text); }
+.instr-card:hover { transform:translateY(-2px); }
+.dk .instr-card { background:var(--dk-bg3); border:1px solid var(--dk-b3); }
+.dk .instr-card:hover { border-color:var(--dk-b2); }
+.lt .instr-card { background:white; border:1px solid var(--lt-b3); }
+.lt .instr-card:hover { border-color:var(--lt-b2); }
+.instr-top { display:flex; align-items:center; gap:14px; margin-bottom:12px; }
+.instr-name { font-size:16px; font-weight:700; }
+.dk .instr-name { color:var(--dk-t1); }
+.lt .instr-name { color:var(--lt-t1); }
 .instr-photo {
-  width: 96px; height: 96px; border-radius: 50%;
-  object-fit: cover; object-position: center top;
-  flex-shrink: 0;
-  box-shadow: 0 0 0 3px var(--bg), 0 0 0 5px var(--accent-h);
+  width:96px; height:96px; border-radius:50%;
+  object-fit:cover; object-position:center top; flex-shrink:0;
 }
-@media (max-width: 600px) { .instr-photo { width: 80px; height: 80px; } }
-.instr-title {
-  font-size: 12px; color: var(--text-2);
-  text-transform: uppercase; letter-spacing: .06em; margin-top: 2px;
-}
-.instr-bio { font-size: 14px; color: var(--text-2); line-height: 1.6; }
+.dk .instr-photo { box-shadow:0 0 0 2px var(--dk-bg3), 0 0 0 4px var(--dk-ind2), 0 0 18px rgba(99,102,241,0.2); }
+.lt .instr-photo { box-shadow:0 0 0 2px white, 0 0 0 4px var(--lt-ind2); }
+.instr-title { font-family:'Fira Code',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; margin-top:3px; }
+.dk .instr-title { color:var(--dk-ind); }
+.lt .instr-title { color:var(--lt-ind); }
+.instr-bio { font-size:13px; line-height:1.65; font-weight:300; }
+.dk .instr-bio { color:var(--dk-t1); opacity:0.82; }
+.lt .instr-bio { color:var(--lt-t2); }
 
-/* ─── §09 PRICING ─── */
+/* ══════════════════════════════════════════════════
+   §09 PRICING  (LIGHT)
+══════════════════════════════════════════════════ */
 .pricing-grid {
-  display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-top: 1.5rem;
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,280px));
+  gap:12px; margin-top:1.25rem;
+  align-items:start;
+  justify-content:center;
 }
-@media (max-width: 720px) { .pricing-grid { grid-template-columns: 1fr; } }
+@media(max-width:720px) { .pricing-grid{grid-template-columns:minmax(0,320px); justify-content:center;} }
 .price-card {
-  border: 1.5px solid var(--border-2); border-radius: 10px;
-  padding: 1.5rem; position: relative;
-  background: var(--bg-2);
+  border-radius:8px; padding:1.5rem; position:relative;
+  transition:border-color .2s, transform .2s, box-shadow .2s;
+  /* prevent vertical stretch */
+  align-self:start;
 }
-.price-card.feat { border-color: var(--accent); border-width: 2px; background: var(--bg-2); }
+.price-card:hover { transform:translateY(-3px); }
+.lt .price-card { background:white; border:1px solid var(--lt-b3); }
+.lt .price-card:hover { border-color:var(--lt-b); box-shadow:0 16px 48px rgba(79,70,229,.12); }
+.dk .price-card { background:var(--dk-bg2); border:1px solid var(--dk-b3); }
+.dk .price-card:hover { border-color:var(--dk-b); box-shadow:0 16px 48px rgba(0,0,0,.4); }
+
+.price-card.feat { }
+.lt .price-card.feat { background:var(--lt-bg2); border-color:rgba(79,70,229,0.45); box-shadow:0 0 0 1px rgba(79,70,229,.18), 0 0 48px var(--lt-glow); }
+.lt .price-card.feat:hover { box-shadow:0 16px 56px rgba(79,70,229,.22), 0 0 0 1px var(--lt-b2); }
+.dk .price-card.feat { background:var(--dk-bg3); border-color:rgba(99,102,241,.5); box-shadow:0 0 48px rgba(99,102,241,0.12); }
+.dk .price-card.feat:hover { box-shadow:0 16px 56px rgba(99,102,241,.22); }
+
 .feat-badge {
-  position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-  background: var(--accent); color: #fff;
-  font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
-  padding: 4px 12px; border-radius: 20px; white-space: nowrap;
+  position:absolute; top:-13px; left:50%; transform:translateX(-50%);
+  background:linear-gradient(135deg, #6366F1, #818CF8);
+  color:#fff; font-family:'Fira Code',monospace;
+  font-size:10px; font-weight:600; letter-spacing:.1em; text-transform:uppercase;
+  padding:4px 16px; border-radius:100px; white-space:nowrap;
+  box-shadow:0 4px 14px rgba(99,102,241,0.4);
 }
-.price-tier {
-  font-size: 12px; font-weight: 700; text-transform: uppercase;
-  letter-spacing: .08em; color: var(--text-2); margin-bottom: 8px;
-}
-.price-num {
-  font-family: 'JetBrains Mono', monospace; font-size: 2rem;
-  font-weight: 500; color: var(--text); line-height: 1;
-}
-.price-cur { font-size: 1rem; font-weight: 400; font-family: 'Manrope', sans-serif; }
-.price-period { font-size: 13px; color: var(--text-2); margin: 4px 0 1rem; }
-.price-features { list-style: none; margin-bottom: 1.25rem; font-size: 14px; color: var(--text-2); }
-.price-features li {
-  padding: 5px 0; border-bottom: 1px solid var(--border);
-  display: flex; gap: 8px; align-items: flex-start;
-}
-.price-features li .check { color: var(--green); flex-shrink: 0; }
+.price-tier { font-family:'Fira Code',monospace; font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:.14em; margin-bottom:12px; }
+.lt .price-tier { color:var(--lt-t3); }
+.lt .price-card.feat .price-tier { color:var(--lt-ind); }
+.dk .price-tier { color:var(--dk-t3); }
+.dk .price-card.feat .price-tier { color:var(--dk-ind); }
+
+.price-num { font-family:'Syne',sans-serif; font-size:2.2rem; font-weight:800; line-height:1; letter-spacing:-.04em; }
+.lt .price-num { color:var(--lt-t1); }
+.dk .price-num { color:var(--dk-t1); }
+.price-cur { font-size:1.1rem; font-weight:400; }
+.price-period { font-size:12px; margin:5px 0 1.25rem; font-weight:300; }
+.lt .price-period { color:var(--lt-t2); }
+.dk .price-period { color:var(--dk-t2); }
+
+.price-features { list-style:none; margin-bottom:1.25rem; font-size:13px; font-weight:300; }
+.price-features li { padding:6px 0; border-bottom:1px solid; display:flex; gap:9px; align-items:flex-start; line-height:1.5; }
+.lt .price-features { color:var(--lt-t2); }
+.lt .price-features li { border-color:var(--lt-b3); }
+.dk .price-features { color:var(--dk-t2); }
+.dk .price-features li { border-color:var(--dk-b3); }
+.price-features li .check { flex-shrink:0; font-weight:700; }
+.lt .price-features li .check { color:var(--green-lt); }
+.dk .price-features li .check { color:var(--green); }
+
 .btn-price {
-  display: block; text-align: center; padding: 12px;
-  font-size: 14px; font-weight: 700; font-family: 'Manrope', sans-serif;
-  border: 1.5px solid var(--border-2); border-radius: 8px;
-  background: transparent; color: var(--text); text-decoration: none;
-  cursor: pointer; transition: all .18s; letter-spacing: .01em;
+  display:block; text-align:center; padding:12px;
+  font-size:13px; font-weight:700; font-family:'Plus Jakarta Sans',sans-serif;
+  border-radius:8px; text-decoration:none; cursor:pointer; letter-spacing:.01em;
+  transition:all .18s;
 }
-.btn-price:hover { border-color: var(--accent); color: var(--accent-h); }
-.price-card.feat .btn-price { background: var(--accent); color: #fff; border-color: var(--accent); }
-.price-card.feat .btn-price:hover { background: var(--accent-h); border-color: var(--accent-h); }
-.price-note { font-size: 13px; color: var(--text-2); margin-top: 14px; text-align: center; }
-.price-note .ph { white-space: normal; }
+.lt .btn-price { border:1px solid var(--lt-b2); color:var(--lt-t1); background:transparent; }
+.lt .btn-price:hover { border-color:var(--lt-ind); color:var(--lt-ind); background:var(--lt-ind-bg); }
+.dk .btn-price { border:1px solid var(--dk-b2); color:var(--dk-t1); background:transparent; }
+.dk .btn-price:hover { border-color:var(--dk-ind); color:var(--dk-ind); background:var(--dk-ind-bg); }
+.price-card.feat .btn-price {
+  background:linear-gradient(135deg, #6366F1, #818CF8);
+  color:#fff; border-color:transparent;
+  box-shadow:0 4px 18px rgba(99,102,241,.38);
+}
+.price-card.feat .btn-price:hover { opacity:.9; box-shadow:0 6px 26px rgba(99,102,241,.48); }
 
-/* ─── §10 FAQ ─── */
-.faq-section { background: var(--bg-2); border-top: 3px solid var(--accent); }
-.faq-list { margin-top: 1.5rem; border-top: 1px solid var(--border); }
-.faq-item { border-bottom: 1px solid var(--border); padding: 1.1rem 0; }
+.price-note { font-size:12px; margin-top:18px; text-align:center; font-weight:300; }
+.lt .price-note { color:var(--lt-t3); }
+.dk .price-note { color:var(--dk-t3); }
+.price-note a { }
+.lt .price-note a { color:var(--lt-ind); text-decoration:none; }
+.dk .price-note a { color:var(--dk-ind); text-decoration:none; }
+
+/* ══════════════════════════════════════════════════
+   §10 FAQ  (DARK)
+══════════════════════════════════════════════════ */
+.faq-list { margin-top:1.75rem; border-top:1px solid; }
+.dk .faq-list { border-color:var(--dk-b3); }
+.lt .faq-list { border-color:var(--lt-b3); }
+.faq-item { border-bottom:1px solid; }
+.dk .faq-item { border-color:var(--dk-b3); }
+.lt .faq-item { border-color:var(--lt-b3); }
 .faq-q {
-  font-size: 15px; font-weight: 600; color: var(--text);
-  margin-bottom: 6px; display: flex; gap: 10px;
+  font-size:14px; font-weight:600; padding:1.25rem 0;
+  display:flex; gap:12px; align-items:flex-start;
+  cursor:pointer; transition:color .15s; user-select:none;
 }
-.faq-q .nn {
-  font-family: 'JetBrains Mono', monospace; font-size: 12px;
-  color: var(--accent); font-weight: 500; padding-top: 3px; flex-shrink: 0;
+.dk .faq-q { color:var(--dk-t1); }
+.dk .faq-q:hover { color:var(--dk-ind); }
+.lt .faq-q { color:var(--lt-t1); }
+.lt .faq-q:hover { color:var(--lt-ind); }
+.faq-q .nn { font-family:'Fira Code',monospace; font-size:11px; font-weight:600; padding-top:2px; flex-shrink:0; }
+.dk .faq-q .nn { color:var(--dk-ind); }
+.lt .faq-q .nn { color:var(--lt-ind); }
+.faq-icon { margin-left:auto; flex-shrink:0; font-size:20px; line-height:1; transition:transform .3s; }
+.dk .faq-icon { color:var(--dk-ind); }
+.lt .faq-icon { color:var(--lt-ind); }
+.faq-item.open .faq-icon { transform:rotate(45deg); }
+.faq-a {
+  max-height:0; overflow:hidden; font-size:13px; line-height:1.75;
+  padding:0 0 0 24px; font-weight:300;
+  transition:max-height .35s ease, opacity .3s, padding .35s; opacity:0;
 }
-.faq-a { font-size: 14px; color: var(--text-2); line-height: 1.7; padding-left: 22px; }
+.faq-item.open .faq-a { max-height:400px; opacity:1; padding-bottom:1.25rem; }
+.dk .faq-a { color:var(--dk-t2); }
+.lt .faq-a { color:var(--lt-t2); }
 
-/* ─── FINAL CTA ─── */
+/* ══════════════════════════════════════════════════
+   FINAL CTA  (DARK)
+══════════════════════════════════════════════════ */
 .final-cta {
-  background: var(--bg-3); color: var(--text);
-  text-align: center; padding: 4.5rem 2rem;
-  }
+  background:var(--lt-bg); text-align:center; padding:5rem 2rem;
+  position:relative; overflow:hidden;
+}
+.final-cta::before {
+  content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
+  width:900px; height:500px; border-radius:50%;
+  background:radial-gradient(ellipse, rgba(99,102,241,0.09) 0%, transparent 65%);
+  pointer-events:none;
+}
 .final-cta h2 {
-  font-size: clamp(1.5rem, 3.5vw, 2rem); font-weight: 800;
-  letter-spacing: -.015em; margin-bottom: .75rem;
+  font-size:clamp(1.8rem,4vw,2.8rem); font-weight:800;
+  letter-spacing:-.025em; color:var(--dk-t1); margin-bottom:.75rem; position:relative;
 }
-.final-cta h2 span { color: var(--accent-h); }
-.final-cta p { font-size: 15px; color: var(--text-2); max-width: 440px; margin: 0 auto 2rem; }
-.final-badges {
-  display: flex; flex-wrap: wrap; justify-content: center;
-  gap: 1.25rem 1.5rem; margin-top: 1.5rem;
-}
-.f-badge { font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 6px; }
-.f-badge::before { content: '✓'; color: var(--accent-h); font-weight: 700; }
+.final-cta h2 span { color:var(--dk-ind); }
+.final-cta p { font-size:15px; color:var(--dk-t2); max-width:440px; margin:0 auto 2.5rem; font-weight:300; position:relative; }
+.final-badges { display:flex; flex-wrap:wrap; justify-content:center; gap:1.25rem 2rem; margin-top:2rem; position:relative; }
+.f-badge { font-size:12px; color:var(--dk-t3); display:flex; align-items:center; gap:7px; font-weight:300; }
+.f-badge::before { content:'✓'; color:var(--dk-ind); font-weight:700; }
 
-/* ─── FOOTER ─── */
-footer {
-  text-align: center; padding: 1.75rem 2rem;
-  font-size: 13px;
-}
-footer a { color: var(--text-3); text-decoration: none; }
-footer a:hover { color: var(--text-2); }
+/* ══════════════════════════════════════════════════
+   FOOTER
+══════════════════════════════════════════════════ */
+footer { background:var(--lt-bg2); border-top:1px solid var(--lt-b3); text-align:center; padding:2rem; font-size:12px; color:var(--lt-t3); font-weight:300; }
+footer a { color:var(--lt-t3); text-decoration:none; transition:color .15s; }
+footer a:hover { color:var(--lt-ind); }
 
-/* ─── STICKY MOBILE CTA ─── */
+/* ══════════════════════════════════════════════════
+   MOBILE CTA
+══════════════════════════════════════════════════ */
 .mobile-cta {
-  display: none;
-  position: fixed; left: 12px; right: 12px; bottom: 12px;
-  z-index: 90;
-  background: var(--accent); color: #fff;
-  border-radius: 8px; padding: 12px 16px;
-  font-family: 'Manrope', sans-serif; font-size: 15px; font-weight: 700;
-  text-decoration: none; text-align: center;
-  box-shadow: 0 8px 24px rgba(0,0,0,.4);
-  transform: translateY(100px); transition: transform .25s ease, opacity .25s;
-  opacity: 0; pointer-events: none;
+  display:none; position:fixed; left:12px; right:12px; bottom:12px; z-index:90;
+  background:linear-gradient(135deg, #6366F1, #818CF8); color:#fff;
+  border-radius:8px; padding:14px 16px;
+  font-family:'Plus Jakarta Sans',sans-serif; font-size:15px; font-weight:700;
+  text-decoration:none; text-align:center;
+  box-shadow:0 8px 32px rgba(99,102,241,.45);
+  transform:translateY(100px); transition:transform .28s cubic-bezier(.34,1.56,.64,1), opacity .25s;
+  opacity:0; pointer-events:none;
 }
-.mobile-cta.show {
-  transform: translateY(0); opacity: 1; pointer-events: auto;
+.mobile-cta.show { transform:translateY(0); opacity:1; pointer-events:auto; }
+.mobile-cta .small { font-weight:400; font-size:12px; opacity:.85; margin-left:8px; }
+@media(max-width:700px) { .mobile-cta{display:block;} body{padding-bottom:76px;} }
+
+/* ══════════════════════════════════════════════════
+   DIAGONAL CUTS — угловые переходы между секциями
+   Наклон ~2.5deg, острый геометрический срез
+══════════════════════════════════════════════════ */
+/* ══ SECTION DIVIDERS — clean angled cuts ══
+   Using overflow:hidden + skewed pseudo-element technique
+   Produces a clean hard diagonal edge with zero artifacts
+══════════════════════════════════════════════════ */
+.cut-dk-lt,
+.cut-lt-dk,
+.cut-dk2-lt {
+  height:64px;
+  position:relative;
+  z-index:5;
+  overflow:hidden;
+  flex-shrink:0;
 }
-.mobile-cta .small {
-  font-family: 'JetBrains Mono', monospace; font-weight: 500;
-  font-size: 12px; opacity: .85; margin-left: 6px;
+/* Dark → Light */
+.cut-dk-lt {
+  background:var(--dk-bg);
 }
-@media (max-width: 700px) {
-  .mobile-cta { display: block; }
-  body { padding-bottom: 70px; }
+.cut-dk-lt::after {
+  content:'';
+  position:absolute;
+  left:-5%; right:-5%;
+  bottom:0;
+  height:130%;
+  background:var(--lt-bg);
+  transform:skewY(-2deg);
+  transform-origin:bottom left;
+}
+/* Light → Dark */
+.cut-lt-dk {
+  background:var(--lt-bg);
+}
+.cut-lt-dk::after {
+  content:'';
+  position:absolute;
+  left:-5%; right:-5%;
+  bottom:0;
+  height:130%;
+  background:var(--dk-bg);
+  transform:skewY(2deg);
+  transform-origin:bottom right;
 }
 
-/* ─── ROI SOURCE ─── */
-.roi-source {
-  font-size: 12px; color: var(--text-3); margin-top: 10px;
-  border-top: 1px solid var(--border); padding-top: 8px;
-  line-height: 1.5;
+/* ── Lead magnet on indigo bg ── */
+.ind-band .leadmag-title { color:var(--dk-t1); }
+.ind-band .leadmag-sub { color:var(--dk-t2); }
+.ind-band .leadmag-form input {
+  background:var(--dk-bg3); color:var(--dk-t1);
+  border:1px solid rgba(99,102,241,0.35);
 }
-.roi-source a { color: var(--text-3); text-decoration: none; border-bottom: 1px solid transparent; transition: color .15s, border-color .15s; }
-.roi-source a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.ind-band .leadmag-form input::placeholder { color:var(--dk-t3); }
+.ind-band .leadmag-form input:focus { border-color:var(--dk-ind); box-shadow:0 0 0 3px var(--dk-ind-bg); }
+.ind-band .btn-lead {
+  background:var(--dk-bg4); color:var(--dk-ind);
+  border:1px solid var(--dk-b2); font-weight:600;
+}
+.ind-band .btn-lead:hover { border-color:var(--dk-ind2); background:var(--dk-ind-bg); }
+.ind-band .ph { color:#A5B4FC; background:rgba(99,102,241,0.15); border-color:rgba(99,102,241,0.35); }
 
-/* ─── DARK SECTION OVERRIDES ─── */
-.dark-section footer a,
-footer.dark-section a { color: var(--text-3); }
-footer.dark-section a:hover { color: var(--text-2); }
-.dark-section .nav-brand b { color: var(--text); }
-.dark-section .feat-badge { background: var(--accent); }
+/* Pricing gets extra vertical breathing room */
+#pricing { padding-top:5.5rem; padding-bottom:5.5rem; }
+#hero { /* hero already has min-height */ }
+
+/* Dark-2 → Light variant */
+.cut-dk2-lt {
+  background:var(--dk-bg2);
+}
+.cut-dk2-lt::after {
+  background:var(--lt-bg);
+}
+
+/* ── Atmospheric depth on dark sections ── */
+.dk:not(.hero)::before {
+  content:'';
+  position:absolute; inset:0; z-index:0; pointer-events:none;
+  background:radial-gradient(ellipse 70% 50% at 80% 50%, rgba(99,102,241,0.04) 0%, transparent 70%);
+}
+
+/* ── Better section-label spacing ── */
+.section-label { margin-bottom:.75rem; }
+
+/* ── Stronger heading-to-label connection ── */
+h2.section-h { margin-top:.1rem; }
+
+/* ── Smooth scroll highlight for active nav ── */
+.nav-links a { position:relative; }
+.nav-links a.active::after {
+  content:''; position:absolute; bottom:-2px; left:14px; right:14px;
+  height:2px; background:var(--dk-ind); border-radius:1px;
+}
+
+/* ── CTA button glow pulse animation ── */
+@keyframes glow-pulse {
+  0%,100% { box-shadow:0 4px 28px rgba(99,102,241,0.38); }
+  50%      { box-shadow:0 4px 40px rgba(99,102,241,0.58); }
+}
+.hero .btn-main { animation:fadeUp .7s .4s ease both, glow-pulse 3s 1.5s ease-in-out infinite; }
+
+/* ── Tighter body font ── */
+body { font-size:15px; line-height:1.68; }
+
+
+/* ── Wave gap elimination ──
+   Sections following SVG wave dividers must overlap by 2px
+   to eliminate subpixel rendering gaps on HiDPI displays */
+[aria-hidden="true"] + section,
+[aria-hidden="true"] + .dk,
+[aria-hidden="true"] + .lt,
+[aria-hidden="true"] + .lt-section,
+[aria-hidden="true"] + .dk-section {
+  margin-top:-2px;
+  position:relative;
+  z-index:1;
+}
+/* Ensure wave divs themselves have no gap */
+[aria-hidden="true"] {
+  display:block;
+  line-height:0;
+  font-size:0;
+}
+
 </style>
 </head>
 <body>
 
-<!-- ──────────── STICKY HEADER ──────────── -->
+<!-- ── HEADER ── -->
 <header class="site-header" id="site-header">
   <div class="header-top">
     <div class="nav-brand"><b>Лидер-практик</b> <span>·</span> Ситуационное управление <span>·</span> Тимлиды в ИТ</div>
@@ -621,22 +946,18 @@ footer.dark-section a:hover { color: var(--text-2); }
       <a href="#faq">FAQ</a>
     </nav>
     <div class="header-right">
-
       <a href="#pricing" class="nav-cta">Записаться →</a>
     </div>
   </div>
 </header>
 
-<!-- ──────────── HERO ──────────── -->
-<div class="hero dark-section">
+<!-- ══ HERO  (DARK) ══ -->
+<div class="hero" id="hero" data-theme="dark">
+  <canvas id="hero-canvas"></canvas>
   <div class="hero-inner">
     <div class="hero-tag">Ситуационное управление · тимлиды в ИТ</div>
-    <h1>Перестань разгребать пожары.<br><em>Начни управлять командой.</em></h1>
-    <p class="hero-sub">
-      <strong>21 день, 30 кейсов</strong> из практики команд в e-com, финтех, edtech и медиа.
-      Свой алгоритм для сеньоров, джунов и распределённых команд —
-      без курсов общего менеджмента и без книг для CEO.
-    </p>
+    <h1>Перестань тушить пожары.<br><em>Начни управлять командой.</em></h1>
+    <p class="hero-sub"><strong>21 день, 30 кейсов</strong> из практики команд в e-com, финтех, edtech и медиа. Свой алгоритм для сеньоров, джунов и распределённых команд — без курсов общего менеджмента и без книг для CEO.</p>
     <div class="hero-pills">
       <div class="pill"><span class="n">21</span> день</div>
       <div class="pill"><span class="n">30</span> кейсов из digital</div>
@@ -655,14 +976,16 @@ footer.dark-section a:hover { color: var(--text-2); }
       </div>
     </div>
   </div>
+  <!-- wave into §01 dark — none needed, same theme -->
 </div>
 
-<!-- ──────────── §01 RECOGNITION ──────────── -->
-<section class="recog">
+<!-- ══ §01 RECOGNITION  (DARK — боль/проблемы) ══ -->
+<section class="dk recog" id="recog" data-theme="dark">
+  <div class="sec-wm">01</div>
   <div class="container">
-    <div class="section-label"><span class="n">§01</span> Это про тебя, если</div>
-    <h2 class="section-h">Ты узнаёшь себя в этом</h2>
-    <ul class="recog-list">
+    <div class="section-label reveal"><span class="n">§01</span> Это про тебя, если</div>
+    <h2 class="section-h reveal">Ты узнаёшь себя в этом</h2>
+    <ul class="recog-list reveal">
       <li><span class="nn">01</span>Сеньор на ретро снова сказал, что твой план — фигня, и ты не нашёл, что ответить так, чтобы не потерять человека и не потерять авторитет.</li>
       <li><span class="nn">02</span>Джун, который месяц назад говорил «всё понятно», теперь третий день молчит на дейли, а задача стоит в Jira. Непонятно, что происходит.</li>
       <li><span class="nn">03</span>Удалённый разработчик «пропал»: онлайн в Telegram, Jira-задача стоит, на 1:1 говорит «всё нормально». Что делать дальше — неясно.</li>
@@ -674,426 +997,223 @@ footer.dark-section a:hover { color: var(--text-2); }
   </div>
 </section>
 
-<!-- ──────────── §02 WHY-NOT ──────────── -->
-<section>
+<!-- ══ §02 WHY-NOT  (DARK) ══ -->
+<section class="dk" id="why" data-theme="dark">
+  <div class="sec-wm">02</div>
   <div class="container">
-    <div class="section-label"><span class="n">§02</span> Почему стандартные курсы не работают</div>
-    <h2 class="section-h">Курсы по менеджменту проектируются не для тебя</h2>
-    <p class="section-sub">Там нет спринта, команды другие, и «трудный разговор» — это не 1:1 с сеньором в пятницу.</p>
-    <div class="why-grid">
-      <div class="why-card">
-        <h3>Книги для CEO</h3>
-        <p>Про другой масштаб и другие проблемы. У тебя нет Chief of Staff и P&amp;L — есть Jira и ретро в понедельник.</p>
-      </div>
-      <div class="why-card">
-        <h3>Курсы общего менеджмента</h3>
-        <p>Про PowerPoint и SMART-цели, которые в команде разработки звучат странно. Не про тебя.</p>
-      </div>
-      <div class="why-card">
-        <h3>Классический Hersey-Blanchard</h3>
-        <p>Академический: не учитывает удалёнку, AI-ассистентов и матричные команды без прямой административной власти.</p>
-      </div>
-      <div class="why-card star">
-        <h3>Лидер-практик для тимлидов</h3>
-        <p>Построен от твоего дня в Jira и Telegram. Конкретные ходы на встречах команды: 1:1, ретро, ревью кода, планирование, оценка результатов.</p>
-      </div>
+    <div class="section-label reveal"><span class="n">§02</span> Почему стандартные курсы не работают</div>
+    <h2 class="section-h reveal">Курсы по менеджменту проектируются не для тебя</h2>
+    <p class="section-sub reveal">Там нет спринта, команды другие, и «трудный разговор» — это не 1:1 с сеньором в пятницу.</p>
+    <div class="why-grid reveal">
+      <div class="why-card"><h3>Книги для CEO</h3><p>Про другой масштаб и другие проблемы. У тебя нет Chief of Staff и P&amp;L — есть Jira и ретро в понедельник.</p></div>
+      <div class="why-card"><h3>Курсы общего менеджмента</h3><p>Про PowerPoint и SMART-цели, которые в команде разработки звучат странно. Не про тебя.</p></div>
+      <div class="why-card"><h3>Классический Hersey-Blanchard</h3><p>Академический: не учитывает удалёнку, AI-ассистентов и матричные команды без прямой административной власти.</p></div>
+      <div class="why-card star"><h3>Лидер-практик для тимлидов</h3><p>Построен от твоего дня в Jira и Telegram. Конкретные ходы на встречах команды: 1:1, ретро, ревью кода, планирование, оценка результатов.</p></div>
     </div>
   </div>
 </section>
 
-<hr class="rule">
+<!-- ════ ZONE 2: СВЕТЛОЕ — трансформация + решение ════ -->
+<div aria-hidden="true" style="display:block;width:100%;overflow:hidden;line-height:0;font-size:0;margin-bottom:-2px;background:var(--dk-bg);">
+  <svg viewBox="0 0 1440 62" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C360,60 1080,0 1440,40 L1440,60 L0,60 Z" fill="var(--lt-bg)"/>
+  </svg>
+</div>
 
-<!-- ──────────── §03 TRANSFORMATION ──────────── -->
-<section>
+<!-- ══ §03 TRANSFORMATION  (LIGHT) ══ -->
+<section class="lt" id="transform" data-theme="light">
+  <div class="sec-wm">03</div>
   <div class="container">
-    <div class="section-label"><span class="n">§03</span> До и после</div>
-    <h2 class="section-h">Что меняется через 21 день</h2>
-    <div class="transform-grid">
-      <div class="tf-card">
-        <div class="tf-before"><div class="tf-tag">Сейчас</div>Готовишься к 1:1 с сеньором как к дуэли — и часто проигрываешь или выходишь без результата</div>
-        <div class="tf-after"><div class="tf-tag">После курса</div>Алгоритм для 3 типов: сопротивление, выгорание, низкий уверенность — знаешь, что делать в каждом</div>
-      </div>
-      <div class="tf-card">
-        <div class="tf-before"><div class="tf-tag">Сейчас</div>Performance cycle — стресс. Боишься «не повышаем» сказать так, чтобы человек не ушёл</div>
-        <div class="tf-after"><div class="tf-tag">После курса</div>Протокол сложных perf-разговоров. Конкретные слова, которые работают без потери человека</div>
-      </div>
-      <div class="tf-card">
-        <div class="tf-before"><div class="tf-tag">Сейчас</div>Делегируешь и переделываешь сам — не знаешь, насколько отпускать контроль</div>
-        <div class="tf-after"><div class="tf-tag">После курса</div>7 уровней делегирования. Под каждого человека в команде — свой уровень и своя точка контроля</div>
-      </div>
-      <div class="tf-card">
-        <div class="tf-before"><div class="tf-tag">Сейчас</div>Удалённый «пропал» — пишешь в Telegram, получаешь «всё нормально». Дальше не знаешь, что делать</div>
-        <div class="tf-after"><div class="tf-tag">После курса</div>Знаешь сигналы выгорания vs сопротивления vs внешних обстоятельств — и три разных протокола</div>
-      </div>
+    <div class="section-label reveal"><span class="n">§03</span> До и после</div>
+    <h2 class="section-h reveal">Что меняется через 21 день</h2>
+    <div class="transform-grid reveal">
+      <div class="tf-card"><div class="tf-before"><div class="tf-tag">Сейчас</div>Готовишься к 1:1 с сеньором как к дуэли — и часто проигрываешь или выходишь без результата</div><div class="tf-after"><div class="tf-tag">После курса</div>Алгоритм для 3 типов: сопротивление, выгорание, низкий уверенность — знаешь, что делать в каждом</div></div>
+      <div class="tf-card"><div class="tf-before"><div class="tf-tag">Сейчас</div>Performance cycle — стресс. Боишься «не повышаем» сказать так, чтобы человек не ушёл</div><div class="tf-after"><div class="tf-tag">После курса</div>Протокол сложных perf-разговоров. Конкретные слова, которые работают без потери человека</div></div>
+      <div class="tf-card"><div class="tf-before"><div class="tf-tag">Сейчас</div>Делегируешь и переделываешь сам — не знаешь, насколько отпускать контроль</div><div class="tf-after"><div class="tf-tag">После курса</div>7 уровней делегирования. Под каждого человека в команде — свой уровень и своя точка контроля</div></div>
+      <div class="tf-card"><div class="tf-before"><div class="tf-tag">Сейчас</div>Удалённый «пропал» — пишешь в Telegram, получаешь «всё нормально». Дальше не знаешь, что делать</div><div class="tf-after"><div class="tf-tag">После курса</div>Знаешь сигналы выгорания vs сопротивления vs внешних обстоятельств — и три разных протокола</div></div>
     </div>
   </div>
 </section>
 
-<!-- ──────────── §04 ROI ──────────── -->
-<section class="roi dark-section">
+<!-- ══ §04 ROI  (LIGHT — факты/статистика) ══ -->
+<section class="lt" id="roi" data-theme="light">
+  <div class="sec-wm">04</div>
   <div class="container">
-    <div class="section-label"><span class="n">§04</span> Цена отсутствия системы</div>
-    <h2 class="section-h">Что стоит работа без управленческого инструмента</h2>
-    <p class="section-sub">Пока тимлид пишет код вместо команды — он не управляет командой.</p>
-    <div class="roi-grid">
-      <div class="roi-card">
-        <div class="roi-number">8–12</div>
-        <div class="roi-label">часов в неделю</div>
-        <div class="roi-desc">теряет тимлид, который сам закрывает задачи вместо инженеров — это полноценный спринт-план</div>
-      <div class="roi-source">По данным <a href="https://www.gallup.com/workplace/349484/state-of-the-global-workplace.aspx" target="_blank" rel="noopener">Gallup State of the Global Workplace, 2023</a>: руководители, перегруженные операционными задачами, теряют в среднем до 20% рабочего времени на задачи подчинённых.</div>
-      </div>
-      <div class="roi-card">
-        <div class="roi-number">×2–3</div>
-        <div class="roi-label">выше текучка</div>
-        <div class="roi-desc">в командах без регулярных 1:1 и развивающего фидбэка — люди уходят без предупреждения</div>
-      <div class="roi-source"><a href="https://learning.linkedin.com/resources/workplace-learning-report" target="_blank" rel="noopener">LinkedIn Workplace Learning Report, 2024</a>: сотрудники без регулярного развивающего фидбэка уходят в 2–3 раза чаще.</div>
-      </div>
-      <div class="roi-card">
-        <div class="roi-number">1 спринт</div>
-        <div class="roi-label">до деградации</div>
-        <div class="roi-desc">средний срок, за который команда без диагностики D-уровней начинает терять скорость и качество</div>
-      <div class="roi-source"><a href="https://itrevolution.com/product/accelerate/" target="_blank" rel="noopener">Accelerate, Forsgren et al., 2018</a>: команды без регулярных практик инженерного совершенства деградируют по метрикам DORA в течение 2–4 недель без внешнего вмешательства.</div>
-      </div>
+    <div class="section-label reveal"><span class="n">§04</span> Цена отсутствия системы</div>
+    <h2 class="section-h reveal">Что стоит работа без управленческого инструмента</h2>
+    <p class="section-sub reveal">Пока тимлид пишет код вместо команды — он не управляет командой.</p>
+    <div class="roi-grid reveal">
+      <div class="roi-card"><div class="roi-number">8–12</div><div class="roi-label">часов в неделю</div><div class="roi-desc">теряет тимлид, который сам закрывает задачи вместо инженеров — это полноценный спринт-план</div><div class="roi-source">По данным <a href="https://www.gallup.com/workplace/349484/state-of-the-global-workplace.aspx" target="_blank" rel="noopener">Gallup State of the Global Workplace, 2023</a>: руководители, перегруженные операционными задачами, теряют в среднем до 20% рабочего времени на задачи подчинённых.</div></div>
+      <div class="roi-card"><div class="roi-number">×2–3</div><div class="roi-label">выше текучка</div><div class="roi-desc">в командах без регулярных 1:1 и развивающего фидбэка — люди уходят без предупреждения</div><div class="roi-source"><a href="https://learning.linkedin.com/resources/workplace-learning-report" target="_blank" rel="noopener">LinkedIn Workplace Learning Report, 2024</a>: сотрудники без регулярного развивающего фидбэка уходят в 2–3 раза чаще.</div></div>
+      <div class="roi-card"><div class="roi-number">1 спринт</div><div class="roi-label">до деградации</div><div class="roi-desc">средний срок, за который команда без диагностики D-уровней начинает терять скорость и качество</div><div class="roi-source"><a href="https://itrevolution.com/product/accelerate/" target="_blank" rel="noopener">Accelerate, Forsgren et al., 2018</a>: команды без регулярных практик инженерного совершенства деградируют по метрикам DORA в течение 2–4 недель без внешнего вмешательства.</div></div>
     </div>
   </div>
 </section>
 
-<!-- ──────────── §05 PROGRAMME + TIMELINE ──────────── -->
-<section id="programme">
+<!-- ══ §05 PROGRAMME  (LIGHT) ══ -->
+<section class="lt" id="programme" data-theme="light">
+  <div class="sec-wm">05</div>
   <div class="container">
-    <div class="section-label"><span class="n">§05</span> Программа</div>
-    <h2 class="section-h">21 день, три недели + финиш</h2>
-    <p class="section-sub">По 2 кейса из практики тимлидов в день + шаблон. Конец каждой недели — интервизия в группе до 8 человек.</p>
-
-    <div class="timeline" aria-label="Таймлайн программы">
-      <svg viewBox="0 0 720 120" xmlns="http://www.w3.org/2000/svg" role="img">
-        <!-- track -->
-        <line x1="60" y1="50" x2="660" y2="50" stroke="var(--border-2)" stroke-width="2" stroke-dasharray="4 4"/>
-        <line x1="60" y1="50" x2="660" y2="50" stroke="var(--accent)" stroke-width="2" opacity=".7"/>
-        <!-- nodes -->
-        <g>
-          <circle cx="60"  cy="50" r="12" fill="var(--bg-2)" stroke="var(--accent)" stroke-width="2"/>
-          <text x="60"  y="54" text-anchor="middle" class="timeline-text-track" fill="var(--accent)">01</text>
-          <text x="60"  y="22" text-anchor="middle" class="timeline-text-week">Неделя 01</text>
-          <text x="60"  y="80" text-anchor="middle" class="timeline-text-track">Диагностика</text>
-          <text x="60"  y="96" text-anchor="middle" class="timeline-text-track">14 кейсов</text>
-        </g>
-        <g>
-          <circle cx="260" cy="50" r="12" fill="var(--bg-2)" stroke="var(--accent)" stroke-width="2"/>
-          <text x="260" y="54" text-anchor="middle" class="timeline-text-track" fill="var(--accent)">02</text>
-          <text x="260" y="22" text-anchor="middle" class="timeline-text-week">Неделя 02</text>
-          <text x="260" y="80" text-anchor="middle" class="timeline-text-track">Стилевая работа</text>
-          <text x="260" y="96" text-anchor="middle" class="timeline-text-track">14 кейсов</text>
-        </g>
-        <g>
-          <circle cx="460" cy="50" r="12" fill="var(--bg-2)" stroke="var(--accent)" stroke-width="2"/>
-          <text x="460" y="54" text-anchor="middle" class="timeline-text-track" fill="var(--accent)">03</text>
-          <text x="460" y="22" text-anchor="middle" class="timeline-text-week">Неделя 03</text>
-          <text x="460" y="80" text-anchor="middle" class="timeline-text-track">Делегирование</text>
-          <text x="460" y="96" text-anchor="middle" class="timeline-text-track">12 кейсов</text>
-        </g>
-        <g>
-          <circle cx="660" cy="50" r="14" fill="var(--accent)" stroke="var(--accent-h)" stroke-width="2"/>
-          <text x="660" y="55" text-anchor="middle" class="timeline-text-track" fill="#fff" font-weight="700">★</text>
-          <text x="660" y="22" text-anchor="middle" class="timeline-text-week">Финиш</text>
-          <text x="660" y="80" text-anchor="middle" class="timeline-text-track">Защита кейса</text>
-          <text x="660" y="96" text-anchor="middle" class="timeline-text-track">+ сертификат</text>
-        </g>
+    <div class="section-label reveal"><span class="n">§05</span> Программа</div>
+    <h2 class="section-h reveal">21 день, три недели + финиш</h2>
+    <p class="section-sub reveal">По 2 кейса из практики тимлидов в день + шаблон. Конец каждой недели — интервизия в группе до 8 человек.</p>
+    <div class="timeline lt reveal">
+      <svg viewBox="0 0 720 124" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Таймлайн программы">
+        <defs>
+          <linearGradient id="tg" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="rgba(79,70,229,0.3)"/>
+            <stop offset="85%" stop-color="rgba(99,102,241,0.7)"/>
+            <stop offset="100%" stop-color="rgba(129,140,248,0.9)"/>
+          </linearGradient>
+        </defs>
+        <line x1="60" y1="52" x2="660" y2="52" stroke="rgba(79,70,229,0.12)" stroke-width="2"/>
+        <line x1="60" y1="52" x2="660" y2="52" stroke="url(#tg)" stroke-width="1.5"/>
+        <!-- W01 -->
+        <circle cx="60" cy="52" r="14" fill="white" stroke="#4F46E5" stroke-width="1.5"/>
+        <text x="60" y="57" text-anchor="middle" font-family="Fira Code" font-size="11" fill="#4F46E5" font-weight="600">01</text>
+        <text x="60" y="24" text-anchor="middle" font-family="Plus Jakarta Sans" font-size="12" font-weight="700" fill="#12122A">Неделя 01</text>
+        <text x="60" y="82" text-anchor="middle" font-family="Fira Code" font-size="10" fill="#4B4B80">Диагностика</text>
+        <text x="60" y="97" text-anchor="middle" font-family="Fira Code" font-size="10" fill="#9090BB">14 кейсов</text>
+        <!-- W02 -->
+        <circle cx="260" cy="52" r="14" fill="white" stroke="#4F46E5" stroke-width="1.5"/>
+        <text x="260" y="57" text-anchor="middle" font-family="Fira Code" font-size="11" fill="#4F46E5" font-weight="600">02</text>
+        <text x="260" y="24" text-anchor="middle" font-family="Plus Jakarta Sans" font-size="12" font-weight="700" fill="#12122A">Неделя 02</text>
+        <text x="260" y="82" text-anchor="middle" font-family="Fira Code" font-size="10" fill="#4B4B80">Стилевая работа</text>
+        <text x="260" y="97" text-anchor="middle" font-family="Fira Code" font-size="10" fill="#9090BB">14 кейсов</text>
+        <!-- W03 -->
+        <circle cx="460" cy="52" r="14" fill="white" stroke="#4F46E5" stroke-width="1.5"/>
+        <text x="460" y="57" text-anchor="middle" font-family="Fira Code" font-size="11" fill="#4F46E5" font-weight="600">03</text>
+        <text x="460" y="24" text-anchor="middle" font-family="Plus Jakarta Sans" font-size="12" font-weight="700" fill="#12122A">Неделя 03</text>
+        <text x="460" y="82" text-anchor="middle" font-family="Fira Code" font-size="10" fill="#4B4B80">Делегирование</text>
+        <text x="460" y="97" text-anchor="middle" font-family="Fira Code" font-size="10" fill="#9090BB">12 кейсов</text>
+        <!-- FINISH -->
+        <circle cx="660" cy="52" r="16" fill="#4F46E5" stroke="#6366F1" stroke-width="1.5"/>
+        <text x="660" y="57" text-anchor="middle" font-family="Fira Code" font-size="14" fill="#ffffff" font-weight="700">★</text>
+        <text x="660" y="24" text-anchor="middle" font-family="Plus Jakarta Sans" font-size="12" font-weight="700" fill="#12122A">Финиш</text>
+        <text x="660" y="82" text-anchor="middle" font-family="Fira Code" font-size="10" fill="#4B4B80">Защита кейса</text>
+        <text x="660" y="97" text-anchor="middle" font-family="Fira Code" font-size="10" fill="#9090BB">+ сертификат</text>
       </svg>
     </div>
-
-    <div class="prog-grid">
-      <div class="prog-card">
-        <div class="prog-week">Неделя 01</div>
-        <div>
-          <div class="prog-title">Диагностика: что у тебя в команде на самом деле</div>
-          <div class="prog-desc">Учишься смотреть на команду через артефакты, которые и так перед глазами: Jira, GitHub, Telegram, встречи команды. Появляется язык для того, что раньше звучало как «у Дениса что-то не так». 14 кейсов + диагностическая карта на каждого человека.</div>
-        </div>
-      </div>
-      <div class="prog-card">
-        <div class="prog-week">Неделя 02</div>
-        <div>
-          <div class="prog-title">Стилевая работа: алгоритмы для 6 типичных ситуаций</div>
-          <div class="prog-desc">Сеньор-сопротивленец, выгорающий сеньор, джун в ступоре, мидл на плато. Что делать на 1:1, на ретро, в ревью кода. 14 кейсов + шаблоны разговоров для каждого стиля.</div>
-        </div>
-      </div>
-      <div class="prog-card">
-        <div class="prog-week">Неделя 03</div>
-        <div>
-          <div class="prog-title">Делегирование и системные эффекты</div>
-          <div class="prog-desc">Когда отпустить, когда вмешаться. Что меняется через спринт, через квартал. Где стилевая работа не поможет — нужен структурный фикс. 12 кейсов + матрица делегирования на твою команду.</div>
-        </div>
-      </div>
-      <div class="prog-card">
-        <div class="prog-week">Финиш</div>
-        <div>
-          <div class="prog-title">Защита итогового кейса</div>
-          <div class="prog-desc">Сводный план работы с командой на следующий квартал. Финальная интервизия. Сертификат участника.</div>
-        </div>
-      </div>
+    <div class="prog-grid reveal">
+      <div class="prog-card lt"><div class="prog-week">Неделя 01</div><div><div class="prog-title">Диагностика: что у тебя в команде на самом деле</div><div class="prog-desc">Учишься смотреть на команду через артефакты, которые и так перед глазами: Jira, GitHub, Telegram, встречи команды. Появляется язык для того, что раньше звучало как «у Дениса что-то не так». 14 кейсов + диагностическая карта на каждого человека.</div></div></div>
+      <div class="prog-card lt"><div class="prog-week">Неделя 02</div><div><div class="prog-title">Стилевая работа: алгоритмы для 6 типичных ситуаций</div><div class="prog-desc">Сеньор-сопротивленец, выгорающий сеньор, джун в ступоре, мидл на плато. Что делать на 1:1, на ретро, в ревью кода. 14 кейсов + шаблоны разговоров для каждого стиля.</div></div></div>
+      <div class="prog-card lt"><div class="prog-week">Неделя 03</div><div><div class="prog-title">Делегирование и системные эффекты</div><div class="prog-desc">Когда отпустить, когда вмешаться. Что меняется через спринт, через квартал. Где стилевая работа не поможет — нужен структурный фикс. 12 кейсов + матрица делегирования на твою команду.</div></div></div>
+      <div class="prog-card lt"><div class="prog-week">Финиш</div><div><div class="prog-title">Защита итогового кейса</div><div class="prog-desc">Сводный план работы с командой на следующий квартал. Финальная интервизия. Сертификат участника.</div></div></div>
     </div>
   </div>
 </section>
 
-<hr class="rule">
-
-<!-- ──────────── §06 INSIDE + ICONS ──────────── -->
-<section id="inside">
+<!-- wave lt→lt: no wave, §06 stays light -->
+<!-- ══ §06 INSIDE  (LIGHT — формат решения) ══ -->
+<section class="lt" id="inside" data-theme="light">
+  <div class="sec-wm">06</div>
   <div class="container">
-    <div class="section-label"><span class="n">§06</span> Что внутри</div>
-    <h2 class="section-h">Из чего состоит курс</h2>
-    <div class="inside-grid">
-      <!-- 01 — терминал/код -->
-      <div class="inside-card">
-        <div class="inside-icon">
-          <svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
-        </div>
-        <div>
-          <div class="inside-num">01 / Кейсы</div>
-          <div class="inside-title">30 кейсов из практики тимлидов</div>
-          <div class="inside-desc">По 2 кейса в день. Не «у вас есть сотрудник, который…» — конкретные ситуации со стэка, спринта, ретро.</div>
-          <ul class="inside-list">
-            <li>Сеньор саботирует план миграции на gRPC</li>
-            <li>Джун с Cursor выглядит как мидл, но на ревью не объясняет решения</li>
-            <li>Performance review: как сказать «не повышаем»</li>
-          </ul>
-        </div>
-      </div>
-      <!-- 02 — две головы -->
-      <div class="inside-card">
-        <div class="inside-icon">
-          <svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3"/><circle cx="16" cy="11" r="2.4"/><path d="M3 19c0-3 2.5-5 6-5s6 2 6 5"/><path d="M14 19c0-2 1.6-3.5 3.5-3.5S21 17 21 19"/></svg>
-        </div>
-        <div>
-          <div class="inside-num">02 / Интервизии</div>
-          <div class="inside-title">4 интервизии (5 в тарифе Pro)</div>
-          <div class="inside-desc">Группа из 6–8 тимлидов, 90 минут синхронно. Ты приносишь свой реальный кейс — Илья и Надежда разбирают его вместе с участниками.</div>
-          <ul class="inside-list">
-            <li>Без записи — для безопасности обсуждения</li>
-            <li>Группа фиксирована на весь поток</li>
-          </ul>
-        </div>
-      </div>
-      <!-- 03 — документ-чеклист -->
-      <div class="inside-card">
-        <div class="inside-icon">
-          <svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><polyline points="9 13 11 15 15 11"/><line x1="9" y1="18" x2="15" y2="18"/></svg>
-        </div>
-        <div>
-          <div class="inside-num">03 / Шаблоны</div>
-          <div class="inside-title">Методички и рабочие шаблоны</div>
-          <div class="inside-desc">Доступ навсегда. Шаблоны в Younote — можно скопировать в свой workspace.</div>
-          <ul class="inside-list">
-            <li>Диагностика D-уровня через Jira / GitHub / Telegram</li>
-            <li>Алгоритмы 1:1 для шести типичных ситуаций</li>
-            <li>Performance review без потери человека</li>
-          </ul>
-        </div>
-      </div>
-      <!-- 04 — чат-bubble -->
-      <div class="inside-card">
-        <div class="inside-icon">
-          <svg viewBox="0 0 24 24"><path d="M3 6h18v11H8l-5 4z"/><line x1="7" y1="11" x2="13" y2="11"/><line x1="7" y1="14" x2="16" y2="14"/></svg>
-        </div>
-        <div>
-          <div class="inside-num">04 / Сообщество</div>
-          <div class="inside-title">Чат потока в Telegram</div>
-          <div class="inside-desc">Канал на время курса + 30 дней после. Илья отвечает на вопросы. Другие тимлиды — твоя группа равных.</div>
-          <ul class="inside-list">
-            <li>21 день курса + 30 дней после</li>
-            <li>Закрытая группа, только участники потока</li>
-          </ul>
-        </div>
-      </div>
+    <div class="section-label reveal"><span class="n">§06</span> Что внутри</div>
+    <h2 class="section-h reveal">Из чего состоит курс</h2>
+    <div class="inside-grid reveal">
+      <div class="inside-card lt"><div class="inside-icon"><svg viewBox="0 0 24 24"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg></div><div><div class="inside-num">01 / Кейсы</div><div class="inside-title">30 кейсов из практики тимлидов</div><div class="inside-desc">По 2 кейса в день. Не «у вас есть сотрудник, который…» — конкретные ситуации со стэка, спринта, ретро.</div><ul class="inside-list"><li>Сеньор саботирует план миграции на gRPC</li><li>Джун с Cursor выглядит как мидл, но на ревью не объясняет решения</li><li>Performance review: как сказать «не повышаем»</li></ul></div></div>
+      <div class="inside-card lt"><div class="inside-icon"><svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="3"/><circle cx="16" cy="11" r="2.4"/><path d="M3 19c0-3 2.5-5 6-5s6 2 6 5"/><path d="M14 19c0-2 1.6-3.5 3.5-3.5S21 17 21 19"/></svg></div><div><div class="inside-num">02 / Интервизии</div><div class="inside-title">4 интервизии (5 в тарифе Pro)</div><div class="inside-desc">Группа из 6–8 тимлидов, 90 минут синхронно. Ты приносишь свой реальный кейс — Илья и Надежда разбирают его вместе с участниками.</div><ul class="inside-list"><li>Без записи — для безопасности обсуждения</li><li>Группа фиксирована на весь поток</li></ul></div></div>
+      <div class="inside-card lt"><div class="inside-icon"><svg viewBox="0 0 24 24"><path d="M6 2h9l5 5v15H6z"/><path d="M15 2v5h5"/><polyline points="9 13 11 15 15 11"/><line x1="9" y1="18" x2="15" y2="18"/></svg></div><div><div class="inside-num">03 / Шаблоны</div><div class="inside-title">Методички и рабочие шаблоны</div><div class="inside-desc">Доступ навсегда. Шаблоны в Younote — можно скопировать в свой workspace.</div><ul class="inside-list"><li>Диагностика D-уровня через Jira / GitHub / Telegram</li><li>Алгоритмы 1:1 для шести типичных ситуаций</li><li>Performance review без потери человека</li></ul></div></div>
+      <div class="inside-card lt"><div class="inside-icon"><svg viewBox="0 0 24 24"><path d="M3 6h18v11H8l-5 4z"/><line x1="7" y1="11" x2="13" y2="11"/><line x1="7" y1="14" x2="16" y2="14"/></svg></div><div><div class="inside-num">04 / Сообщество</div><div class="inside-title">Чат потока в Telegram</div><div class="inside-desc">Канал на время курса + 30 дней после. Илья отвечает на вопросы. Другие тимлиды — твоя группа равных.</div><ul class="inside-list"><li>21 день курса + 30 дней после</li><li>Закрытая группа, только участники потока</li></ul></div></div>
     </div>
   </div>
 </section>
 
-<!-- ──────────── §07 PROOF ──────────── -->
-<section class="proof" id="proof">
+<!-- ════ ZONE 3: ТЁМНОЕ — доверие + команда ════ -->
+<div aria-hidden="true" style="display:block;width:100%;overflow:hidden;line-height:0;font-size:0;margin-bottom:-2px;background:var(--lt-bg);">
+  <svg viewBox="0 0 1440 62" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,50 C200,10 500,60 800,20 C1100,-20 1350,50 1440,30 L1440,60 L0,60 Z" fill="var(--dk-bg)"/>
+  </svg>
+</div>
+
+<!-- ══ §07 PROOF  (DARK — доверие) ══ -->
+<section class="dk" id="proof" data-theme="dark">
+  <div class="sec-wm">07</div>
   <div class="container">
-    <div class="section-label"><span class="n">§07</span> Отзывы участников</div>
-    <h2 class="section-h">Что говорят тимлиды после курса</h2>
-    <p class="section-sub">Реальные отзывы появятся после первого потока. Сейчас — структурный шаблон карточек.</p>
-    <div class="proof-grid">
-      <div class="proof-card">
-        <div class="proof-head">
-          <div class="proof-avatar">??</div>
-          <div>
-            <div class="proof-name"><span class="ph">{{ОТЗЫВ_1_ИМЯ}}</span></div>
-            <div class="proof-role"><span class="ph">{{ДОЛЖНОСТЬ_КОМПАНИЯ_ГОРОД}}</span></div>
-          </div>
-        </div>
-        <div class="proof-quote"><span class="ph-block">{{ОТЗЫВ_1_ЦИТАТА — 2-3 предложения, конкретный инсайт от участника}}</span></div>
-        <div class="proof-result"><span class="ph">{{МЕТРИКА_РЕЗУЛЬТАТА_1}}</span></div>
-      </div>
-      <div class="proof-card">
-        <div class="proof-head">
-          <div class="proof-avatar">??</div>
-          <div>
-            <div class="proof-name"><span class="ph">{{ОТЗЫВ_2_ИМЯ}}</span></div>
-            <div class="proof-role"><span class="ph">{{ДОЛЖНОСТЬ_КОМПАНИЯ_ГОРОД}}</span></div>
-          </div>
-        </div>
-        <div class="proof-quote"><span class="ph-block">{{ОТЗЫВ_2_ЦИТАТА}}</span></div>
-        <div class="proof-result"><span class="ph">{{МЕТРИКА_РЕЗУЛЬТАТА_2}}</span></div>
-      </div>
-      <div class="proof-card">
-        <div class="proof-head">
-          <div class="proof-avatar">??</div>
-          <div>
-            <div class="proof-name"><span class="ph">{{ОТЗЫВ_3_ИМЯ}}</span></div>
-            <div class="proof-role"><span class="ph">{{ДОЛЖНОСТЬ_КОМПАНИЯ_ГОРОД}}</span></div>
-          </div>
-        </div>
-        <div class="proof-quote"><span class="ph-block">{{ОТЗЫВ_3_ЦИТАТА}}</span></div>
-        <div class="proof-result"><span class="ph">{{МЕТРИКА_РЕЗУЛЬТАТА_3}}</span></div>
-      </div>
+    <div class="section-label reveal"><span class="n">§07</span> Отзывы участников</div>
+    <h2 class="section-h reveal">Что говорят тимлиды после курса</h2>
+    <p class="section-sub reveal">Реальные отзывы появятся после первого потока. Сейчас — структурный шаблон карточек.</p>
+    <div class="proof-grid reveal">
+      <div class="proof-card dk"><div class="proof-head"><div class="proof-avatar">??</div><div><div class="proof-name"><span class="ph">{{ОТЗЫВ_1_ИМЯ}}</span></div><div class="proof-role"><span class="ph">{{ДОЛЖНОСТЬ_КОМПАНИЯ_ГОРОД}}</span></div></div></div><div class="proof-quote"><span class="ph-block">{{ОТЗЫВ_1_ЦИТАТА — 2-3 предложения, конкретный инсайт от участника}}</span></div><div class="proof-result"><span class="ph">{{МЕТРИКА_РЕЗУЛЬТАТА_1}}</span></div></div>
+      <div class="proof-card dk"><div class="proof-head"><div class="proof-avatar">??</div><div><div class="proof-name"><span class="ph">{{ОТЗЫВ_2_ИМЯ}}</span></div><div class="proof-role"><span class="ph">{{ДОЛЖНОСТЬ_КОМПАНИЯ_ГОРОД}}</span></div></div></div><div class="proof-quote"><span class="ph-block">{{ОТЗЫВ_2_ЦИТАТА}}</span></div><div class="proof-result"><span class="ph">{{МЕТРИКА_РЕЗУЛЬТАТА_2}}</span></div></div>
+      <div class="proof-card dk"><div class="proof-head"><div class="proof-avatar">??</div><div><div class="proof-name"><span class="ph">{{ОТЗЫВ_3_ИМЯ}}</span></div><div class="proof-role"><span class="ph">{{ДОЛЖНОСТЬ_КОМПАНИЯ_ГОРОД}}</span></div></div></div><div class="proof-quote"><span class="ph-block">{{ОТЗЫВ_3_ЦИТАТА}}</span></div><div class="proof-result"><span class="ph">{{МЕТРИКА_РЕЗУЛЬТАТА_3}}</span></div></div>
     </div>
   </div>
 </section>
 
-<!-- ──────────── LEAD MAGNET ──────────── -->
-<div class="leadmag">
+<!-- LEAD MAGNET (INDIGO full-bleed — разделитель между §07 и §08) -->
+<div class="ind-band leadmag">
   <div class="leadmag-inner">
-    <div>
-      <div class="leadmag-title">Получи бесплатно: <span class="ph">{{LEAD_MAGNET_НАЗВАНИЕ — например: «7 сигналов выгорания сеньора»}}</span></div>
-      <div class="leadmag-sub">Скинем в Telegram или на email. Без спама — только материалы курса.</div>
-    </div>
+    <div><div class="leadmag-title">Получи бесплатно: <span class="ph">{{LEAD_MAGNET_НАЗВАНИЕ — например: «7 сигналов выгорания сеньора»}}</span></div><div class="leadmag-sub">Скинем в Telegram или на email. Без спама — только материалы курса.</div></div>
     <form class="leadmag-form" action="{{LEAD_MAGNET_ENDPOINT}}" method="post">
       <input type="email" name="email" placeholder="Твой email" required>
-      <button type="submit" class="btn-lead">Получить чек-лист →</button>
+      <button type="submit" class="btn-lead dk">Получить чек-лист →</button>
     </form>
   </div>
 </div>
 
-<!-- ──────────── §08 INSTRUCTORS ──────────── -->
-<section class="instructors">
+<!-- ══ §08 INSTRUCTORS  (DARK — bg2 для отделения от §07) ══ -->
+<section class="dk dk-2" id="instructors" data-theme="dark">
+  <div class="sec-wm">08</div>
   <div class="container">
-    <div class="section-label"><span class="n">§08</span> Кто ведёт</div>
-    <h2 class="section-h">Ведущие</h2>
-    <div class="instr-grid">
-      <div class="instr-card">
-        <div class="instr-top">
-          <div class="ph-photo">{{ФОТО<br>ИЛЬИ}}</div>
-          <div>
-            <div class="instr-name">Илья Кириенков</div>
-            <div class="instr-title">Автор курса</div>
-          </div>
-        </div>
-        <div class="instr-bio"><span class="ph-block">{{БИО_ИЛЬИ — 2-3 предложения: компании по именам, реальные роли с датами, ссылка на LinkedIn / Habr / выступления. Минимум один верифицируемый артефакт публичной экспертизы}}</span></div>
-      </div>
-      <div class="instr-card">
-        <div class="instr-top">
-          <div class="ph-photo">{{ФОТО<br>НАДЕЖДЫ}}</div>
-          <div>
-            <div class="instr-name">Надежда Вихарева</div>
-            <div class="instr-title">Эксперт</div>
-          </div>
-        </div>
-        <div class="instr-bio"><span class="ph-block">{{БИО_НАДЕЖДЫ — релевантность IT-аудитории: с какими IT-командами работала, какая роль в курсе для всех тарифов, не только Pro}}</span></div>
-      </div>
+    <div class="section-label reveal"><span class="n">§08</span> Кто ведёт</div>
+    <h2 class="section-h reveal">Ведущие</h2>
+    <div class="instr-grid reveal">
+      <div class="instr-card dk"><div class="instr-top"><div class="ph-photo">{{ФОТО<br>ИЛЬИ}}</div><div><div class="instr-name">Илья Кириенков</div><div class="instr-title">Автор курса</div></div></div><div class="instr-bio"><span class="ph-block">{{БИО_ИЛЬИ — 2-3 предложения: компании по именам, реальные роли с датами, ссылка на LinkedIn / Habr / выступления. Минимум один верифицируемый артефакт публичной экспертизы}}</span></div></div>
+      <div class="instr-card dk"><div class="instr-top"><div class="ph-photo">{{ФОТО<br>НАДЕЖДЫ}}</div><div><div class="instr-name">Надежда Вихарева</div><div class="instr-title">Эксперт</div></div></div><div class="instr-bio"><span class="ph-block">{{БИО_НАДЕЖДЫ — релевантность IT-аудитории: с какими IT-командами работала, какая роль в курсе для всех тарифов, не только Pro}}</span></div></div>
     </div>
   </div>
 </section>
 
-<!-- ──────────── §09 PRICING ──────────── -->
-<section id="pricing" class="dark-section">
+<!-- ════ ZONE 4: СВЕТЛОЕ — покупка + безопасность ════ -->
+<div aria-hidden="true" style="display:block;width:100%;overflow:hidden;line-height:0;font-size:0;margin-bottom:-2px;background:var(--dk-bg2);">
+  <svg viewBox="0 0 1440 62" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,10 C300,55 700,0 1100,45 C1280,60 1400,30 1440,20 L1440,60 L0,60 Z" fill="var(--lt-bg)"/>
+  </svg>
+</div>
+
+<!-- ══ §09 PRICING  (LIGHT) ══ -->
+<section class="lt" id="pricing" data-theme="light">
+  <div class="sec-wm">09</div>
   <div class="container">
-    <div class="section-label"><span class="n">§09</span> Тарифы</div>
-    <h2 class="section-h">Три тарифа</h2>
-    <p class="section-sub">Гарантия возврата 30 дней на любой тариф. Оплата от юрлица — выставим счёт и закрывающие документы.</p>
-    <div class="pricing-grid">
-      <div class="price-card">
-        <div class="price-tier">База</div>
-        <div class="price-num">14&thinsp;990<span class="price-cur"> ₽</span></div>
-        <div class="price-period">21 день</div>
-        <ul class="price-features">
-          <li><span class="check">✓</span>30 кейсов на платформе</li>
-          <li><span class="check">✓</span>Методички и шаблоны Younote</li>
-          <li><span class="check">✓</span>Чат потока: курс + 30 дней после</li>
-        </ul>
-        <a href="{{ССЫЛКА_ОПЛАТЫ_БАЗА}}" class="btn-price">Выбрать «База»</a>
-      </div>
-      <div class="price-card feat">
-        <div class="feat-badge">Рекомендуем</div>
-        <div class="price-tier">С обратной связью</div>
-        <div class="price-num">24&thinsp;990<span class="price-cur"> ₽</span></div>
-        <div class="price-period">21 день · стандартный</div>
-        <ul class="price-features">
-          <li><span class="check">✓</span>Всё из «Базы»</li>
-          <li><span class="check">✓</span>4 интервизии в группе по 8 тимлидов</li>
-          <li><span class="check">✓</span>Расширенный разбор каждого кейса на платформе (не только правильный ответ — разбор именно вашей ситуации)</li>
-          <li><span class="check">✓</span>Письменный разбор именно вашего итогового кейса от Ильи</li>
-          <li><span class="check">✓</span>Сертификат участника</li>
-        </ul>
-        <a href="{{ССЫЛКА_ОПЛАТЫ_СТАНДАРТ}}" class="btn-price">Записаться →</a>
-      </div>
-      <div class="price-card">
-        <div class="price-tier">С менторингом</div>
-        <div class="price-num">49&thinsp;990<span class="price-cur"> ₽</span></div>
-        <div class="price-period">21 день · pro</div>
-        <ul class="price-features">
-          <li><span class="check">✓</span>Всё из «С обратной связью»</li>
-          <li><span class="check">✓</span>5 интервизий вместо 4</li>
-          <li><span class="check">✓</span>2 индивидуальные сессии с Надеждой по 60 минут</li>
-          <li><span class="check">✓</span>Сопровождение в течение двух недель после курса (разборы текущих ситуаций в вашей команде)</li>
-        </ul>
-        <a href="{{ССЫЛКА_ОПЛАТЫ_ПРО}}" class="btn-price">Выбрать «С менторингом»</a>
-      </div>
+    <div class="section-label reveal"><span class="n">§09</span> Тарифы</div>
+    <h2 class="section-h reveal">Три тарифа</h2>
+    <p class="section-sub reveal">Гарантия возврата 30 дней на любой тариф. Оплата от юрлица — выставим счёт и закрывающие документы.</p>
+    <div class="pricing-grid reveal">
+      <div class="price-card lt"><div class="price-tier">База</div><div class="price-num">14&thinsp;990<span class="price-cur"> ₽</span></div><div class="price-period">21 день</div><ul class="price-features"><li><span class="check">✓</span>30 кейсов на платформе</li><li><span class="check">✓</span>Методички и шаблоны Younote</li><li><span class="check">✓</span>Чат потока: курс + 30 дней после</li></ul><a href="{{ССЫЛКА_ОПЛАТЫ_БАЗА}}" class="btn-price">Выбрать «База»</a></div>
+      <div class="price-card lt feat"><div class="feat-badge">Рекомендуем</div><div class="price-tier">С обратной связью</div><div class="price-num">24&thinsp;990<span class="price-cur"> ₽</span></div><div class="price-period">21 день · стандартный</div><ul class="price-features"><li><span class="check">✓</span>Всё из «Базы»</li><li><span class="check">✓</span>4 интервизии в группе по 8 тимлидов</li><li><span class="check">✓</span>Расширенный разбор каждого кейса на платформе (не только правильный ответ — разбор именно вашей ситуации)</li><li><span class="check">✓</span>Письменный разбор именно вашего итогового кейса от Ильи</li><li><span class="check">✓</span>Сертификат участника</li></ul><a href="{{ССЫЛКА_ОПЛАТЫ_СТАНДАРТ}}" class="btn-price">Записаться →</a></div>
+      <div class="price-card lt"><div class="price-tier">С менторингом</div><div class="price-num">49&thinsp;990<span class="price-cur"> ₽</span></div><div class="price-period">21 день · pro</div><ul class="price-features"><li><span class="check">✓</span>Всё из «С обратной связью»</li><li><span class="check">✓</span>5 интервизий вместо 4</li><li><span class="check">✓</span>2 индивидуальные сессии с Надеждой по 60 минут</li><li><span class="check">✓</span>Сопровождение в течение двух недель после курса (разборы текущих ситуаций в вашей команде)</li></ul><a href="{{ССЫЛКА_ОПЛАТЫ_ПРО}}" class="btn-price">Выбрать «С менторингом»</a></div>
     </div>
-    <p class="price-note">
-      Оплата от юрлица — напишите в
-      <a href="{{TELEGRAM_ССЫЛКА}}" style="color:var(--accent-h)">Telegram</a> или на
-      <a href="{{EMAIL_ССЫЛКА}}" style="color:var(--accent-h)">email</a>
-    </p>
+    <p class="price-note reveal">Оплата от юрлица — напишите в <a href="{{TELEGRAM_ССЫЛКА}}">Telegram</a> или на <a href="{{EMAIL_ССЫЛКА}}">email</a></p>
   </div>
 </section>
 
-<!-- ──────────── §10 FAQ ──────────── -->
-<section class="faq-section" id="faq">
+<!-- ══ §10 FAQ  (LIGHT — снятие возражений перед покупкой) ══ -->
+<section class="lt" id="faq" data-theme="light">
+  <div class="sec-wm">10</div>
   <div class="container">
-    <div class="section-label"><span class="n">§10</span> Часто спрашивают</div>
-    <h2 class="section-h">Возражения и ответы</h2>
-    <div class="faq-list">
-      <div class="faq-item">
-        <div class="faq-q"><span class="nn">01</span>У меня в этот период два спринта. Не вытяну.</div>
-        <div class="faq-a">Курс рассчитан на 30–60 минут в день. Кейсы можно проходить в обеденный перерыв или вечером. Интервизии — раз в неделю, 90 минут, дата согласовывается с группой. Если случился аврал — материалы остаются навсегда, кейсы можно догнать. Главное — не пропускать интервизии: они синхронные и не записываются.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q"><span class="nn">02</span>А методология не противоречит agile / scrum-практикам?</div>
-        <div class="faq-a">Нет. Курс прямо опирается на встречи команды разработки: 1:1, ретро, планирование, ревью кода, оценка результатовormance cycle. Все алгоритмы — про то, что делать на этих встречах. Никаких параллельных встреч, отчётов и форм для HR.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q"><span class="nn">03</span>Я уже читал The Manager's Path и An Elegant Puzzle. Чем отличается?</div>
-        <div class="faq-a">The Manager's Path — про карьерный путь от разработчик до VPE, общие принципы. An Elegant Puzzle — сборник случаев Will Larson, уровень Engineering Director. «Лидер-практик» — про конкретные алгоритмы первого года тимлида: что сказать на 1:1 с сеньором, который сильнее тебя; что делать с джуном через Cursor; как провести performance review. Не «о чём думать» — «что делать в понедельник утром».</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q"><span class="nn">04</span>Мне курс нужен от компании. Можно по счёту от юрлица?</div>
-        <div class="faq-a">Да. Напишите в Telegram или email — выставим счёт и подготовим закрывающие документы (акт, справки). Возможна оплата с НДС или без.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q"><span class="nn">05</span>Команда у меня меньше 5 человек / распределена по трём проектам. Сработает?</div>
-        <div class="faq-a">Да. Часть кейсов — про команды 5–8 человек, но методика применяется и на двух подчинённых, и на матричной структуре без прямой власти. На интервизиях разбираем твой реальный сетап.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q"><span class="nn">06</span>А если не зайдёт?</div>
-        <div class="faq-a">Возврат полной оплаты в течение 30 дней с момента старта потока, без объяснения причин. Просто пишешь в Telegram — возвращаем без вопросов и удержаний.</div>
-      </div>
-      <div class="faq-item">
-        <div class="faq-q"><span class="nn">07</span>У меня смешанная команда: половина по-русски, половина англоговорящие.</div>
-        <div class="faq-a">Курс на русском. Алгоритмы и шаблоны разговоров переносятся на английский — лексика 1:1, ревью кода, performance review и так на английском в большинстве команд.</div>
-      </div>
+    <div class="section-label reveal"><span class="n">§10</span> Часто спрашивают</div>
+    <h2 class="section-h reveal">Возражения и ответы</h2>
+    <div class="faq-list lt reveal">
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this.parentElement)"><span class="nn">01</span>У меня в этот период два спринта. Не вытяну.<span class="faq-icon">+</span></div><div class="faq-a">Курс рассчитан на 30–60 минут в день. Кейсы можно проходить в обеденный перерыв или вечером. Интервизии — раз в неделю, 90 минут, дата согласовывается с группой. Если случился аврал — материалы остаются навсегда, кейсы можно догнать. Главное — не пропускать интервизии: они синхронные и не записываются.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this.parentElement)"><span class="nn">02</span>А методология не противоречит agile / scrum-практикам?<span class="faq-icon">+</span></div><div class="faq-a">Нет. Курс прямо опирается на встречи команды разработки: 1:1, ретро, планирование, ревью кода, оценка результатов performance cycle. Все алгоритмы — про то, что делать на этих встречах. Никаких параллельных встреч, отчётов и форм для HR.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this.parentElement)"><span class="nn">03</span>Я уже читал The Manager's Path и An Elegant Puzzle. Чем отличается?<span class="faq-icon">+</span></div><div class="faq-a">The Manager's Path — про карьерный путь от разработчик до VPE, общие принципы. An Elegant Puzzle — сборник случаев Will Larson, уровень Engineering Director. «Лидер-практик» — про конкретные алгоритмы первого года тимлида: что сказать на 1:1 с сеньором, который сильнее тебя; что делать с джуном через Cursor; как провести performance review. Не «о чём думать» — «что делать в понедельник утром».</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this.parentElement)"><span class="nn">04</span>Мне курс нужен от компании. Можно по счёту от юрлица?<span class="faq-icon">+</span></div><div class="faq-a">Да. Напишите в Telegram или email — выставим счёт и подготовим закрывающие документы (акт, справки). Возможна оплата с НДС или без.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this.parentElement)"><span class="nn">05</span>Команда у меня меньше 5 человек / распределена по трём проектам. Сработает?<span class="faq-icon">+</span></div><div class="faq-a">Да. Часть кейсов — про команды 5–8 человек, но методика применяется и на двух подчинённых, и на матричной структуре без прямой власти. На интервизиях разбираем твой реальный сетап.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this.parentElement)"><span class="nn">06</span>А если не зайдёт?<span class="faq-icon">+</span></div><div class="faq-a">Возврат полной оплаты в течение 30 дней с момента старта потока, без объяснения причин. Просто пишешь в Telegram — возвращаем без вопросов и удержаний.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this.parentElement)"><span class="nn">07</span>У меня смешанная команда: половина по-русски, половина англоговорящие.<span class="faq-icon">+</span></div><div class="faq-a">Курс на русском. Алгоритмы и шаблоны разговоров переносятся на английский — лексика 1:1, ревью кода, performance review и так на английском в большинстве команд.</div></div>
     </div>
   </div>
 </section>
 
-<!-- ──────────── FINAL CTA ──────────── -->
-<div class="final-cta dark-section">
+
+
+<!-- ══ FINAL CTA  (DARK) ══ -->
+<div class="final-cta" data-theme="light">
   <div class="container">
     <h2>Старт <span><span class="ph">{{ДАТА_СТАРТА}}</span></span> — осталось <span class="ph">{{N}}</span> мест</h2>
     <p>Группа на интервизии не больше 8 тимлидов. Если набор закрыт — запишись в лист ожидания, пришлём уведомление за 2 недели.</p>
-    <a href="#pricing" class="btn-main">Перестать разгребать пожары самому →</a>
+    <a href="#pricing" class="btn-main">Перестать тушить пожары самому →</a>
     <div class="final-badges">
       <div class="f-badge">Открытый набор первого потока</div>
       <div class="f-badge">Скидка 30% за публикуемый кейс</div>
@@ -1103,81 +1223,128 @@ footer.dark-section a:hover { color: var(--text-2); }
   </div>
 </div>
 
-<footer class="dark-section">
+<footer>
   <p>© 2026 · Лидер-практик: Ситуационное управление для тимлидов в ИТ · <span class="ph">{{ИП_ООО_РЕКВИЗИТЫ}}</span></p>
-  <p style="margin-top:6px;">
-    <a href="{{ССЫЛКА_ПОЛИТИКИ}}">Политика конфиденциальности</a> &nbsp;·&nbsp;
-    <a href="{{ССЫЛКА_ОФЕРТЫ}}">Оферта</a> &nbsp;·&nbsp;
-    <a href="{{TELEGRAM_ССЫЛКА}}">Контакты</a>
-  </p>
+  <p style="margin-top:6px;"><a href="{{ССЫЛКА_ПОЛИТИКИ}}">Политика конфиденциальности</a> &nbsp;·&nbsp; <a href="{{ССЫЛКА_ОФЕРТЫ}}">Оферта</a> &nbsp;·&nbsp; <a href="{{TELEGRAM_ССЫЛКА}}">Контакты</a></p>
 </footer>
 
-<!-- ──────────── STICKY MOBILE CTA ──────────── -->
 <a href="#pricing" class="mobile-cta" id="mobile-cta">Записаться в поток <span class="small">от 14 990 ₽</span></a>
 
 <script>
-/* theme toggle removed */
-
-/* ─── STICKY HEADER SHADOW ─── */
-(function () {
-  const header = document.getElementById('site-header');
-  const onScroll = () => header.classList.toggle('scrolled', window.scrollY > 10);
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+/* ── DOT GRID CANVAS ── */
+(function(){
+  const canvas = document.getElementById('hero-canvas');
+  if(!canvas) return;
+  const ctx = canvas.getContext('2d');
+  let W, H, dots=[], animId, running=true;
+  const SP=36, R=1.2;
+  function resize(){
+    W=canvas.width=canvas.offsetWidth;
+    H=canvas.height=canvas.offsetHeight;
+    dots=[];
+    const cols=Math.ceil(W/SP)+1, rows=Math.ceil(H/SP)+1;
+    for(let r=0;r<rows;r++) for(let c=0;c<cols;c++)
+      dots.push({x:c*SP,y:r*SP,ox:c*SP,oy:r*SP,ph:Math.random()*Math.PI*2,sp:.003+Math.random()*.003,amp:2+Math.random()*3});
+  }
+  let t=0;
+  function draw(){
+    if(!running){animId=null;return;}
+    ctx.clearRect(0,0,W,H); t+=0.8;
+    dots.forEach(d=>{
+      d.x=d.ox+Math.sin(t*d.sp+d.ph)*d.amp;
+      d.y=d.oy+Math.cos(t*d.sp*.7+d.ph)*d.amp;
+      const op=0.08+(1-d.y/H)*0.1+d.x/W*0.06;
+      ctx.beginPath(); ctx.arc(d.x,d.y,R,0,Math.PI*2);
+      ctx.fillStyle=`rgba(99,102,241,${Math.min(op,.25)})`; ctx.fill();
+    });
+    animId=requestAnimationFrame(draw);
+  }
+  /* pause when hero not visible — saves ~30% CPU on scroll */
+  const heroEl = document.getElementById('hero');
+  if(heroEl && window.IntersectionObserver){
+    new IntersectionObserver(([entry])=>{
+      running = entry.isIntersecting;
+      if(running && !animId) draw();
+    },{threshold:0}).observe(heroEl);
+  }
+  window.addEventListener('resize',()=>{cancelAnimationFrame(animId);animId=null;resize();if(running)draw();});
+  resize(); draw();
 })();
 
-/* ─── ACTIVE NAV LINK ─── */
-(function () {
-  const links = document.querySelectorAll('.nav-links a');
-  const ids = ['programme', 'inside', 'proof', 'pricing', 'faq'];
-  const obs = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        links.forEach(l => l.classList.remove('active'));
-        const a = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
-        if (a) a.classList.add('active');
+/* ── STICKY HEADER with light/dark theme detection ── */
+(function(){
+  const h = document.getElementById('site-header');
+  const sections = document.querySelectorAll('[data-theme]');
+
+  function updateHeader(){
+    h.classList.toggle('scrolled', window.scrollY > 10);
+    let current = 'dark';
+    sections.forEach(sec => {
+      const rect = sec.getBoundingClientRect();
+      if(rect.top <= 80 && rect.bottom > 80){ current = sec.dataset.theme; }
+    });
+    h.classList.toggle('light-mode', current === 'light');
+  }
+  window.addEventListener('scroll', updateHeader, {passive:true});
+  updateHeader();
+})();
+
+/* ── ACTIVE NAV ── */
+(function(){
+  const links=document.querySelectorAll('.nav-links a');
+  const ids=['programme','inside','proof','pricing','faq'];
+  const obs=new IntersectionObserver(e=>{
+    e.forEach(en=>{
+      if(en.isIntersecting){
+        links.forEach(l=>l.classList.remove('active'));
+        const a=document.querySelector(`.nav-links a[href="#${en.target.id}"]`);
+        if(a)a.classList.add('active');
       }
     });
-  }, { rootMargin: '-40% 0px -55% 0px' });
-  ids.forEach(id => { const el = document.getElementById(id); if (el) obs.observe(el); });
+  },{rootMargin:'-40% 0px -55% 0px'});
+  ids.forEach(id=>{const el=document.getElementById(id);if(el)obs.observe(el);});
 })();
 
-/* ─── MOBILE STICKY CTA ─── */
-(function () {
-  const cta = document.getElementById('mobile-cta');
-  const hero = document.querySelector('.hero');
-  const pricing = document.getElementById('pricing');
-  if (!cta || !hero || !pricing) return;
-  let pastHero = false;
-  let inPricing = false;
-  const update = () => {
-    cta.classList.toggle('show', pastHero && !inPricing);
-  };
-  const heroObs = new IntersectionObserver(([e]) => {
-    pastHero = !e.isIntersecting; update();
-  }, { threshold: 0 });
-  const priceObs = new IntersectionObserver(([e]) => {
-    inPricing = e.isIntersecting; update();
-  }, { threshold: 0.1 });
-  heroObs.observe(hero);
-  priceObs.observe(pricing);
+/* ── MOBILE CTA ── */
+(function(){
+  const cta=document.getElementById('mobile-cta');
+  const hero=document.getElementById('hero');
+  const pricing=document.getElementById('pricing');
+  if(!cta||!hero||!pricing)return;
+  let p=false,ip=false;
+  const upd=()=>cta.classList.toggle('show',p&&!ip);
+  new IntersectionObserver(([e])=>{p=!e.isIntersecting;upd();},{threshold:0}).observe(hero);
+  new IntersectionObserver(([e])=>{ip=e.isIntersecting;upd();},{threshold:.1}).observe(pricing);
 })();
 
-/* ─── TILDA IFRAME HEIGHT REPORTER ─── */
-(function () {
-  function sendHeight() {
-    var h = document.documentElement.scrollHeight;
-    window.parent.postMessage({ type: 'lp-height', height: h }, '*');
-  }
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', sendHeight);
-  } else {
-    sendHeight();
-  }
-  window.addEventListener('load', sendHeight);
-  if (window.ResizeObserver) {
-    new ResizeObserver(sendHeight).observe(document.body);
-  }
+/* ── SCROLL REVEAL ── */
+(function(){
+  const els=document.querySelectorAll('.reveal');
+  const obs=new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{
+      if(e.isIntersecting){
+        const d=parseInt(e.target.dataset.delay||0);
+        setTimeout(()=>e.target.classList.add('in'),d);
+        obs.unobserve(e.target);
+      }
+    });
+  },{rootMargin:'-50px'});
+  els.forEach((el,i)=>{el.dataset.delay=(i%4)*90;obs.observe(el);});
+})();
+
+/* ── FAQ ── */
+function toggleFaq(item){
+  const was=item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el=>el.classList.remove('open'));
+  if(!was)item.classList.add('open');
+}
+
+/* ── IFRAME HEIGHT ── */
+(function(){
+  function sh(){window.parent.postMessage({type:'lp-height',height:document.documentElement.scrollHeight},'*');}
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',sh);else sh();
+  window.addEventListener('load',sh);
+  if(window.ResizeObserver)new ResizeObserver(sh).observe(document.body);
 })();
 </script>
 </body>
